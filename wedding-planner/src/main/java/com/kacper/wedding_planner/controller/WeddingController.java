@@ -1,15 +1,14 @@
 package com.kacper.wedding_planner.controller;
 
+import com.kacper.wedding_planner.exception.ResourceNotFoundException;
 import com.kacper.wedding_planner.model.Guest;
+import com.kacper.wedding_planner.repository.GuestRepository;
 import com.kacper.wedding_planner.service.GuestService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,9 +17,11 @@ import java.util.List;
 public class WeddingController {
 
     private GuestService guestService;
+    private GuestRepository guestRepository;
 
-    public WeddingController(GuestService guestService) {
+    public WeddingController(GuestService guestService, GuestRepository guestRepository) {
         this.guestService = guestService;
+        this.guestRepository = guestRepository;
     }
 
     @GetMapping
@@ -45,6 +46,21 @@ public class WeddingController {
         }
 
         guestService.saveGuest(guest);
+        return "redirect:/guests";
+    }
+
+    @GetMapping("/details/{id}")
+    public String viewGuestDetails(@PathVariable("id") Long id, Model model) {
+        Guest guest = guestRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Guest not found"));
+
+        model.addAttribute("guest", guest);
+        return "guest_details";
+    }
+
+    @PostMapping("/update")
+    public String updateGuest(@ModelAttribute Guest guest) {
+        guestRepository.save(guest);
         return "redirect:/guests";
     }
 }

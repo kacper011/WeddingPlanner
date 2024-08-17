@@ -52,6 +52,7 @@
 
         .table {
             width: 100%;
+            table-layout: fixed; /* Umożliwia stałą szerokość kolumn */
         }
 
         .table thead {
@@ -66,14 +67,19 @@
             white-space: nowrap;
             vertical-align: middle;
             border-color: #f4d7d7; /* Dopasowanie kolorów obramowania */
+            padding: 0.3rem; /* Mniejsze paddingi */
         }
 
         .table td {
-            vertical-align: middle;
+            word-wrap: break-word; /* Zawijanie długich słów */
+            font-size: 0.8rem; /* Mniejszy rozmiar tekstu */
         }
 
-        .bg-success {
-            background-color: #fce8e8 !important; /* Delikatny beżowy odcień dla sukcesów */
+        .btn-success, .btn-danger {
+            width: 50px; /* Mniejsza szerokość przycisków */
+            margin: 1px; /* Mniejszy margines między przyciskami */
+            font-size: 0.6rem; /* Mniejszy rozmiar tekstu */
+            padding: 0.25rem; /* Mniejsze paddingi */
         }
 
         .btn-disabled {
@@ -85,10 +91,17 @@
             resize: none;
             width: 100%;
             box-sizing: border-box;
+            font-size: 0.8rem; /* Mniejszy rozmiar tekstu */
         }
 
         .table-responsive {
-            margin-bottom: 15px;
+            overflow-x: auto; /* Umożliwia przewijanie poziome, jeśli potrzebne */
+        }
+
+        /* Stylizowanie kolumny numeru */
+        .col-number {
+            width: 50px; /* Można dostosować szerokość zgodnie z potrzebami */
+            text-align: center;
         }
     </style>
 </head>
@@ -117,53 +130,46 @@
     </div>
     <br />
     <div class="row">
-        <div class="col table-responsive">
-            <table class="table table-striped table-hover table-bordered">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Nazwisko</th>
-                    <th>Imię</th>
-                    <th>Potwierdzenie Obecności</th>
-                    <th>Transport</th>
-                    <th>Nocleg</th>
-                    <th>Kontakt</th>
-                    <th>Dodatkowe Informacje</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="guest, iter : ${guests}">
-                    <td th:text="${iter.count}"></td> <!-- Numeracja -->
-                    <td th:text="${guest.nazwisko}"></td>
-                    <td th:text="${guest.imie}"></td>
-                    <td>
-                        <span th:text="${guest.potwierdzenieObecnosci}"></span>
-                        <!-- Ustawienie kolorów dla wartości "TAK", "NIE" i "MOŻE" -->
-                        <span th:classappend="${guest.potwierdzenieObecnosci == 'TAK'} ? ' bg-success' : ''"></span>
-                        <span th:classappend="${guest.potwierdzenieObecnosci == 'NIE'} ? ' bg-danger' : ''"></span>
-                        <span th:classappend="${guest.potwierdzenieObecnosci == 'MOŻE'} ? ' bg-warning' : ''"></span>
-                    </td>
-                    <td>
-                        <span th:text="${guest.transport}"></span>
-                        <!-- Ustawienie kolorów dla wartości "TAK", "NIE" i "MOŻE" -->
-                        <span th:classappend="${guest.transport == 'TAK'} ? ' bg-success' : ''"></span>
-                        <span th:classappend="${guest.transport == 'NIE'} ? ' bg-danger' : ''"></span>
-                        <span th:classappend="${guest.transport == 'MOŻE'} ? ' bg-warning' : ''"></span>
-                    </td>
-                    <td>
-                        <span th:text="${guest.nocleg}"></span>
-                        <!-- Ustawienie kolorów dla wartości "TAK", "NIE" i "MOŻE" -->
-                        <span th:classappend="${guest.nocleg == 'TAK'} ? ' bg-success' : ''"></span>
-                        <span th:classappend="${guest.nocleg == 'NIE'} ? ' bg-danger' : ''"></span>
-                        <span th:classappend="${guest.nocleg == 'MOŻE'} ? ' bg-warning' : ''"></span>
-                    </td>
-                    <td th:text="${guest.kontakt}"></td>
-                    <td>
-                        <textarea rows="2" cols="30" th:text="${guest.dodatkoweInformacje}"></textarea>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th class="col-number">#</th>
+                        <th>Nazwisko</th>
+                        <th>Imię</th>
+                        <th>Obecność</th>
+                        <th>Transport</th>
+                        <th>Nocleg</th>
+                        <th>Kontakt</th>
+                        <th>Informacje</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="guest, iter : ${guests}">
+                        <td class="col-number" th:text="${iter.count}"></td> <!-- Numeracja -->
+                        <td th:text="${guest.nazwisko}"></td>
+                        <td th:text="${guest.imie}"></td>
+                        <td>
+                            <button type="button" class="btn btn-success" th:classappend="${guest.potwierdzenieObecnosci == 'TAK'} ? 'active' : ''" disabled>TAK</button>
+                            <button type="button" class="btn btn-danger" th:classappend="${guest.potwierdzenieObecnosci == 'NIE'} ? 'active' : ''" disabled>NIE</button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-success" th:classappend="${guest.transport == 'TAK'} ? 'active' : ''" disabled>TAK</button>
+                            <button type="button" class="btn btn-danger" th:classappend="${guest.transport == 'NIE'} ? 'active' : ''" disabled>NIE</button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-success" th:classappend="${guest.nocleg == 'TAK'} ? 'active' : ''" disabled>TAK</button>
+                            <button type="button" class="btn btn-danger" th:classappend="${guest.nocleg == 'NIE'} ? 'active' : ''" disabled>NIE</button>
+                        </td>
+                        <td th:text="${guest.kontakt}"></td>
+                        <td>
+                            <a href="#" th:href="@{/guests/details/{id}(id=${guest.id})}" class="btn btn-info btn-sm">Wyświetl</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -171,5 +177,11 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMF8jYln/NU6Pp3O8jsLxga4q9UWB/jv7Z0n3G1R7rBXgSIBHF6wr06Jz3M" crossorigin="anonymous"></script>
 </body>
 </html>
+
+
+
+
+
+
 
 
