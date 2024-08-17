@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
-    <title>Wedding Guest Management</title>
+    <title>Szczegóły Gościa</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
         html, body {
@@ -13,7 +13,7 @@
         }
 
         body {
-            background-color: #f8d7da; /* Jasno różowe tło */
+            background-color: #f8d7da; /* Jasnoróżowe tło */
             font-family: 'Arial', sans-serif;
             color: #333;
             display: flex;
@@ -49,11 +49,11 @@
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
             max-width: 600px;
             width: 100%;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: #fff7f7; /* Bardzo jasny róż */
         }
 
         .card-header {
-            background-color: rgba(52, 58, 64, 0.8);
+            background-color: #a65c5c; /* Ciemniejszy róż dla nagłówków */
             color: white;
             padding: 1rem;
         }
@@ -83,19 +83,19 @@
         }
 
         .btn-primary {
-            background-color: #007bff;
+            background-color: #a65c5c; /* Ciemniejszy różowy */
             border: none;
             color: white;
             font-weight: bold;
         }
 
         .btn-primary:hover {
-            background-color: #0056b3;
+            background-color: #924d4d; /* Trochę ciemniejszy odcień różu przy hover */
         }
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <a class="navbar-brand" href="/guests">Wedding Guest Management</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,29 +114,29 @@
 <div class="container main-container">
     <div class="card">
         <div class="card-header">
-            <h2 class="text-center">Dodaj Gościa</h2>
+            <h2 class="text-center">Szczegóły Gościa</h2>
         </div>
         <div class="card-body">
-            <form method="post" role="form" th:action="@{/guests}" th:object="${guest}">
+            <form method="post" role="form" th:action="@{/guests/update}" th:object="${guest}">
+                <input type="hidden" th:field="*{id}" />
+
                 <div class="form-group mb-3">
-                    <label class="form-label" for="imie">IMIĘ</label>
-                    <input class="form-control" id="imie" name="imie" placeholder="Wprowadź imię gościa" type="text" th:field="*{imie}">
-                    <p th:if="${#fields.hasErrors('imie')}" class="text-danger" th:errors="*{imie}"></p>
+                    <label class="form-label" for="imie">Imię</label>
+                    <input class="form-control" id="imie" name="imie" placeholder="Wprowadź imię gościa" type="text" th:field="*{imie}" required>
                 </div>
 
                 <div class="form-group mb-3">
                     <label class="form-label" for="nazwisko">Nazwisko</label>
-                    <input class="form-control" id="nazwisko" name="nazwisko" placeholder="Wprowadź nazwisko gościa" type="text" th:field="*{nazwisko}">
-                    <p th:if="${#fields.hasErrors('nazwisko')}" class="text-danger" th:errors="*{nazwisko}"></p>
+                    <input class="form-control" id="nazwisko" name="nazwisko" placeholder="Wprowadź nazwisko gościa" type="text" th:field="*{nazwisko}" required>
                 </div>
 
                 <div class="form-group mb-3">
-                    <label class="form-label" for="kontakt">Kontakt</label>
-                    <input class="form-control" id="kontakt" name="kontakt" placeholder="Wprowadź numer telefonu gościa" type="text" th:field="*{kontakt}">
+                    <label class="form-label" for="kontakt">Numer Telefonu</label>
+                    <input class="form-control" id="kontakt" name="kontakt" placeholder="Wprowadź numer telefonu gościa" type="text" th:field="*{kontakt}" required>
                 </div>
 
                 <div class="form-group mb-3">
-                    <label class="form-label" for="dodatkoweInformacje">Dodatkowe informacje</label>
+                    <label class="form-label" for="dodatkoweInformacje">Dodatkowe Informacje</label>
                     <textarea class="form-control" id="dodatkoweInformacje" name="dodatkoweInformacje" rows="4" placeholder="Wprowadź dodatkowe informacje" th:field="*{dodatkoweInformacje}"></textarea>
                 </div>
 
@@ -149,6 +149,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMF8jYln/NU6Pp3O8jsLxga4q9UWB/jv7Z0n3G1R7rBXgSIBHF6wr06Jz3M" crossorigin="anonymous"></script>
 </body>
 </html>
+
+
 
 
 
