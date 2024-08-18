@@ -117,6 +117,14 @@
                 <li class="nav-item">
                     <a class="nav-link active" th:href="@{/guests/new}">Dodaj gościa</a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/guests/confirmed}">Obecni</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/guests/notConfirmed}">Nieobecni</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -153,31 +161,31 @@
                         <td>
                             <form th:action="@{/guests/updatePresence/{id}(id=${guest.id})}" method="post" style="display: inline;">
                                 <input type="hidden" name="presence" value="TAK"/>
-                                <button type="submit" class="btn btn-success" th:classappend="${guest.potwierdzenieObecnosci == 'TAK'} ? 'active' : ''">TAK</button>
+                                <button type="submit" class="btn btn-success">TAK</button>
                             </form>
                             <form th:action="@{/guests/updatePresence/{id}(id=${guest.id})}" method="post" style="display: inline;">
                                 <input type="hidden" name="presence" value="NIE"/>
-                                <button type="submit" class="btn btn-danger" th:classappend="${guest.potwierdzenieObecnosci == 'NIE'} ? 'active' : ''">NIE</button>
+                                <button type="submit" class="btn btn-danger">NIE</button>
                             </form>
                         </td>
                         <td>
                             <form th:action="@{/guests/updateTransport/{id}(id=${guest.id})}" method="post" style="display: inline;">
                                 <input type="hidden" name="transport" value="TAK"/>
-                                <button type="submit" class="btn btn-success" th:classappend="${guest.transport == 'TAK'} ? 'active' : ''">TAK</button>
+                                <button type="submit" class="btn btn-success">TAK</button>
                             </form>
                             <form th:action="@{/guests/updateTransport/{id}(id=${guest.id})}" method="post" style="display: inline;">
                                 <input type="hidden" name="transport" value="NIE"/>
-                                <button type="submit" class="btn btn-danger" th:classappend="${guest.transport == 'NIE'} ? 'active' : ''">NIE</button>
+                                <button type="submit" class="btn btn-danger">NIE</button>
                             </form>
                         </td>
                         <td>
                             <form th:action="@{/guests/updateLodging/{id}(id=${guest.id})}" method="post" style="display: inline;">
                                 <input type="hidden" name="lodging" value="TAK"/>
-                                <button type="submit" class="btn btn-success" th:classappend="${guest.nocleg == 'TAK'} ? 'active' : ''">TAK</button>
+                                <button type="submit" class="btn btn-success">TAK</button>
                             </form>
                             <form th:action="@{/guests/updateLodging/{id}(id=${guest.id})}" method="post" style="display: inline;">
                                 <input type="hidden" name="lodging" value="NIE"/>
-                                <button type="submit" class="btn btn-danger" th:classappend="${guest.nocleg == 'NIE'} ? 'active' : ''">NIE</button>
+                                <button type="submit" class="btn btn-danger">NIE</button>
                             </form>
                         </td>
                         <td th:text="${guest.kontakt}"></td>
@@ -195,6 +203,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMF8jYln/NU6Pp3O8jsLxga4q9UWB/jv7Z0n3G1R7rBXgSIBHF6wr06Jz3M" crossorigin="anonymous"></script>
 </body>
 </html>
+
 
 
 

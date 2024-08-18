@@ -74,24 +74,36 @@ public class WeddingController {
     }
 
     @PostMapping("/updatePresence/{id}")
-    public String updatePresence(@PathVariable("id") Long id, @RequestParam("presence") String presence, RedirectAttributes redirectAttributes) {
-        System.out.println("Updating presence for guest with id: " + id + " to " + presence);
-        guestService.updatePresence(id, presence);
-        redirectAttributes.addFlashAttribute("message", "Status obecności gościa został zaktualizowany.");
-        return "redirect:/guests";
+    public String updatePresence(@PathVariable Long id, @RequestParam String presence) {
+
+        if ("TAK".equals(presence)) {
+            return "redirect:/guests/confirmed";
+        } else {
+            return "redirect:/guests/notConfirmed";
+        }
     }
 
     @PostMapping("/updateTransport/{id}")
-    public String updateTransport(@PathVariable("id") Long id, @RequestParam("transport") String transport, RedirectAttributes redirectAttributes) {
-        guestService.updateTransport(id, transport);
-        redirectAttributes.addFlashAttribute("message", "Status transportu gościa został zaktualizowany.");
+    public String updateTransport(@PathVariable Long id, @RequestParam String transport) {
+
         return "redirect:/guests";
     }
 
     @PostMapping("/updateLodging/{id}")
-    public String updateLodging(@PathVariable("id") Long id, @RequestParam("lodging") String lodging, RedirectAttributes redirectAttributes) {
-        guestService.updateLodging(id, lodging);
-        redirectAttributes.addFlashAttribute("message", "Status noclegu gościa został zaktualizowany.");
+    public String updateLodging(@PathVariable Long id, @RequestParam String lodging) {
+
         return "redirect:/guests";
+    }
+
+    @GetMapping("/confirmed")
+    public String confirmedGuests(Model model) {
+
+        return "confirmed_guests";
+    }
+
+    @GetMapping("/notConfirmed")
+    public String notConfirmedGuests(Model model) {
+
+        return "not_confirmed_guests";
     }
 }
