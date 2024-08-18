@@ -23,6 +23,11 @@ public class GuestServiceImpl implements GuestService {
     }
 
     @Override
+    public void deleteGuest(Long id) {
+        guestRepository.deleteById(id);
+    }
+
+    @Override
     public Guest saveGuest(Guest guest) {
 
         return guestRepository.save(guest);

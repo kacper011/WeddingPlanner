@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -61,6 +62,14 @@ public class WeddingController {
     @PostMapping("/update")
     public String updateGuest(@ModelAttribute Guest guest) {
         guestRepository.save(guest);
+        return "redirect:/guests";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteGuest(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        System.out.println("Attempting to delete guest with id: " + id);
+        guestService.deleteGuest(id);
+        redirectAttributes.addFlashAttribute("message", "Gość został pomyślnie usunięty.");
         return "redirect:/guests";
     }
 }

@@ -8,4 +8,6 @@ public interface GuestService {
     Guest saveGuest(Guest guest);
 
     List<Guest> getAllGuests();
+
+    void deleteGuest(Long id);
 }
