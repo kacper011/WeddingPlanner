@@ -171,8 +171,14 @@
                             </form>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-success" th:classappend="${guest.nocleg == 'TAK'} ? 'active' : ''" disabled>TAK</button>
-                            <button type="button" class="btn btn-danger" th:classappend="${guest.nocleg == 'NIE'} ? 'active' : ''" disabled>NIE</button>
+                            <form th:action="@{/guests/updateLodging/{id}(id=${guest.id})}" method="post" style="display: inline;">
+                                <input type="hidden" name="lodging" value="TAK"/>
+                                <button type="submit" class="btn btn-success" th:classappend="${guest.nocleg == 'TAK'} ? 'active' : ''">TAK</button>
+                            </form>
+                            <form th:action="@{/guests/updateLodging/{id}(id=${guest.id})}" method="post" style="display: inline;">
+                                <input type="hidden" name="lodging" value="NIE"/>
+                                <button type="submit" class="btn btn-danger" th:classappend="${guest.nocleg == 'NIE'} ? 'active' : ''">NIE</button>
+                            </form>
                         </td>
                         <td th:text="${guest.kontakt}"></td>
                         <td>

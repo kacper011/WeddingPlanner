@@ -14,4 +14,6 @@ public interface GuestService {
     void updatePresence(Long id, String presence);
 
     void updateTransport(Long id, String transport);
+
+    void updateLodging(Long id, String lodging);
 }

@@ -52,6 +52,16 @@ public class GuestServiceImpl implements GuestService {
     }
 
     @Override
+    public void updateLodging(Long id, String lodging) {
+        Optional<Guest> guestOptional = guestRepository.findById(id);
+        if (guestOptional.isPresent()) {
+            Guest guest = guestOptional.get();
+            guest.setNocleg(lodging);
+            guestRepository.save(guest);
+        }
+    }
+
+    @Override
     public Guest saveGuest(Guest guest) {
 
         return guestRepository.save(guest);

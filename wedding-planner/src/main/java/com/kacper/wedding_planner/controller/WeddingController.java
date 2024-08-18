@@ -87,4 +87,11 @@ public class WeddingController {
         redirectAttributes.addFlashAttribute("message", "Status transportu gościa został zaktualizowany.");
         return "redirect:/guests";
     }
+
+    @PostMapping("/updateLodging/{id}")
+    public String updateLodging(@PathVariable("id") Long id, @RequestParam("lodging") String lodging, RedirectAttributes redirectAttributes) {
+        guestService.updateLodging(id, lodging);
+        redirectAttributes.addFlashAttribute("message", "Status noclegu gościa został zaktualizowany.");
+        return "redirect:/guests";
+    }
 }
