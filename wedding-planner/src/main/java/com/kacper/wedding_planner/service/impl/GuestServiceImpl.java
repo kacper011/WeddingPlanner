@@ -42,6 +42,16 @@ public class GuestServiceImpl implements GuestService {
     }
 
     @Override
+    public void updateTransport(Long id, String transport) {
+        Optional<Guest> guestOptional = guestRepository.findById(id);
+        if (guestOptional.isPresent()) {
+            Guest guest = guestOptional.get();
+            guest.setTransport(transport);
+            guestRepository.save(guest);
+        }
+    }
+
+    @Override
     public Guest saveGuest(Guest guest) {
 
         return guestRepository.save(guest);

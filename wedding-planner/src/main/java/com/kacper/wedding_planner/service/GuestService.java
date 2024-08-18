@@ -12,4 +12,6 @@ public interface GuestService {
     void deleteGuest(Long id);
 
     void updatePresence(Long id, String presence);
+
+    void updateTransport(Long id, String transport);
 }
