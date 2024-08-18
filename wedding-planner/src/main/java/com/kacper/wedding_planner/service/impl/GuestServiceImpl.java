@@ -30,15 +30,10 @@ public class GuestServiceImpl implements GuestService {
 
     @Override
     public void updatePresence(Long id, String presence) {
-        Optional<Guest> guestOptional = guestRepository.findById(id);
-        if (guestOptional.isPresent()) {
-            Guest guest = guestOptional.get();
-            guest.setPotwierdzenieObecnosci(presence);
-            guestRepository.save(guest);
-            System.out.println("Updated guest with id: " + id + " to presence: " + presence);
-        } else {
-            System.out.println("Guest with id: " + id + " not found.");
-        }
+        Guest guest = guestRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Guest not found"));
+        guest.setPotwierdzenieObecnosci(presence);
+        guestRepository.save(guest);
     }
 
     @Override
@@ -60,6 +55,13 @@ public class GuestServiceImpl implements GuestService {
             guestRepository.save(guest);
         }
     }
+
+    @Override
+    public List<Guest> findByConfirmedPresence(String potwierdzenieObecnosci) {
+
+        return guestRepository.findByPotwierdzenieObecnosci(potwierdzenieObecnosci);
+    }
+
 
     @Override
     public Guest saveGuest(Guest guest) {

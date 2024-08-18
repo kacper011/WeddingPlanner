@@ -16,4 +16,7 @@ public interface GuestService {
     void updateTransport(Long id, String transport);
 
     void updateLodging(Long id, String lodging);
+
+    List<Guest> findByConfirmedPresence(String potwierdzenieObecnosci);
+
 }

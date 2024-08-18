@@ -76,6 +76,8 @@ public class WeddingController {
     @PostMapping("/updatePresence/{id}")
     public String updatePresence(@PathVariable Long id, @RequestParam String presence) {
 
+        guestService.updatePresence(id, presence);
+
         if ("TAK".equals(presence)) {
             return "redirect:/guests/confirmed";
         } else {
@@ -97,7 +99,7 @@ public class WeddingController {
 
     @GetMapping("/confirmed")
     public String confirmedGuests(Model model) {
-
+        model.addAttribute("guests", guestService.findByConfirmedPresence("TAK"));
         return "confirmed_guests";
     }
 
