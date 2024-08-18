@@ -72,4 +72,12 @@ public class WeddingController {
         redirectAttributes.addFlashAttribute("message", "Gość został pomyślnie usunięty.");
         return "redirect:/guests";
     }
+
+    @PostMapping("/updatePresence/{id}")
+    public String updatePresence(@PathVariable("id") Long id, @RequestParam("presence") String presence, RedirectAttributes redirectAttributes) {
+        System.out.println("Updating presence for guest with id: " + id + " to " + presence);
+        guestService.updatePresence(id, presence);
+        redirectAttributes.addFlashAttribute("message", "Status obecności gościa został zaktualizowany.");
+        return "redirect:/guests";
+    }
 }

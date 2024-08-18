@@ -147,12 +147,18 @@
                     </thead>
                     <tbody>
                     <tr th:each="guest, iter : ${guests}">
-                        <td class="col-number" th:text="${iter.count}"></td> <!-- Numeracja -->
+                        <td class="col-number" th:text="${iter.count}"></td>
                         <td th:text="${guest.nazwisko}"></td>
                         <td th:text="${guest.imie}"></td>
                         <td>
-                            <button type="button" class="btn btn-success" th:classappend="${guest.potwierdzenieObecnosci == 'TAK'} ? 'active' : ''" disabled>TAK</button>
-                            <button type="button" class="btn btn-danger" th:classappend="${guest.potwierdzenieObecnosci == 'NIE'} ? 'active' : ''" disabled>NIE</button>
+                            <form th:action="@{/guests/updatePresence/{id}(id=${guest.id})}" method="post" style="display: inline;">
+                                <input type="hidden" name="presence" value="TAK"/>
+                                <button type="submit" class="btn btn-success" th:classappend="${guest.potwierdzenieObecnosci == 'TAK'} ? 'active' : ''">TAK</button>
+                            </form>
+                            <form th:action="@{/guests/updatePresence/{id}(id=${guest.id})}" method="post" style="display: inline;">
+                                <input type="hidden" name="presence" value="NIE"/>
+                                <button type="submit" class="btn btn-danger" th:classappend="${guest.potwierdzenieObecnosci == 'NIE'} ? 'active' : ''">NIE</button>
+                            </form>
                         </td>
                         <td>
                             <button type="button" class="btn btn-success" th:classappend="${guest.transport == 'TAK'} ? 'active' : ''" disabled>TAK</button>

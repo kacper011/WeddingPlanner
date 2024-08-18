@@ -6,6 +6,7 @@ import com.kacper.wedding_planner.service.GuestService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GuestServiceImpl implements GuestService {
@@ -25,6 +26,19 @@ public class GuestServiceImpl implements GuestService {
     @Override
     public void deleteGuest(Long id) {
         guestRepository.deleteById(id);
+    }
+
+    @Override
+    public void updatePresence(Long id, String presence) {
+        Optional<Guest> guestOptional = guestRepository.findById(id);
+        if (guestOptional.isPresent()) {
+            Guest guest = guestOptional.get();
+            guest.setPotwierdzenieObecnosci(presence);
+            guestRepository.save(guest);
+            System.out.println("Updated guest with id: " + id + " to presence: " + presence);
+        } else {
+            System.out.println("Guest with id: " + id + " not found.");
+        }
     }
 
     @Override
