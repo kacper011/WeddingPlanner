@@ -98,8 +98,9 @@ public class WeddingController {
     }
 
     @GetMapping("/confirmed")
-    public String confirmedGuests(Model model) {
-        model.addAttribute("guests", guestService.findByConfirmedPresence("TAK"));
+    public String getConfirmedGuests(Model model) {
+        List<Guest> confirmedGuests = guestRepository.findByPotwierdzenieObecnosci("TAK");
+        model.addAttribute("confirmedGuests", confirmedGuests);
         return "confirmed_guests";
     }
 

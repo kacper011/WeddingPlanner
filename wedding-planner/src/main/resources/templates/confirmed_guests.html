@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Potwierdzeni Goście</title>
@@ -115,13 +115,13 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" th:href="@{/guests/new}">Dodaj gościa</a>
+          <a class="nav-link" th:href="@{/guests/new}">Dodaj gościa</a>
         </li>
         <li class="nav-item">
           <a class="nav-link active" th:href="@{/guests/confirmed}">Obecni</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" th:href="@{/guests/notConfirmed}">Nieobecni</a>
+          <a class="nav-link" th:href="@{/guests/notConfirmed}">Nieobecni</a>
         </li>
       </ul>
     </div>
@@ -153,12 +153,12 @@
           </thead>
           <tbody>
           <tr th:each="guest, iter : ${confirmedGuests}">
-            <td class="col-number" th:text="${iter.count}"></td> <!-- Numeracja -->
+            <td class="col-number" th:text="${iter.index + 1}"></td> <!-- Numeracja zaczynająca się od 1 -->
             <td th:text="${guest.nazwisko}"></td>
             <td th:text="${guest.imie}"></td>
-            <td th:text="${guest.presence}"></td>
+            <td th:text="${guest.potwierdzenieObecnosci}"></td>
             <td th:text="${guest.transport}"></td>
-            <td th:text="${guest.lodging}"></td>
+            <td th:text="${guest.nocleg}"></td>
             <td th:text="${guest.kontakt}"></td>
             <td>
               <a href="#" th:href="@{/guests/details/{id}(id=${guest.id})}" class="btn btn-info btn-sm">Wyświetl</a>
@@ -174,3 +174,4 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMF8jYln/NU6Pp3O8jsLxga4q9UWB/jv7Z0n3G1R7rBXgSIBHF6wr06Jz3M" crossorigin="anonymous"></script>
 </body>
 </html>
+
