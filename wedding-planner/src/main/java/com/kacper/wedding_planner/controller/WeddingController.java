@@ -105,8 +105,9 @@ public class WeddingController {
     }
 
     @GetMapping("/notConfirmed")
-    public String notConfirmedGuests(Model model) {
-
+    public String getNotConfirmedGuests(Model model) {
+        List<Guest> notConfirmedGuests = guestRepository.findByPotwierdzenieObecnosci("NIE");
+        model.addAttribute("notConfirmedGuests", notConfirmedGuests);
         return "not_confirmed_guests";
     }
 }
