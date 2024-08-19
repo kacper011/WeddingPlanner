@@ -157,7 +157,14 @@
             <td th:text="${guest.nazwisko}"></td>
             <td th:text="${guest.imie}"></td>
             <td th:text="${guest.potwierdzenieObecnosci}"></td>
-            <td th:text="${guest.transport}"></td>
+            <td>
+              <!-- Przycisk TAK jeśli transport jest dostępny -->
+              <button th:if="${guest.transport == 'TAK'}" class="btn btn-success btn-sm">TAK</button>
+              <!-- Przycisk NIE jeśli transport nie jest dostępny -->
+              <button th:if="${guest.transport == 'NIE'}" class="btn btn-danger btn-sm">NIE</button>
+              <!-- Przycisk, jeśli transport nie jest określony -->
+              <button th:if="${guest.transport == null or guest.transport == ''}" class="btn btn-secondary btn-sm">Brak</button>
+            </td>
             <td th:text="${guest.nocleg}"></td>
             <td th:text="${guest.kontakt}"></td>
             <td>
@@ -174,4 +181,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMF8jYln/NU6Pp3O8jsLxga4q9UWB/jv7Z0n3G1R7rBXgSIBHF6wr06Jz3M" crossorigin="anonymous"></script>
 </body>
 </html>
+
+
 
