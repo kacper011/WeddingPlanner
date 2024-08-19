@@ -147,8 +147,6 @@
                         <th>Nazwisko</th>
                         <th>Imię</th>
                         <th>Obecność</th>
-                        <th>Transport</th>
-                        <th>Nocleg</th>
                         <th>Kontakt</th>
                         <th>Informacje</th>
                     </tr>
@@ -165,26 +163,6 @@
                             </form>
                             <form th:action="@{/guests/updatePresence/{id}(id=${guest.id})}" method="post" style="display: inline;">
                                 <input type="hidden" name="presence" value="NIE"/>
-                                <button type="submit" class="btn btn-danger">NIE</button>
-                            </form>
-                        </td>
-                        <td>
-                            <form th:action="@{/guests/updateTransport/{id}(id=${guest.id})}" method="post" style="display: inline;">
-                                <input type="hidden" name="transport" value="TAK"/>
-                                <button type="submit" class="btn btn-success">TAK</button>
-                            </form>
-                            <form th:action="@{/guests/updateTransport/{id}(id=${guest.id})}" method="post" style="display: inline;">
-                                <input type="hidden" name="transport" value="NIE"/>
-                                <button type="submit" class="btn btn-danger">NIE</button>
-                            </form>
-                        </td>
-                        <td>
-                            <form th:action="@{/guests/updateLodging/{id}(id=${guest.id})}" method="post" style="display: inline;">
-                                <input type="hidden" name="lodging" value="TAK"/>
-                                <button type="submit" class="btn btn-success">TAK</button>
-                            </form>
-                            <form th:action="@{/guests/updateLodging/{id}(id=${guest.id})}" method="post" style="display: inline;">
-                                <input type="hidden" name="lodging" value="NIE"/>
                                 <button type="submit" class="btn btn-danger">NIE</button>
                             </form>
                         </td>

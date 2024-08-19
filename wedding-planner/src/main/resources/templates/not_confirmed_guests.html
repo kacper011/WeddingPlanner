@@ -145,8 +145,6 @@
             <th>Nazwisko</th>
             <th>Imię</th>
             <th>Obecność</th>
-            <th>Transport</th>
-            <th>Nocleg</th>
             <th>Kontakt</th>
             <th>Informacje</th>
           </tr>
@@ -157,8 +155,6 @@
             <td th:text="${guest.nazwisko}"></td>
             <td th:text="${guest.imie}"></td>
             <td th:text="${guest.presence}"></td>
-            <td th:text="${guest.transport}"></td>
-            <td th:text="${guest.lodging}"></td>
             <td th:text="${guest.kontakt}"></td>
             <td>
               <a href="#" th:href="@{/guests/details/{id}(id=${guest.id})}" class="btn btn-info btn-sm">Wyświetl</a>
