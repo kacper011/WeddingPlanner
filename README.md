@@ -20,3 +20,10 @@ Ensure you have the following installed:
 Java JDK (for backend if applicable)
 Maven/Gradle (for backend build management if applicable)
 A web server or application server (e.g., Tomcat, Spring Boot embedded server)
+
+Usage
+Navigating the Application
+Home: Navigate to /guests to view the list of guests.
+Add New Guest: Go to /guests/new to add a new guest.
+Confirmed Guests: View confirmed guests at /guests/confirmed.
+Not Confirmed Guests: View guests who have not confirmed at /guests/notConfirmed.
