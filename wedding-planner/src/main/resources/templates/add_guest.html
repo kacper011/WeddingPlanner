@@ -114,7 +114,7 @@
 <div class="container main-container">
     <div class="card">
         <div class="card-header">
-            <h2 class="text-center">Szczegóły Gościa</h2>
+            <h2 class="text-center">Dodaj Gościa</h2>
         </div>
         <div class="card-body">
             <form method="post" role="form" th:action="@{/guests/update}" th:object="${guest}">
@@ -140,7 +140,7 @@
                     <textarea class="form-control" id="dodatkoweInformacje" name="dodatkoweInformacje" rows="4" placeholder="Wprowadź dodatkowe informacje" th:field="*{dodatkoweInformacje}"></textarea>
                 </div>
 
-                <button class="btn btn-primary" type="submit">Zapisz</button>
+                <button class="btn btn-primary" type="submit">Dodaj</button>
             </form>
         </div>
     </div>
