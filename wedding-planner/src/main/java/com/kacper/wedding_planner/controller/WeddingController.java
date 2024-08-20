@@ -62,7 +62,7 @@ public class WeddingController {
     @PostMapping("/update")
     public String updateGuest(@ModelAttribute Guest guest) {
         guestRepository.save(guest);
-        return "redirect:/guests";
+        return "redirect:/guests/confirmed";
     }
 
     @GetMapping("/delete/{id}")

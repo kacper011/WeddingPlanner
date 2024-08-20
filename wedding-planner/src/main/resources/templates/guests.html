@@ -162,7 +162,6 @@
                         <th>Imię</th>
                         <th>Obecność</th>
                         <th>Kontakt</th>
-                        <th>Informacje</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -181,9 +180,6 @@
                             </form>
                         </td>
                         <td th:text="${guest.kontakt}"></td>
-                        <td>
-                            <a href="#" th:href="@{/guests/details/{id}(id=${guest.id})}" class="btn btn-info btn-sm">Wyświetl</a>
-                        </td>
                     </tr>
                     </tbody>
                 </table>
