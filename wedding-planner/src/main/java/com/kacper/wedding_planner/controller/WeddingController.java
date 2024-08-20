@@ -62,10 +62,10 @@ public class WeddingController {
     @PostMapping("/update")
     public String updateGuest(@ModelAttribute Guest guest) {
         guestRepository.save(guest);
-        return "redirect:/guests/confirmed";
+        return "redirect:/guests";
     }
 
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteGuest(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         System.out.println("Attempting to delete guest with id: " + id);
         guestService.deleteGuest(id);

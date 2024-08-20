@@ -131,13 +131,11 @@
                 <li class="nav-item">
                     <a class="nav-link active" th:href="@{/guests/new}">Dodaj gościa</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link active" th:href="@{/guests/confirmed}">Obecni</a>
+                    <a class="nav-link" th:href="@{/guests/confirmed}">Obecni</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link active" th:href="@{/guests/notConfirmed}">Nieobecni</a>
+                    <a class="nav-link" th:href="@{/guests/notConfirmed}">Nieobecni</a>
                 </li>
             </ul>
         </div>
@@ -162,6 +160,7 @@
                         <th>Imię</th>
                         <th>Obecność</th>
                         <th>Kontakt</th>
+                        <th>Akcje</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -180,6 +179,11 @@
                             </form>
                         </td>
                         <td th:text="${guest.kontakt}"></td>
+                        <td>
+                            <form th:action="@{/guests/delete/{id}(id=${guest.id})}" method="post" style="display: inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Usuń</button>
+                            </form>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
