@@ -103,6 +103,20 @@
             width: 50px; /* Można dostosować szerokość zgodnie z potrzebami */
             text-align: center;
         }
+
+        /* Kolory dla obecnych i nieobecnych gości */
+        .row-present {
+            background-color: #d4edda; /* Zielony dla obecnych */
+        }
+
+        .row-absent {
+            background-color: #f8d7da; /* Czerwony dla nieobecnych */
+        }
+
+        /* Wiersz bez koloru */
+        .row-neutral {
+            background-color: transparent; /* Brak koloru */
+        }
     </style>
 </head>
 <body>
@@ -152,7 +166,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="guest, iter : ${guests}">
+                    <tr th:each="guest, iter : ${guests}" th:class="${guest.potwierdzenieObecnosci == 'TAK'} ? 'row-present' : (${guest.potwierdzenieObecnosci == 'NIE'} ? 'row-absent' : 'row-neutral')">
                         <td class="col-number" th:text="${iter.count}"></td> <!-- Numeracja -->
                         <td th:text="${guest.nazwisko}"></td>
                         <td th:text="${guest.imie}"></td>
@@ -181,6 +195,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMF8jYln/NU6Pp3O8jsLxga4q9UWB/jv7Z0n3G1R7rBXgSIBHF6wr06Jz3M" crossorigin="anonymous"></script>
 </body>
 </html>
+
+
 
 
 
