@@ -74,15 +74,17 @@ public class WeddingController {
     }
 
     @PostMapping("/updatePresence/{id}")
-    public String updatePresence(@PathVariable Long id, @RequestParam String presence) {
+    public String updatePresence(@PathVariable("id") Long id, @RequestParam("presence") String presence) {
+        Guest guest = guestRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid guest Id:" + id));
+        guest.setPotwierdzenieObecnosci(presence);
 
-        guestService.updatePresence(id, presence);
-
-        if ("TAK".equals(presence)) {
-            return "redirect:/guests/confirmed";
-        } else {
-            return "redirect:/guests/notConfirmed";
+        if ("NIE".equals(presence)) {
+            guest.setTransport(null); 
+            guest.setNocleg(null);
         }
+
+        guestRepository.save(guest);
+        return "redirect:/guests";
     }
 
     @PostMapping("/updateTransport/{id}")
