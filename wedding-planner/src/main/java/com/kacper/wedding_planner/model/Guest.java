@@ -1,6 +1,7 @@
 package com.kacper.wedding_planner.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,7 @@ public class Guest {
     private String nocleg;
 
     @Column(name = "kontakt")
+    @Pattern(regexp = "\\d{3} \\d{3} \\d{3}", message = "Numer telefonu musi mieć format xxx xxx xxx")
     private String kontakt;
 
     @Column(name = "informacje")

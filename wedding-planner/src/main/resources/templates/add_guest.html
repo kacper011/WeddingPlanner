@@ -138,7 +138,7 @@
 
                 <div class="form-group mb-3">
                     <label class="form-label" for="kontakt">Numer Telefonu</label>
-                    <input class="form-control" id="kontakt" name="kontakt" placeholder="Wprowadź numer telefonu gościa" type="text" th:field="*{kontakt}" required>
+                    <input class="form-control" id="kontakt" name="kontakt" placeholder="Numer telefonu musi mieć format xxx xxx xxx" type="text" th:field="*{kontakt}" required>
                 </div>
 
                 <div class="form-group mb-3">
@@ -146,11 +146,24 @@
                     <textarea class="form-control" id="dodatkoweInformacje" name="dodatkoweInformacje" rows="4" placeholder="Wprowadź dodatkowe informacje" th:field="*{dodatkoweInformacje}"></textarea>
                 </div>
 
-                <button class="btn btn-primary" type="submit">Dodaj</button>
+                <button class="btn btn-primary" type="submit" onclick="return validatePhoneNumber()">Dodaj</button>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+    function validatePhoneNumber() {
+        var kontakt = document.getElementById("kontakt").value;
+        var regex = /^\d{3} \d{3} \d{3}$/;
+
+        if (!regex.test(kontakt)) {
+            alert("Numer telefonu musi mieć format xxx xxx xxx");
+            return false; // Blokuje przesłanie formularza
+        }
+        return true; // Pozwala na przesłanie formularza
+    }
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMF8jYln/NU6Pp3O8jsLxga4q9UWB/jv7Z0n3G1R7rBXgSIBHF6wr06Jz3M" crossorigin="anonymous"></script>
 </body>
