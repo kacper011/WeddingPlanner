@@ -130,4 +130,17 @@ public class WeddingController {
         model.addAttribute("notConfirmedGuests", sortedNotConfirmedGuests);
         return "not_confirmed_guests";
     }
+
+    @GetMapping("/search")
+    public String searchGuests(@RequestParam("nazwisko") String nazwisko, Model model) {
+        List<Guest> guests = guestRepository.findAll();
+
+        List<Guest> filteredGuests = guests.stream()
+                .filter(guest -> guest.getNazwisko().toLowerCase().contains(nazwisko.toLowerCase()))
+                .collect(Collectors.toList());
+
+        model.addAttribute("guests", filteredGuests);
+
+        return "guests";
+    }
 }

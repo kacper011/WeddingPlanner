@@ -19,4 +19,5 @@ public interface GuestService {
 
     List<Guest> findByConfirmedPresence(String potwierdzenieObecnosci);
 
+
 }
