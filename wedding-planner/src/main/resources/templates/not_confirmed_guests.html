@@ -153,7 +153,10 @@
             <td class="col-number" th:text="${iter.count}"></td> <!-- Numeracja -->
             <td th:text="${guest.nazwisko}"></td>
             <td th:text="${guest.imie}"></td>
-            <td th:text="${guest.potwierdzenieObecnosci}"></td>
+            <td>
+              <button th:if="${guest.potwierdzenieObecnosci == 'TAK'}" class="btn btn-success btn-sm">TAK</button>
+              <button th:if="${guest.potwierdzenieObecnosci == 'NIE'}" class="btn btn-danger btn-sm">NIE</button>
+            </td>
             <td th:text="${guest.kontakt}"></td>
           </tr>
           </tbody>

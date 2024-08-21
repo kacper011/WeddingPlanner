@@ -11,7 +11,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/guests")
@@ -28,7 +30,13 @@ public class WeddingController {
     @GetMapping
     public String listGuests(Model model) {
         List<Guest> guests = guestService.getAllGuests();
-        model.addAttribute("guests", guests);
+
+        List<Guest> sortedGuests = guests.stream()
+                        .sorted(Comparator.comparing(Guest::getNazwisko))
+                                .collect(Collectors.toList());
+
+
+        model.addAttribute("guests", sortedGuests);
         return "guests";
     }
 
@@ -102,14 +110,24 @@ public class WeddingController {
     @GetMapping("/confirmed")
     public String getConfirmedGuests(Model model) {
         List<Guest> confirmedGuests = guestRepository.findByPotwierdzenieObecnosci("TAK");
-        model.addAttribute("confirmedGuests", confirmedGuests);
+
+        List<Guest> sortedConfirmedGuests = confirmedGuests.stream()
+                        .sorted(Comparator.comparing(Guest::getNazwisko))
+                                .collect(Collectors.toList());
+
+        model.addAttribute("confirmedGuests", sortedConfirmedGuests);
         return "confirmed_guests";
     }
 
     @GetMapping("/notConfirmed")
     public String getNotConfirmedGuests(Model model) {
         List<Guest> notConfirmedGuests = guestRepository.findByPotwierdzenieObecnosci("NIE");
-        model.addAttribute("notConfirmedGuests", notConfirmedGuests);
+
+        List<Guest> sortedNotConfirmedGuests = notConfirmedGuests.stream()
+                        .sorted(Comparator.comparing(Guest::getNazwisko))
+                                .collect(Collectors.toList());
+
+        model.addAttribute("notConfirmedGuests", sortedNotConfirmedGuests);
         return "not_confirmed_guests";
     }
 }
