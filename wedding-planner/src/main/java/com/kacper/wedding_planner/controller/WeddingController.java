@@ -143,4 +143,14 @@ public class WeddingController {
 
         return "guests";
     }
+
+    @GetMapping("/receptions")
+    public String showAfterpartyGuestList(Model model) {
+        // Tutaj można dodać logikę, np. pobranie listy gości z bazy danych
+        // Przykład: List<Guest> afterpartyGuests = guestService.getAfterpartyGuests();
+        // model.addAttribute("afterpartyGuests", afterpartyGuests);
+
+        // Zwracamy nazwę template'u, np. "afterparty"
+        return "wedding_receptions";
+    }
 }

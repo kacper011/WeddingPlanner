@@ -118,12 +118,20 @@
           <a class="nav-link active" th:href="@{/guests/new}">Dodaj gościa</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" th:href="@{/guests/confirmed}">Obecni</a>
+          <a class="nav-link" th:href="@{/guests/confirmed}">Obecni</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" th:href="@{/guests/notConfirmed}">Nieobecni</a>
+          <a class="nav-link" th:href="@{/guests/notConfirmed}">Nieobecni</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/guests/receptions}">Poprawiny</a>
         </li>
       </ul>
+      <!-- Formularz wyszukiwania w nawigacji -->
+      <form class="d-flex" method="get" th:action="@{/guests/search}">
+        <input class="form-control me-2" type="search" name="nazwisko" placeholder="Wyszukaj po nazwisku" aria-label="Search">
+        <button class="btn btn-primary" type="submit">Szukaj</button>
+      </form>
     </div>
   </div>
 </nav>
