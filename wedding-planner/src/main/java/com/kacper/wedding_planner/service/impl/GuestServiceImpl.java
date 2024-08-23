@@ -62,6 +62,10 @@ public class GuestServiceImpl implements GuestService {
         return guestRepository.findByPotwierdzenieObecnosci(potwierdzenieObecnosci);
     }
 
+    @Override
+    public List<Guest> findByPoprawiny(String poprawiny) {
+        return guestRepository.findByPoprawiny(poprawiny);
+    }
 
 
     @Override

@@ -34,6 +34,9 @@ public class Guest {
     @Column(name = "nocleg")
     private String nocleg;
 
+    @Column(name = "poprawiny")
+    private String poprawiny;
+
     @Column(name = "kontakt")
     @Pattern(regexp = "\\d{3} \\d{3} \\d{3}", message = "Numer telefonu musi mieć format xxx xxx xxx")
     private String kontakt;

@@ -19,5 +19,5 @@ public interface GuestService {
 
     List<Guest> findByConfirmedPresence(String potwierdzenieObecnosci);
 
-
+    List<Guest> findByPoprawiny(String poprawiny);
 }

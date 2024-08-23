@@ -145,12 +145,11 @@ public class WeddingController {
     }
 
     @GetMapping("/receptions")
-    public String showAfterpartyGuestList(Model model) {
-        // Tutaj można dodać logikę, np. pobranie listy gości z bazy danych
-        // Przykład: List<Guest> afterpartyGuests = guestService.getAfterpartyGuests();
-        // model.addAttribute("afterpartyGuests", afterpartyGuests);
+    public String getWeddingReceptionsGuests(Model model) {
 
-        // Zwracamy nazwę template'u, np. "afterparty"
+        List<Guest> weddingReceptionsGuests = guestRepository.findByPoprawiny("TAK");
+        model.addAttribute("weddingReceptionsGuests", weddingReceptionsGuests);
+
         return "wedding_receptions";
     }
 }

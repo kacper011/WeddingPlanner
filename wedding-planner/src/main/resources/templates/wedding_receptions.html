@@ -172,23 +172,16 @@
           </tr>
           </thead>
           <tbody>
-          <tr th:each="guest, iter : ${afterpartyGuests}" th:class="${guest.potwierdzenieObecnosci == 'TAK'} ? 'row-present' : (${guest.potwierdzenieObecnosci == 'NIE'} ? 'row-absent' : 'row-neutral')">
+          <tr th:each="guest, iter : ${weddingReceptionsGuests}" th:class="${guest.potwierdzenieObecnosci == 'TAK'} ? 'row-present' : (${guest.potwierdzenieObecnosci == 'NIE'} ? 'row-absent' : 'row-neutral')">
             <td class="col-number" th:text="${iter.count}"></td> <!-- Numeracja -->
             <td th:text="${guest.nazwisko}"></td>
             <td th:text="${guest.imie}"></td>
             <td>
-              <form th:action="@{/afterparty/updatePresence/{id}(id=${guest.id})}" method="post" style="display: inline;">
-                <input type="hidden" name="presence" value="TAK"/>
-                <button type="submit" class="btn btn-success">TAK</button>
-              </form>
-              <form th:action="@{/afterparty/updatePresence/{id}(id=${guest.id})}" method="post" style="display: inline;">
-                <input type="hidden" name="presence" value="NIE"/>
-                <button type="submit" class="btn btn-danger">NIE</button>
-              </form>
+              <button th:if="${guest.poprawiny == 'TAK'}" class="btn btn-success btn-sm">TAK</button>
             </td>
             <td th:text="${guest.kontakt}"></td>
             <td>
-              <form th:action="@{/afterparty/delete/{id}(id=${guest.id})}" method="post" style="display: inline;">
+              <form th:action="@{/receptions/delete/{id}(id=${guest.id})}" method="post" style="display: inline;">
                 <button type="submit" class="btn btn-danger btn-sm">Usuń</button>
               </form>
             </td>

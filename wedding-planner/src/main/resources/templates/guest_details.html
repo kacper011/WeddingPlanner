@@ -46,6 +46,17 @@
       background-color: #8a4b4b;
       border-color: #8a4b4b;
     }
+    .form-inline-group {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .form-inline-group .form-check {
+      margin-bottom: 0;
+    }
+    .form-inline-group label {
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -70,72 +81,73 @@
   <form action="#" th:action="@{/guests/update}" th:object="${guest}" method="post">
     <input type="hidden" th:field="*{id}"/>
     <input type="hidden" th:field="*{potwierdzenieObecnosci}"/>
+
     <div class="mb-3">
       <label for="nazwisko" class="form-label">Nazwisko</label>
       <input type="text" class="form-control" id="nazwisko" th:field="*{nazwisko}" required/>
     </div>
+
     <div class="mb-3">
       <label for="imie" class="form-label">Imię</label>
       <input type="text" class="form-control" id="imie" th:field="*{imie}" required/>
     </div>
+
     <div class="mb-3">
       <label for="telefon" class="form-label">Numer Telefonu</label>
       <input type="text" class="form-control" id="telefon" th:field="*{kontakt}" required/>
     </div>
+
     <div class="mb-3">
       <label for="dodatkoweInformacje" class="form-label">Dodatkowe Informacje</label>
       <textarea id="dodatkoweInformacje" class="form-control" rows="4" th:field="*{dodatkoweInformacje}"></textarea>
     </div>
-    <div class="mb-3">
-      <label class="form-label">Transport</label>
+
+    <div class="form-inline-group mb-3">
       <div>
+        <label class="form-label">Transport</label>
         <div class="form-check">
-          <input class="form-check-input" type="radio" id="transportTak" th:field="*{transport}" value="TAK"
-                 th:checked="${guest.transport} == 'TAK'"/>
-          <label class="form-check-label" for="transportTak">
-            TAK
-          </label>
+          <input class="form-check-input" type="radio" id="transportTak" th:field="*{transport}" value="TAK" th:checked="${guest.transport} == 'TAK'"/>
+          <label class="form-check-label" for="transportTak">TAK</label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" id="transportNie" th:field="*{transport}" value="NIE"
-                 th:checked="${guest.transport} == 'NIE'"/>
-          <label class="form-check-label" for="transportNie">
-            NIE
-          </label>
+          <input class="form-check-input" type="radio" id="transportNie" th:field="*{transport}" value="NIE" th:checked="${guest.transport} == 'NIE'"/>
+          <label class="form-check-label" for="transportNie">NIE</label>
+        </div>
+      </div>
+
+      <div>
+        <label class="form-label">Nocleg</label>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="noclegTak" th:field="*{nocleg}" value="TAK" th:checked="${guest.nocleg} == 'TAK'"/>
+          <label class="form-check-label" for="noclegTak">TAK</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="noclegNie" th:field="*{nocleg}" value="NIE" th:checked="${guest.nocleg} == 'NIE'"/>
+          <label class="form-check-label" for="noclegNie">NIE</label>
+        </div>
+      </div>
+
+      <div>
+        <label class="form-label">Poprawiny</label>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="poprawinyTak" th:field="*{poprawiny}" value="TAK" th:checked="${guest.poprawiny} == 'TAK'"/>
+          <label class="form-check-label" for="poprawinyTak">TAK</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="poprawinyNie" th:field="*{poprawiny}" value="NIE" th:checked="${guest.poprawiny} == 'NIE'"/>
+          <label class="form-check-label" for="poprawinyNie">NIE</label>
         </div>
       </div>
     </div>
 
-    <!-- Sekcja dotycząca noclegu -->
-    <div class="mb-3">
-      <label class="form-label">Nocleg</label>
-      <div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" id="noclegTak" th:field="*{nocleg}" value="TAK"
-                 th:checked="${guest.nocleg} == 'TAK'"/>
-          <label class="form-check-label" for="noclegTak">
-            TAK
-          </label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" id="noclegNie" th:field="*{nocleg}" value="NIE"
-                 th:checked="${guest.nocleg} == 'NIE'"/>
-          <label class="form-check-label" for="noclegNie">
-            NIE
-          </label>
-        </div>
-      </div>
-    </div>
-
-    <div class="d-flex justify-content-end">
-      <button type="submit" class="btn btn-primary me-2">Zapisz</button>
-    </div>
+    <button type="submit" class="btn btn-primary">Zapisz</button>
   </form>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMF8jYln/NU6Pp3O8jsLxga4q9UWB/jv7Z0n3G1R7rBXgSIBHF6wr06Jz3M" crossorigin="anonymous"></script>
 </body>
 </html>
+
 
 
 
