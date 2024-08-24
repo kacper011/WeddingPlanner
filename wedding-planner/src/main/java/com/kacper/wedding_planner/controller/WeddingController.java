@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -151,5 +152,22 @@ public class WeddingController {
         model.addAttribute("weddingReceptionsGuests", weddingReceptionsGuests);
 
         return "wedding_receptions";
+    }
+
+    @PostMapping("/receptions/toggle/{id}")
+    public String toggleReceptionStatus(@PathVariable Long id) {
+        Optional<Guest> optionalGuest = guestRepository.findById(id);
+
+        if (optionalGuest.isPresent()) {
+            Guest guest = optionalGuest.get();
+            if ("TAK".equals(guest.getPoprawiny())) {
+                guest.setPoprawiny("NIE");
+            } else {
+                guest.setPoprawiny("TAK");
+            }
+            guestRepository.save(guest);
+        }
+
+        return "redirect:/guests/receptions";
     }
 }
