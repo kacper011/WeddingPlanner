@@ -3,7 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <title>Rejestracja</title>
-    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #f9f4ef, #fceaea);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background-color: #ffffff;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 420px;
+            border: 2px solid #f4c2c2;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 24px;
+            color: #4a4a4a;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #4a4a4a;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 15px;
+            background-color: #fef8f8;
+        }
+
+        input:focus {
+            border-color: #f4c2c2;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(244, 194, 194, 0.4);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #f4c2c2;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #e8a1a1;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: #7aaed6;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        p[th\\:if] {
+            text-align: center;
+            margin-top: 10px;
+            color: #e74c3c;
+        }
+    </style>
 </head>
 <body>
 <div class="login-container">
@@ -22,7 +110,7 @@
         Masz już konto? <a th:href="@{/login}">Zaloguj się</a>
     </div>
 
-    <p th:if="${error}" style="color: red;" th:text="${error}"></p>
+    <p th:if="${error}" th:text="${error}"></p>
 </div>
 </body>
 </html>
