@@ -43,4 +43,8 @@ public class Guest {
 
     @Column(name = "informacje")
     private String dodatkoweInformacje;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

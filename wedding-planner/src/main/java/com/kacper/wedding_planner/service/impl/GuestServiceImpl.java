@@ -1,6 +1,7 @@
 package com.kacper.wedding_planner.service.impl;
 
 import com.kacper.wedding_planner.model.Guest;
+import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.GuestRepository;
 import com.kacper.wedding_planner.service.GuestService;
 import org.springframework.stereotype.Service;
@@ -65,6 +66,11 @@ public class GuestServiceImpl implements GuestService {
     @Override
     public List<Guest> findByPoprawiny(String poprawiny) {
         return guestRepository.findByPoprawiny(poprawiny);
+    }
+
+    @Override
+    public List<Guest> getAllGuestsByUser(User user) {
+        return guestRepository.findAllByUser(user);
     }
 
 

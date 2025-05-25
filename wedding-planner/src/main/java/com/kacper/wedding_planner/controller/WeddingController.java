@@ -2,9 +2,11 @@ package com.kacper.wedding_planner.controller;
 
 import com.kacper.wedding_planner.exception.ResourceNotFoundException;
 import com.kacper.wedding_planner.model.Guest;
+import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.GuestRepository;
 import com.kacper.wedding_planner.service.GuestService;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,8 +31,8 @@ public class WeddingController {
     }
 
     @GetMapping
-    public String listGuests(Model model) {
-        List<Guest> guests = guestService.getAllGuests();
+    public String listGuests(Model model, @AuthenticationPrincipal User currentUser) {
+        List<Guest> guests = guestService.getAllGuestsByUser(currentUser);
 
         List<Guest> sortedGuests = guests.stream()
                         .sorted(Comparator.comparing(Guest::getNazwisko))
