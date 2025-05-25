@@ -10,9 +10,7 @@ import java.util.List;
 @Repository
 public interface GuestRepository extends JpaRepository<Guest, Long> {
 
-    List<Guest> findAllByUser(User user);
-
-    List<Guest> findByPotwierdzenieObecnosci(String potwierdzenieObecnosci);
-
-    List<Guest> findByPoprawiny(String poprawiny);
+    List<Guest> findByUser(User user);
+    List<Guest> findByUserAndPotwierdzenieObecnosci(User user, String status);
+    List<Guest> findByUserAndPoprawiny(User user, String poprawiny);
 }

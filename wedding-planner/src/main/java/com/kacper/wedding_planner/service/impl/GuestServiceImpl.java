@@ -58,19 +58,18 @@ public class GuestServiceImpl implements GuestService {
     }
 
     @Override
-    public List<Guest> findByConfirmedPresence(String potwierdzenieObecnosci) {
-
-        return guestRepository.findByPotwierdzenieObecnosci(potwierdzenieObecnosci);
+    public List<Guest> findByConfirmedPresence(User user, String potwierdzenieObecnosci) {
+        return guestRepository.findByUserAndPotwierdzenieObecnosci(user, potwierdzenieObecnosci);
     }
 
     @Override
-    public List<Guest> findByPoprawiny(String poprawiny) {
-        return guestRepository.findByPoprawiny(poprawiny);
+    public List<Guest> findByPoprawiny(User user, String poprawiny) {
+        return guestRepository.findByUserAndPoprawiny(user, poprawiny);
     }
 
     @Override
     public List<Guest> getAllGuestsByUser(User user) {
-        return guestRepository.findAllByUser(user);
+        return guestRepository.findByUser(user);
     }
 
 

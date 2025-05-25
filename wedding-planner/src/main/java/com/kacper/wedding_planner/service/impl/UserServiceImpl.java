@@ -3,6 +3,7 @@ package com.kacper.wedding_planner.service.impl;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.UserRepository;
 import com.kacper.wedding_planner.service.UserService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElse(null);
+        return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }

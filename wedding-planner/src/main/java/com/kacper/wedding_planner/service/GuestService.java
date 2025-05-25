@@ -20,9 +20,9 @@ public interface GuestService {
 
     void updateLodging(Long id, String lodging);
 
-    List<Guest> findByConfirmedPresence(String potwierdzenieObecnosci);
+    List<Guest> findByConfirmedPresence(User user, String potwierdzenieObecnosci);
 
-    List<Guest> findByPoprawiny(String poprawiny);
+    List<Guest> findByPoprawiny(User user, String poprawiny);
 
 
 
