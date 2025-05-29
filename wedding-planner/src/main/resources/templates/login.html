@@ -4,9 +4,11 @@
   <meta charset="UTF-8">
   <title>Logowanie</title>
   <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap');
+
         body {
-            background: linear-gradient(135deg, #f9f4ef, #cce7f3);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(145deg, #fff0f6, #f0f9ff);
+            font-family: 'Open Sans', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -17,67 +19,73 @@
         .login-container {
             background-color: #ffffff;
             padding: 40px 30px;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
             width: 100%;
             max-width: 420px;
-            border: 2px solid #f4c2c2;
+            border: 2px solid #f7d9e3;
         }
 
         h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 36px;
             text-align: center;
             margin-bottom: 24px;
-            color: #4a4a4a;
+            color: #d291bc;
         }
 
         label {
             display: block;
             margin-bottom: 6px;
-            color: #4a4a4a;
+            color: #6a4e77;
+            font-weight: 600;
         }
 
         input[type="email"],
         input[type="password"] {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            font-size: 15px;
-            background-color: #f9f4ef;
+          width: 100%;
+          padding: 12px;
+          margin: 0 0 20px 0;
+          border: 1px solid #e3c5d8;
+          border-radius: 12px;
+          font-size: 15px;
+          background-color: #fef7fb;
+          transition: box-shadow 0.2s ease-in-out;
+          box-sizing: border-box;
         }
 
         input:focus {
-            border-color: #f4c2c2;
+            border-color: #d291bc;
             outline: none;
-            box-shadow: 0 0 0 2px rgba(244, 194, 194, 0.4);
+            box-shadow: 0 0 0 3px rgba(210, 145, 188, 0.3);
         }
 
         button {
             width: 100%;
             padding: 12px;
-            background-color: #f4c2c2;
+            background-color: #d291bc;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             color: white;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
+            transition: background-color 0.3s ease;
         }
 
         button:hover {
-            background-color: #e8a1a1;
+            background-color: #c173a5;
         }
 
         .footer {
             text-align: center;
             margin-top: 18px;
             font-size: 14px;
+            color: #6a4e77;
         }
 
         .footer a {
-            color: #7aaed6;
+            color: #a77994;
             text-decoration: none;
             font-weight: bold;
         }
@@ -89,7 +97,7 @@
 </head>
 <body>
 <div class="login-container">
-  <h1>Zaloguj się</h1>
+  <h1>Wedding Planner</h1>
   <form action="/login" method="post">
     <label for="email">Email:</label>
     <input type="email" id="email" name="username" required>
@@ -97,7 +105,7 @@
     <label for="password">Hasło:</label>
     <input type="password" id="password" name="password" required>
 
-    <button type="submit">Zaloguj</button>
+    <button type="submit">Zaloguj się</button>
   </form>
   <div class="footer">
     Nie masz konta? <a th:href="@{/register}">Zarejestruj się</a>
