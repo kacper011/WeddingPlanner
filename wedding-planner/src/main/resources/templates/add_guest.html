@@ -116,6 +116,14 @@
                     <a class="nav-link" th:href="@{/guests/receptions}">Poprawiny</a>
                 </li>
             </ul>
+
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post" style="margin: 0;">
+                        <button type="submit" class="btn btn-outline-danger ms-3">Wyloguj</button>
+                    </form>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
