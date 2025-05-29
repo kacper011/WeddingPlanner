@@ -5,16 +5,19 @@
     <title>Wedding Guest Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap');
+
         html, body {
             height: 100%;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
+            font-family: 'Open Sans', sans-serif;
         }
+
         body {
             background-image: url('/images/bgc.jpg');
-            font-family: 'Arial', sans-serif;
-            color: #5a5a5a; /* Odcień szarości dla tekstu */
+            color: #5a5a5a;
             display: flex;
             flex-direction: column;
         }
@@ -24,22 +27,26 @@
             position: fixed;
             top: 0;
             z-index: 1000;
-            background-color: #f4d7d7; /* Jasnoróżowy kolor paska nawigacji */
-            color: #5a5a5a; /* Kolor tekstu na pasku nawigacji */
+            background-color: #f4d7d7;
+            color: #5a5a5a;
+            font-family: 'Open Sans', sans-serif;
         }
 
         .navbar-brand {
             font-size: 1.5rem;
             font-weight: bold;
+            font-family: 'Great Vibes', cursive;
+            color: #a65c5c;
         }
 
-        h1 {
+        h1, h2, h3 {
             margin-bottom: 20px;
-            color: #a65c5c; /* Ciemniejszy róż dla nagłówków */
+            color: #a65c5c;
+            font-family: 'Great Vibes', cursive;
         }
 
         .container {
-            background: #fff7f7; /* Bardzo jasny róż */
+            background: #fff7f7;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
@@ -48,15 +55,17 @@
             max-width: 1000px;
             box-sizing: border-box;
             margin-top: 100px;
+            font-family: 'Open Sans', sans-serif;
         }
 
         .table {
             width: 100%;
-            table-layout: fixed; /* Umożliwia stałą szerokość kolumn */
+            table-layout: fixed;
+            font-family: 'Open Sans', sans-serif;
         }
 
         .table thead {
-            background-color: #f4d7d7; /* Jasnoróżowy kolor nagłówków tabeli */
+            background-color: #f4d7d7;
             color: #5a5a5a;
         }
 
@@ -66,20 +75,21 @@
             text-overflow: ellipsis;
             white-space: nowrap;
             vertical-align: middle;
-            border-color: #f4d7d7; /* Dopasowanie kolorów obramowania */
-            padding: 0.3rem; /* Mniejsze paddingi */
+            border-color: #f4d7d7;
+            padding: 0.3rem;
         }
 
         .table td {
-            word-wrap: break-word; /* Zawijanie długich słów */
-            font-size: 0.8rem; /* Mniejszy rozmiar tekstu */
+            word-wrap: break-word;
+            font-size: 0.8rem;
         }
 
         .btn-success, .btn-danger {
-            width: 50px; /* Mniejsza szerokość przycisków */
-            margin: 1px; /* Mniejszy margines między przyciskami */
-            font-size: 0.6rem; /* Mniejszy rozmiar tekstu */
-            padding: 0.25rem; /* Mniejsze paddingi */
+            width: 50px;
+            margin: 1px;
+            font-size: 0.6rem;
+            padding: 0.25rem;
+            font-family: 'Open Sans', sans-serif;
         }
 
         .btn-disabled {
@@ -91,39 +101,58 @@
             resize: none;
             width: 100%;
             box-sizing: border-box;
-            font-size: 0.8rem; /* Mniejszy rozmiar tekstu */
+            font-size: 0.8rem;
+            font-family: 'Open Sans', sans-serif;
         }
 
         .table-responsive {
-            overflow-x: auto; /* Umożliwia przewijanie poziome, jeśli potrzebne */
+            overflow-x: auto;
         }
 
-        /* Stylizowanie kolumny numeru */
         .col-number {
-            width: 50px; /* Można dostosować szerokość zgodnie z potrzebami */
+            width: 50px;
             text-align: center;
         }
 
-        /* Kolory dla obecnych i nieobecnych gości */
         .row-present {
-            background-color: #d4edda; /* Zielony dla obecnych */
+            background-color: #d4edda;
         }
 
         .row-absent {
-            background-color: #f8d7da; /* Czerwony dla nieobecnych */
+            background-color: #f8d7da;
         }
 
-        /* Wiersz bez koloru */
         .row-neutral {
-            background-color: transparent; /* Brak koloru */
+            background-color: transparent;
+        }
+
+        .nav-link {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #7c5c5c !important;
+            transition: all 0.3s ease-in-out;
+            padding: 8px 12px;
+            border-radius: 6px;
+            letter-spacing: 0.3px;
+            background: transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #a65c5c;
+            background-color: #fce8e8;
+            text-decoration: none;
         }
     </style>
+
 </head>
 <body>
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg custom-navbar">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/guests">Wedding Guest Management</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand wedding-brand" href="/guests">Wedding Guest Management</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -142,21 +171,22 @@
                 </li>
             </ul>
 
-            <form class="d-flex" method="get" th:action="@{/guests/search}">
+            <form class="d-flex search-form" method="get" th:action="@{/guests/search}">
                 <input class="form-control me-2" type="search" name="nazwisko" placeholder="Wyszukaj po nazwisku" aria-label="Search">
-                <button class="btn btn-primary" type="submit">Szukaj</button>
+                <button class="btn btn-search" type="submit">Szukaj</button>
             </form>
 
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <form th:action="@{/logout}" method="post" style="margin: 0;">
-                        <button type="submit" class="btn btn-outline-danger ms-3">Wyloguj</button>
+                        <button type="submit" class="btn btn-outline-danger logout-btn">Wyloguj</button>
                     </form>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
+
 
 <div class="container">
     <div class="row">
