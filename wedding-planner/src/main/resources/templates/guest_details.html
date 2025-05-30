@@ -1,135 +1,174 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Szczegóły Gościa</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
   <style>
-
     @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap');
 
+    html, body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden; /* wyłącz scroll całej strony */
+    }
+
     body {
+      display: flex;
+      flex-direction: column;
       background-image: url('/images/bgc.jpg');
       font-family: 'Arial', sans-serif;
       color: #5a5a5a;
+      min-height: 100vh;
     }
 
     /* ============================
-           NAVIGATION STYLES (START)
-        ============================ */
-        .navbar {
-            width: 100%;
-            position: fixed;
-            top: 0;
-            z-index: 1000;
-            background-color: #f4d7d7;
-            color: #5a5a5a;
-            font-family: 'Open Sans', sans-serif;
-            box-shadow: 0 2px 8px rgba(166, 92, 92, 0.1);
-            padding: 0.75rem 1.5rem;
-        }
+       NAVIGATION STYLES (START)
+    ============================ */
+    .navbar {
+      width: 100%;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+      background-color: #f4d7d7;
+      color: #5a5a5a;
+      font-family: 'Open Sans', sans-serif;
+      box-shadow: 0 2px 8px rgba(166, 92, 92, 0.1);
+      padding: 0.75rem 1.5rem;
 
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
-            font-family: 'Great Vibes', cursive;
-            color: #a65c5c;
-            user-select: none;
-            text-decoration: none;
-        }
+    }
 
-        .nav-link {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #7c5c5c !important;
-            transition: all 0.3s ease-in-out;
-            padding: 8px 12px;
-            border-radius: 6px;
-            letter-spacing: 0.3px;
-            background: transparent;
-            text-decoration: none;
-        }
+    .navbar-brand {
+      font-size: 1.5rem;
+      font-weight: bold;
+      font-family: 'Great Vibes', cursive;
+      color: #a65c5c;
+      user-select: none;
+      text-decoration: none;
+    }
 
-        .nav-link:hover,
-        .nav-link.active {
-            color: #a65c5c !important;
-            background-color: #fce8e8;
-            text-decoration: none;
-        }
+    .nav-link {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #7c5c5c !important;
+      transition: all 0.3s ease-in-out;
+      padding: 8px 12px;
+      border-radius: 6px;
+      letter-spacing: 0.3px;
+      background: transparent;
+      text-decoration: none;
+    }
 
-        .logout-btn {
-            font-size: 0.85rem;
-            padding: 5px 10px;
-            margin-left: 10px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-family: 'Open Sans', sans-serif;
-        }
+    .nav-link:hover,
+    .nav-link.active {
+      color: #a65c5c !important;
+      background-color: #fce8e8;
+      text-decoration: none;
+    }
 
-        .btn-search {
-            background-color: #a65c5c;
-            color: white;
-            border: none;
-            padding: 0.375rem 0.75rem;
-            font-size: 0.85rem;
-            border-radius: 6px;
-            font-family: 'Open Sans', sans-serif;
-            transition: background-color 0.3s ease;
-        }
+    .btn-outline-danger {
+      font-size: 0.85rem;
+      padding: 5px 10px;
+      margin-left: 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-family: 'Open Sans', sans-serif;
+    }
 
-        .btn-search:hover {
-            background-color: #924949;
-        }
-        /* ============================
-           NAVIGATION STYLES (END)
-        ============================ */
+    /* ============================
+       NAVIGATION STYLES (END)
+    ============================ */
 
     .container {
-      background: #fff7f7;
-      padding: 20px;
+      margin-top: 100px; /* wysokość navbar */
+      background-color: rgba(255, 245, 245, 0.95);
+      padding: 10px 15px;
       border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 3px 8px rgba(166, 92, 92, 0.15);
       color: #333;
       max-width: 800px;
-      margin-top: 100px;
+      max-height: calc(100vh - 56px - 20px); /* pełna wysokość okna minus navbar i margines */
+      overflow-y: auto; /* scroll tylko w kontenerze */
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 0.9rem;
     }
-    h1 {
+
+    h1.text-center {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2rem;
       color: #a65c5c;
+      text-shadow: 0 0 5px rgba(166, 92, 92, 0.3);
+      margin-bottom: 10px;
     }
-    .form-control {
+
+    .form-label {
+      font-weight: 600;
+      color: #8f5a5a;
+      font-size: 0.9rem;
+    }
+
+    .form-control,
+    textarea.form-control {
+      font-size: 0.9rem;
+      padding: 6px 10px;
       border-color: #f4d7d7;
     }
+
     .btn-primary {
+      padding: 6px 20px;
+      font-size: 0.9rem;
+      border-radius: 6px;
       background-color: #a65c5c;
       border-color: #a65c5c;
+      transition: background-color 0.3s ease;
     }
+
     .btn-primary:hover {
       background-color: #8a4b4b;
       border-color: #8a4b4b;
     }
+
     .form-inline-group {
       display: flex;
-      justify-content: space-between; /* Ustawienie przestrzeni między elementami */
-      gap: 20px;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 1rem;
     }
+
     .form-inline-group .form-check {
       margin-bottom: 0;
     }
+
     .form-inline-group label {
       font-weight: bold;
     }
-    .text-center {
-    text-align: center;
-}
 
+    .form-check-input {
+      width: 14px;
+      height: 14px;
+    }
+
+    .text-center {
+      text-align: center;
+    }
   </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg">
   <div class="container-fluid">
     <a class="navbar-brand" href="/guests">Wedding Guest Management</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -152,22 +191,22 @@
 <div class="container">
   <h1 class="text-center">Szczegóły Gościa</h1>
   <form action="#" th:action="@{/guests/update}" th:object="${guest}" method="post">
-    <input type="hidden" th:field="*{id}"/>
-    <input type="hidden" th:field="*{potwierdzenieObecnosci}"/>
+    <input type="hidden" th:field="*{id}" />
+    <input type="hidden" th:field="*{potwierdzenieObecnosci}" />
 
     <div class="mb-3">
       <label for="nazwisko" class="form-label">Nazwisko</label>
-      <input type="text" class="form-control" id="nazwisko" th:field="*{nazwisko}" required/>
+      <input type="text" class="form-control" id="nazwisko" th:field="*{nazwisko}" required />
     </div>
 
     <div class="mb-3">
       <label for="imie" class="form-label">Imię</label>
-      <input type="text" class="form-control" id="imie" th:field="*{imie}" required/>
+      <input type="text" class="form-control" id="imie" th:field="*{imie}" required />
     </div>
 
     <div class="mb-3">
       <label for="telefon" class="form-label">Numer Telefonu</label>
-      <input type="text" class="form-control" id="telefon" th:field="*{kontakt}" required/>
+      <input type="text" class="form-control" id="telefon" th:field="*{kontakt}" required />
     </div>
 
     <div class="mb-3">
@@ -179,11 +218,25 @@
       <div>
         <label class="form-label">Transport</label>
         <div class="form-check">
-          <input class="form-check-input" type="radio" id="transportTak" th:field="*{transport}" value="TAK" th:checked="${guest.transport} == 'TAK'"/>
+          <input
+                  class="form-check-input"
+                  type="radio"
+                  id="transportTak"
+                  th:field="*{transport}"
+                  value="TAK"
+                  th:checked="${guest.transport} == 'TAK'"
+          />
           <label class="form-check-label" for="transportTak">TAK</label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" id="transportNie" th:field="*{transport}" value="NIE" th:checked="${guest.transport} == 'NIE'"/>
+          <input
+                  class="form-check-input"
+                  type="radio"
+                  id="transportNie"
+                  th:field="*{transport}"
+                  value="NIE"
+                  th:checked="${guest.transport} == 'NIE'"
+          />
           <label class="form-check-label" for="transportNie">NIE</label>
         </div>
       </div>
@@ -191,11 +244,25 @@
       <div>
         <label class="form-label">Nocleg</label>
         <div class="form-check">
-          <input class="form-check-input" type="radio" id="noclegTak" th:field="*{nocleg}" value="TAK" th:checked="${guest.nocleg} == 'TAK'"/>
+          <input
+                  class="form-check-input"
+                  type="radio"
+                  id="noclegTak"
+                  th:field="*{nocleg}"
+                  value="TAK"
+                  th:checked="${guest.nocleg} == 'TAK'"
+          />
           <label class="form-check-label" for="noclegTak">TAK</label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" id="noclegNie" th:field="*{nocleg}" value="NIE" th:checked="${guest.nocleg} == 'NIE'"/>
+          <input
+                  class="form-check-input"
+                  type="radio"
+                  id="noclegNie"
+                  th:field="*{nocleg}"
+                  value="NIE"
+                  th:checked="${guest.nocleg} == 'NIE'"
+          />
           <label class="form-check-label" for="noclegNie">NIE</label>
         </div>
       </div>
@@ -203,28 +270,40 @@
       <div>
         <label class="form-label">Poprawiny</label>
         <div class="form-check">
-          <input class="form-check-input" type="radio" id="poprawinyTak" th:field="*{poprawiny}" value="TAK" th:checked="${guest.poprawiny} == 'TAK'"/>
+          <input
+                  class="form-check-input"
+                  type="radio"
+                  id="poprawinyTak"
+                  th:field="*{poprawiny}"
+                  value="TAK"
+                  th:checked="${guest.poprawiny} == 'TAK'"
+          />
           <label class="form-check-label" for="poprawinyTak">TAK</label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" id="poprawinyNie" th:field="*{poprawiny}" value="NIE" th:checked="${guest.poprawiny} == 'NIE'"/>
+          <input
+                  class="form-check-input"
+                  type="radio"
+                  id="poprawinyNie"
+                  th:field="*{poprawiny}"
+                  value="NIE"
+                  th:checked="${guest.poprawiny} == 'NIE'"
+          />
           <label class="form-check-label" for="poprawinyNie">NIE</label>
         </div>
       </div>
     </div>
+
     <div class="text-center">
       <button type="submit" class="btn btn-primary">Zapisz</button>
     </div>
   </form>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMF8jYln/NU6Pp3O8jsLxga4q9UWB/jv7Z0n3G1R7rBXgSIBHF6wr06Jz3M" crossorigin="anonymous"></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMF8jYln/NU6Pp3O8jsLxga4q9UWB/jv7Z0n3G1R7rBXgSIBHF6wr06Jz3M"
+        crossorigin="anonymous"
+></script>
 </body>
 </html>
-
-
-
-
-
-
-
