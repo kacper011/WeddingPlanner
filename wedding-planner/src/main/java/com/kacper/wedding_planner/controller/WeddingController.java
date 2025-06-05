@@ -1,5 +1,6 @@
 package com.kacper.wedding_planner.controller;
 
+import com.kacper.wedding_planner.config.CustomUserDetails;
 import com.kacper.wedding_planner.exception.ResourceNotFoundException;
 import com.kacper.wedding_planner.model.Guest;
 import com.kacper.wedding_planner.model.User;
@@ -34,7 +35,12 @@ public class WeddingController {
     }
 
     @GetMapping
-    public String listGuests(Model model, @AuthenticationPrincipal org.springframework.security.core.userdetails.User principal) {
+    public String listGuests(Model model, @AuthenticationPrincipal CustomUserDetails principal) {
+
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
         User currentUser = userService.findByEmail(principal.getUsername());
         List<Guest> guests = guestRepository.findByUser(currentUser);
 

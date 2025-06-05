@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void registerUser(String email, String password) {
+    public void registerUser(String email, String password, String firstName) {
         if (userRepository.findByEmail(email).isPresent()) {
             throw new IllegalArgumentException("Email już istnieje.");
         }
@@ -27,6 +27,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
+        user.setFirstName(firstName);
 
         userRepository.save(user);
     }

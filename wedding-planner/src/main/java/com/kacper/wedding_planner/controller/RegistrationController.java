@@ -24,7 +24,7 @@ public class RegistrationController {
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("userDto") UserDTO userDTO, Model model) {
         try {
-            userService.registerUser(userDTO.getEmail(), userDTO.getPassword());
+            userService.registerUser(userDTO.getEmail(), userDTO.getPassword(), userDTO.getFirstName());
             return "redirect:/login?success";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
