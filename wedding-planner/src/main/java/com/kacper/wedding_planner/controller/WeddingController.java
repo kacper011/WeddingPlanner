@@ -127,7 +127,7 @@ public class WeddingController {
 
     @GetMapping("/confirmed")
     public String getConfirmedGuests(Model model,
-                                     @AuthenticationPrincipal org.springframework.security.core.userdetails.User principal) {
+                                     @AuthenticationPrincipal CustomUserDetails principal) {
         User currentUser = userService.findByEmail(principal.getUsername());
         List<Guest> confirmedGuests = guestRepository.findByUserAndPotwierdzenieObecnosci(currentUser, "TAK");
 
