@@ -138,7 +138,7 @@ public class WeddingController {
 
     @GetMapping("/notConfirmed")
     public String getNotConfirmedGuests(Model model,
-                                        @AuthenticationPrincipal org.springframework.security.core.userdetails.User principal) {
+                                        @AuthenticationPrincipal CustomUserDetails principal) {
         User currentUser = userService.findByEmail(principal.getUsername());
         List<Guest> notConfirmedGuests = guestRepository.findByUserAndPotwierdzenieObecnosci(currentUser, "NIE");
 
