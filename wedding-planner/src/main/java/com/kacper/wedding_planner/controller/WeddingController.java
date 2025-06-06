@@ -163,7 +163,7 @@ public class WeddingController {
 
     @GetMapping("/receptions")
     public String getWeddingReceptionsGuests(Model model,
-                                             @AuthenticationPrincipal org.springframework.security.core.userdetails.User principal) {
+                                             @AuthenticationPrincipal CustomUserDetails principal) {
         User currentUser = userService.findByEmail(principal.getUsername());
         List<Guest> weddingReceptionsGuests = guestRepository.findByUserAndPoprawiny(currentUser, "TAK");
 
