@@ -1,6 +1,6 @@
 package com.kacper.wedding_planner.controller;
 
-import com.kacper.wedding_planner.model.UserDTO;
+import com.kacper.wedding_planner.dto.UserDTO;
 import com.kacper.wedding_planner.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

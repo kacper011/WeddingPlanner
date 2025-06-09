@@ -1,4 +1,4 @@
-package com.kacper.wedding_planner.model;
+package com.kacper.wedding_planner.dto;
 
 import lombok.Getter;
 import lombok.Setter;

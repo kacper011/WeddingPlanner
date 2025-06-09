@@ -4,9 +4,12 @@ import com.kacper.wedding_planner.config.CustomUserDetails;
 import com.kacper.wedding_planner.exception.ResourceNotFoundException;
 import com.kacper.wedding_planner.model.Guest;
 import com.kacper.wedding_planner.model.User;
+import com.kacper.wedding_planner.model.WeddingInfo;
 import com.kacper.wedding_planner.repository.GuestRepository;
+import com.kacper.wedding_planner.repository.WeddingInfoRepository;
 import com.kacper.wedding_planner.service.GuestService;
 import com.kacper.wedding_planner.service.UserService;
+import com.kacper.wedding_planner.service.WeddingInfoService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -27,11 +30,15 @@ public class WeddingController {
     private final GuestService guestService;
     private final GuestRepository guestRepository;
     private final UserService userService;
+    private final WeddingInfoRepository weddingInfoRepository;
+    private final WeddingInfoService weddingInfoService;
 
-    public WeddingController(GuestService guestService, GuestRepository guestRepository, UserService userService) {
+    public WeddingController(GuestService guestService, GuestRepository guestRepository, UserService userService, WeddingInfoRepository weddingInfoRepository, WeddingInfoService weddingInfoService) {
         this.guestService = guestService;
         this.guestRepository = guestRepository;
         this.userService = userService;
+        this.weddingInfoRepository = weddingInfoRepository;
+        this.weddingInfoService = weddingInfoService;
     }
 
     @GetMapping
@@ -186,5 +193,22 @@ public class WeddingController {
 
         return "redirect:/guests/receptions";
     }
+
+    @GetMapping("/countdown")
+    public String getCountdownPage(Model model, @AuthenticationPrincipal CustomUserDetails principal) {
+        User user = userService.findByEmail(principal.getUsername());
+        WeddingInfo info = weddingInfoRepository.findByUser(user).orElse(new WeddingInfo());
+        model.addAttribute("weddingInfo", info);
+        return "countdown";
+    }
+
+    @PostMapping("/countdown")
+    public String saveWeddingInfo(@ModelAttribute WeddingInfo weddingInfo,
+                                  @AuthenticationPrincipal CustomUserDetails principal) {
+        User user = userService.findByEmail(principal.getUsername());
+        weddingInfoService.saveOrUpdateWeddingInfo(weddingInfo, user);
+        return "redirect:/countdown";
+    }
+
 }
 
