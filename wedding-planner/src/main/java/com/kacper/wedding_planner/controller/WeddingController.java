@@ -200,6 +200,7 @@ public class WeddingController {
         WeddingInfo info = weddingInfoRepository.findByUser(user).orElse(new WeddingInfo());
         model.addAttribute("weddingInfo", info);
         return "countdown";
+
     }
 
     @PostMapping("/countdown")
@@ -207,7 +208,7 @@ public class WeddingController {
                                   @AuthenticationPrincipal CustomUserDetails principal) {
         User user = userService.findByEmail(principal.getUsername());
         weddingInfoService.saveOrUpdateWeddingInfo(weddingInfo, user);
-        return "redirect:/countdown";
+        return "redirect:/guests/countdown";
     }
 
 }

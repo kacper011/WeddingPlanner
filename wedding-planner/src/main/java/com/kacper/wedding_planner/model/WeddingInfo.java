@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -21,6 +22,7 @@ public class WeddingInfo {
 
     private String groomName;
     private String brideName;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate weddingDate;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
