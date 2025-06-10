@@ -65,7 +65,7 @@ public class WeddingController {
     @PostMapping
     public String addGuest(@Valid @ModelAttribute("guest") Guest guest,
                            BindingResult bindingResult,
-                           @AuthenticationPrincipal org.springframework.security.core.userdetails.User principal) {
+                           @AuthenticationPrincipal CustomUserDetails principal) {
         if (bindingResult.hasErrors()) {
             return "add_guest";
         }
@@ -87,9 +87,9 @@ public class WeddingController {
 
     @PostMapping("/update")
     public String updateGuest(@ModelAttribute Guest guest,
-                              @AuthenticationPrincipal org.springframework.security.core.userdetails.User principal) {
+                              @AuthenticationPrincipal CustomUserDetails principal) {
         User currentUser = userService.findByEmail(principal.getUsername());
-        guest.setUser(currentUser); // zabezpieczenie przed utratą powiązania
+        guest.setUser(currentUser);
         guestRepository.save(guest);
         return "redirect:/guests";
     }
@@ -156,7 +156,7 @@ public class WeddingController {
 
     @GetMapping("/search")
     public String searchGuests(@RequestParam("nazwisko") String nazwisko, Model model,
-                               @AuthenticationPrincipal org.springframework.security.core.userdetails.User principal) {
+                               @AuthenticationPrincipal CustomUserDetails principal) {
         User currentUser = userService.findByEmail(principal.getUsername());
         List<Guest> guests = guestRepository.findByUser(currentUser);
 

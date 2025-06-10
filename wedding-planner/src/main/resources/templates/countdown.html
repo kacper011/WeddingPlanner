@@ -137,16 +137,56 @@
     }
 
     .countdown {
-      font-size: 2.5rem; /* zmniejszone */
+      width: 220px;
+      height: 220px;
+      background-color: #fff0f0;
+      color: #a65c5c;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.8rem;
+      font-weight: 600;
+      font-family: 'Open Sans', sans-serif;
+      box-shadow: 0 6px 30px rgba(213, 83, 79, 0.15);
+      margin: 0 auto;
+      padding: 20px;
+      animation: pulse 1.8s infinite;
+      border: 4px solid #f4d7d7;
+      text-align: center;
+    }
+
+    .countdown-circle {
+      width: 300px;
+      height: 300px;
+      background-color: #fff0f0;
+      color: #a65c5c;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Open Sans', sans-serif;
+      box-shadow: 0 8px 40px rgba(213, 83, 79, 0.15);
+      margin: 0 auto;
+      padding: 20px;
+      animation: pulse 2s infinite;
+      border: 6px solid #f4d7d7;
+      text-align: center;
+    }
+
+    .countdown-names {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      font-family: 'Great Vibes', cursive;
+      color: #a65c5c;
+    }
+
+    .countdown-days {
+      font-size: 1.3rem;
       font-weight: 700;
-      color: #d9534f;
-      background-color: #fff5f5;
-      padding: 20px 15px; /* zmniejszone paddingi */
-      border-radius: 60px;
-      display: inline-block;
-      box-shadow: 0 4px 20px rgba(213, 83, 79, 0.15);
-      animation: pulse 1.5s infinite;
-      min-width: 240px; /* zmniejszone */
     }
 
     @keyframes pulse {
@@ -230,6 +270,17 @@
         font-size: 2.5rem;
       }
     }
+
+    .glass-card {
+      background: rgba(244, 215, 215, 0.7); /* kolor jak navbar, ale półprzezroczysty */
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(166, 92, 92, 0.25); /* lekki różowy cień */
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 30px;
+      transition: all 0.3s ease-in-out;
+    }
   </style>
 </head>
 <body>
@@ -276,13 +327,16 @@
 <!-- MAIN CONTENT -->
 <main class="content-wrapper">
   <!-- COUNTDOWN -->
-  <div class="counter-container" th:if="${weddingInfo.weddingDate != null}">
+  <div class="counter-container glass-card" th:if="${weddingInfo.weddingDate != null}">
     <h2 class="counter-title" th:text="|${weddingInfo.brideName} &amp; ${weddingInfo.groomName}|">Imiona</h2>
-    <div class="countdown" id="countdown"></div>
+    <div class="countdown-circle" id="countdown">
+      <div class="countdown-names" th:text="|${weddingInfo.brideName} & ${weddingInfo.groomName}|">Dominika & Kacper</div>
+      <div class="countdown-days"></div>
+    </div>
   </div>
 
   <!-- FORM -->
-  <div class="form-container">
+  <div class="form-container glass-card">
     <form th:action="@{/guests/countdown}" th:object="${weddingInfo}" method="post">
       <label>Imię Panny Młodej:</label>
       <input type="text" class="form-control" th:field="*{brideName}" required />
@@ -313,10 +367,12 @@
         const diffTime = weddingDate - now;
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
+        const daysEl = document.querySelector(".countdown-days");
+
         if (diffDays >= 0) {
-          countdownEl.textContent = diffDays + " dni do ślubu!";
+          daysEl.textContent = diffDays + " dni do ślubu!";
         } else {
-          countdownEl.textContent = "Gratulacje! Ślub już się odbył!";
+          daysEl.textContent = "Gratulacje! Ślub już się odbył!";
         }
       }
 
