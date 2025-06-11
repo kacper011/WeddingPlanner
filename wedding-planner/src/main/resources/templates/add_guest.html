@@ -98,28 +98,36 @@
     .main-container {
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start;
         min-height: calc(100vh - 80px);
         margin: 0 auto;
-        padding-top: 80px;
+        padding-top: 100px;
+        padding-bottom: 20px;
+        min-height: calc(100vh - 100px);
+        overflow: hidden;
     }
 
     .card {
         background: #fff6f6;
         border-radius: 15px;
         box-shadow: 0 8px 20px rgba(166, 92, 92, 0.25);
-        padding: 30px 35px;
+        padding: 15px 20px;
         border: 1px solid #f3d6d6;
         max-width: 450px;
-        width: 100%;
+        width: 90vw;
+        max-height: 600px;
+        overflow-y: auto;
+        font-size: 0.9rem;
+        overflow: visible;
+        box-sizing: border-box;
     }
 
     .card-header {
         text-align: center;
         font-family: 'Great Vibes', cursive;
-        font-size: 2.5rem;
+        font-size: 2rem;
         color: #a65c5c;
-        margin-bottom: 25px;
+        margin-bottom: 15px;
         user-select: none;
         background: transparent;
         padding: 0;
@@ -143,21 +151,21 @@
     .form-label {
         font-weight: 600;
         color: #9a5757;
-        font-size: 1rem;
+        font-size: 0.85rem;
         display: block;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
         letter-spacing: 0.03em;
     }
 
     .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
     }
 
     .form-control {
         width: 100%;
-        padding: 10px 14px;
-        font-size: 1rem;
-        border-radius: 12px;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        border-radius: 10px;
         border: 2px solid #f2c2c2;
         background-color: #fff1f1;
         color: #5a5a5a;
@@ -184,12 +192,12 @@
 
     .btn-primary {
         width: 100%;
-        padding: 12px 0;
+        padding: 4px 0;
         background-color: #a65c5c;
         border: none;
-        border-radius: 15px;
+        border-radius: 12px;
         font-family: 'Great Vibes', cursive;
-        font-size: 1.6rem;
+        font-size: 1.3rem;
         color: #fff;
         cursor: pointer;
         transition: background-color 0.3s ease;
@@ -278,6 +286,17 @@
                 <div class="form-group mb-3">
                     <label class="form-label" for="nazwisko">Nazwisko</label>
                     <input class="form-control" id="nazwisko" name="nazwisko" placeholder="Wprowadź nazwisko gościa" type="text" th:field="*{nazwisko}" required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label" for="kategoria">Kategoria</label>
+                    <select class="form-control" id="kategoria" name="kategoria" th:field="*{kategoria}" required>
+                        <option value="" th:selected="${guest.kategoria == null}">Wybierz kategorię</option>
+                        <option th:each="category : ${categories}"
+                                th:value="${category}"
+                                th:text="${#strings.replace(category.name(), '_', ' ')}">
+                        </option>
+                    </select>
                 </div>
 
                 <div class="form-group mb-3">

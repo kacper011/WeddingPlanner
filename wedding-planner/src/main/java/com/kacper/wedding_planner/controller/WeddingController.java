@@ -3,6 +3,7 @@ package com.kacper.wedding_planner.controller;
 import com.kacper.wedding_planner.config.CustomUserDetails;
 import com.kacper.wedding_planner.exception.ResourceNotFoundException;
 import com.kacper.wedding_planner.model.Guest;
+import com.kacper.wedding_planner.model.GuestCategory;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.model.WeddingInfo;
 import com.kacper.wedding_planner.repository.GuestRepository;
@@ -58,15 +59,20 @@ public class WeddingController {
 
     @GetMapping("/new")
     public String showCreateGuestForm(Model model) {
-        model.addAttribute("guest", new Guest());
+        Guest newGuest = new Guest();
+        newGuest.setKategoria(null);
+        model.addAttribute("guest", newGuest);
+        model.addAttribute("categories", GuestCategory.values());
         return "add_guest";
     }
 
     @PostMapping
     public String addGuest(@Valid @ModelAttribute("guest") Guest guest,
                            BindingResult bindingResult,
-                           @AuthenticationPrincipal CustomUserDetails principal) {
+                           @AuthenticationPrincipal CustomUserDetails principal,
+                           Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", GuestCategory.values());
             return "add_guest";
         }
 

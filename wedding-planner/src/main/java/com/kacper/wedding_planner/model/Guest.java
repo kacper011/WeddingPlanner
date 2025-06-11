@@ -1,6 +1,7 @@
 package com.kacper.wedding_planner.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -47,4 +48,9 @@ public class Guest {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "kategoria_goscia")
+    @NotNull(message = "Wybierz kategorię")
+    private GuestCategory kategoria;
 }
