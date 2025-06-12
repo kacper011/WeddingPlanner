@@ -119,7 +119,7 @@ public class WeddingController {
         }
 
         guestRepository.save(guest);
-        return "redirect:/guests/receptions";
+        return "redirect:/guests/confirmed";
     }
 
     @PostMapping("/delete/{id}")
