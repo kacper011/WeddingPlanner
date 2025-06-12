@@ -30,6 +30,12 @@
     <tr th:each="expense : ${expenses}">
         <td th:text="${expense.nazwa}"></td>
         <td th:text="${expense.kwota}"></td>
+        <td>
+            <a th:href="@{/expenses/delete/{id}(id=${expense.id})}"
+               onclick="return confirm('Na pewno chcesz usunąć ten wydatek?');">
+                Usuń
+            </a>
+        </td>
     </tr>
     </tbody>
 </table>

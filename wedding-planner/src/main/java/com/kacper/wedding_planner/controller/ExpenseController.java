@@ -8,10 +8,7 @@ import com.kacper.wedding_planner.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -45,6 +42,12 @@ public class ExpenseController {
         User user = userService.findByEmail(principal.getUsername());
         expenseService.saveExpense(expense, user);
 
+        return "redirect:/expenses";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteExpense(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails principal) {
+        expenseService.deleteExpenseByIdAndUser(id, principal.getUsername());
         return "redirect:/expenses";
     }
 }

@@ -43,4 +43,16 @@ public class ExpenseServiceImpl implements ExpenseService {
         expense.setUser(user);
         expenseRepository.save(expense);
     }
+
+    @Override
+    public void deleteExpenseByIdAndUser(Long id, String username) {
+        Expense expense = expenseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Wydatek nieznaleziony."));
+
+        if (!expense.getUser().getEmail().equals(username)) {
+            throw new RuntimeException("Nie jesteś autoryzowany do usunięcia tego wydatku.");
+        }
+
+        expenseRepository.delete(expense);
+    }
 }

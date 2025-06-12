@@ -12,4 +12,6 @@ public interface ExpenseService {
 
     public BigDecimal getTotalForUser(String userEmail);
     void saveExpense(Expense expense, User user);
+
+    void deleteExpenseByIdAndUser(Long id, String username);
 }
