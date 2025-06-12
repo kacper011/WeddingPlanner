@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Wydatki</title>
+    <meta charset="UTF-8" />
+</head>
+<body>
+<h1>Dodaj nowy wydatek</h1>
+<form th:action="@{/expenses}" th:object="${expense}" method="post">
+    <div class="mb-3">
+        <label for="nazwa" class="form-label">Nazwa wydatku</label>
+        <input type="text" class="form-control" id="nazwa" th:field="*{nazwa}" />
+    </div>
+    <div class="mb-3">
+        <label for="kwota" class="form-label">Kwota</label>
+        <input type="number" step="0.01" class="form-control" id="kwota" th:field="*{kwota}" />
+    </div>
+    <button type="submit" class="btn btn-primary">Dodaj wydatek</button>
+</form>
+
+<h2>Lista wydatków</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Nazwa</th>
+        <th>Kwota (zł)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="expense : ${expenses}">
+        <td th:text="${expense.nazwa}"></td>
+        <td th:text="${expense.kwota}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>Razem: <span th:text="${total}">0</span> zł</h3>
+</body>
+</html>
