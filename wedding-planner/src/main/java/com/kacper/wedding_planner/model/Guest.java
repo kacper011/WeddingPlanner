@@ -51,6 +51,6 @@ public class Guest {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "kategoria_goscia")
-    @NotNull(message = "Wybierz kategorię")
+    //@NotNull(message = "Wybierz kategorię")
     private GuestCategory kategoria;
 }

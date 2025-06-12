@@ -13,6 +13,7 @@ import com.kacper.wedding_planner.service.UserService;
 import com.kacper.wedding_planner.service.WeddingInfoService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -106,11 +107,19 @@ public class WeddingController {
 
     @PostMapping("/update")
     public String updateGuest(@ModelAttribute Guest guest,
-                              @AuthenticationPrincipal CustomUserDetails principal) {
+                              @AuthenticationPrincipal CustomUserDetails principal,
+                              Model model) {
+
         User currentUser = userService.findByEmail(principal.getUsername());
         guest.setUser(currentUser);
+
+        if (guest.getId() != null) {
+            Guest existingGuest = guestRepository.findById(guest.getId()).orElseThrow();
+            guest.setKategoria(existingGuest.getKategoria());
+        }
+
         guestRepository.save(guest);
-        return "redirect:/guests";
+        return "redirect:/guests/receptions";
     }
 
     @PostMapping("/delete/{id}")
