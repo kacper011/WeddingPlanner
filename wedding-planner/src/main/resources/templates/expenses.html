@@ -276,11 +276,6 @@
                     <a class="nav-link" th:href="@{/expenses}">Wydatki</a></li>
             </ul>
 
-            <form class="d-flex search-form" method="get" th:action="@{/guests/search}">
-                <input class="form-control me-2" type="search" name="nazwisko" placeholder="Wyszukaj po nazwisku" aria-label="Search">
-                <button class="btn btn-search" type="submit">Szukaj</button>
-            </form>
-
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item d-flex align-items-center me-2">
                     <span class="nav-link disabled" sec:authorize="isAuthenticated()">
