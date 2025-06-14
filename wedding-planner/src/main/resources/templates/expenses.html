@@ -333,9 +333,14 @@
         </table>
     </div>
 
-    <h3 class="text-end mt-3" style="font-family: 'Great Vibes', cursive; font-size: 1.3rem; color: #a65c5c;">
-        Razem: <span th:text="${total}" style="font-weight: 600;"></span> zł 💐
-    </h3>
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <a class="btn-filter" th:href="@{/expenses/export/pdf}" style="font-size: 0.85rem; padding: 6px 14px;">
+            📄 Eksportuj do PDF
+        </a>
+        <h3 class="m-0" style="font-family: 'Great Vibes', cursive; font-size: 1.3rem; color: #a65c5c;">
+            Razem: <span th:text="${total}" style="font-weight: 600;"></span> zł 💐
+        </h3>
+    </div>
 </div>
 
 

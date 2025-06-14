@@ -1,8 +1,10 @@
 package com.kacper.wedding_planner.controller;
 
 import com.kacper.wedding_planner.config.CustomUserDetails;
+import com.kacper.wedding_planner.model.Expense;
 import com.kacper.wedding_planner.model.Guest;
 import com.kacper.wedding_planner.model.User;
+import com.kacper.wedding_planner.repository.ExpenseRepository;
 import com.kacper.wedding_planner.repository.GuestRepository;
 import com.kacper.wedding_planner.service.GuestService;
 import com.kacper.wedding_planner.service.UserService;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.awt.*;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -24,11 +27,13 @@ public class PDFExportController {
     private final GuestService guestService;
     private final UserService userService;
     private final GuestRepository guestRepository;
+    private final ExpenseRepository expenseRepository;
 
-    public PDFExportController(GuestService guestService, UserService userService, GuestRepository guestRepository) {
+    public PDFExportController(GuestService guestService, UserService userService, GuestRepository guestRepository, ExpenseRepository expenseRepository) {
         this.guestService = guestService;
         this.userService = userService;
         this.guestRepository = guestRepository;
+        this.expenseRepository = expenseRepository;
     }
 
     @GetMapping("/guests/export/pdf")
@@ -86,6 +91,64 @@ public class PDFExportController {
         }
 
         document.add(table);
+        document.close();
+    }
+
+    @GetMapping("/expenses/export/pdf")
+    public void exportExpensesToPDF(HttpServletResponse response, @AuthenticationPrincipal CustomUserDetails principal) throws IOException {
+        if (principal == null) {
+            response.sendRedirect("/login");
+            return;
+        }
+
+        User currentUser = userService.findByEmail(principal.getUsername());
+        List<Expense> expenses = expenseRepository.findByUser(currentUser);
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=wydatki.pdf");
+
+        Document document = new Document(PageSize.A4);
+        PdfWriter.getInstance(document, response.getOutputStream());
+        document.open();
+
+        BaseFont baseFont = BaseFont.createFont(BaseFont.HELVETICA, "Cp1250", BaseFont.NOT_EMBEDDED);
+        Font fontTitle = new Font(baseFont, 18, Font.BOLD, Color.PINK);
+        Font fontHeader = new Font(baseFont, 12, Font.BOLD, Color.WHITE);
+        Font fontCell = new Font(baseFont, 12, Font.NORMAL, Color.BLACK);
+
+        Paragraph title = new Paragraph("Lista Wydatków", fontTitle);
+        title.setAlignment(Paragraph.ALIGN_CENTER);
+        title.setSpacingAfter(20);
+        document.add(title);
+
+        PdfPTable table = new PdfPTable(2);
+        table.setWidthPercentage(100f);
+        table.setWidths(new float[]{4f, 2f});
+
+        PdfPCell header = new PdfPCell();
+        header.setBackgroundColor(new Color(244, 215, 215));
+        header.setPadding(5);
+
+        header.setPhrase(new Phrase("Nazwa", fontHeader));
+        table.addCell(header);
+        header.setPhrase(new Phrase("Kwota (zł)", fontHeader));
+        table.addCell(header);
+
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (Expense expense : expenses) {
+            table.addCell(new Phrase(expense.getNazwa(), fontCell));
+            table.addCell(new Phrase(expense.getKwota().toString(), fontCell));
+            total = total.add(expense.getKwota());
+        }
+
+        document.add(table);
+
+        Paragraph summary = new Paragraph("Razem: " + total + " zł", fontCell);
+        summary.setSpacingBefore(20);
+        summary.setAlignment(Paragraph.ALIGN_RIGHT);
+        document.add(summary);
+
         document.close();
     }
 
