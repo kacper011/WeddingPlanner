@@ -230,6 +230,29 @@
           box-shadow: 0 5px 12px rgba(140, 75, 75, 0.6);
         }
 
+        .btn-export-pdf {
+            background-color: #a65c5c;      /* pastelowy róż */
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            font-size: 1rem;
+            border-radius: 12px;
+            font-family: 'Great Vibes', cursive;
+            cursor: pointer;
+            box-shadow: 0 3px 6px rgba(166, 92, 92, 0.4);
+            transition: background-color 0.3s ease;
+            text-decoration: none; /* usuwa podkreślenie dla linka */
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-export-pdf:hover {
+            background-color: #8c4b4b;
+            box-shadow: 0 5px 12px rgba(140, 75, 75, 0.6);
+        }
+
+
         /* Responsive - trochę mniejsze na telefonie */
         @media (max-width: 576px) {
           .filter-form {
@@ -308,7 +331,7 @@
         <div class="col">
             <div class="row mb-3">
                 <div class="col-md-8 d-flex align-items-center">
-                    <a href="/guests/export/pdf" class="btn btn-outline-secondary btn-sm me-3">
+                    <a href="/guests/export/pdf" class="btn-export-pdf me-3">
                         📄 Eksportuj do PDF
                     </a>
                 </div>

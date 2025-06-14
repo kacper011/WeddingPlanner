@@ -1,12 +1,16 @@
 package com.kacper.wedding_planner.controller;
 
+import com.kacper.wedding_planner.config.CustomUserDetails;
 import com.kacper.wedding_planner.model.Guest;
+import com.kacper.wedding_planner.model.User;
+import com.kacper.wedding_planner.repository.GuestRepository;
 import com.kacper.wedding_planner.service.GuestService;
+import com.kacper.wedding_planner.service.UserService;
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.pdf.*;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -18,18 +22,30 @@ import java.util.List;
 public class PDFExportController {
 
     private final GuestService guestService;
+    private final UserService userService;
+    private final GuestRepository guestRepository;
 
-    public PDFExportController(GuestService guestService) {
+    public PDFExportController(GuestService guestService, UserService userService, GuestRepository guestRepository) {
         this.guestService = guestService;
+        this.userService = userService;
+        this.guestRepository = guestRepository;
     }
 
     @GetMapping("/guests/export/pdf")
-    public void exportGuestListToPDF(HttpServletResponse response) throws IOException {
+    public void exportGuestListToPDF(HttpServletResponse response, @AuthenticationPrincipal CustomUserDetails principal) throws IOException {
+
+        if (principal == null) {
+            response.sendRedirect("/login");
+            return;
+        }
+
+        User currentUser = userService.findByEmail(principal.getUsername());
+
+        List<Guest> guests = guestRepository.findByUser(currentUser);
 
         response.setContentType("application/pdf");
         response.setHeader("Content-Disposition", "attachment; filename=lista_gosci.pdf");
 
-        List<Guest> guests = guestService.getAllGuests();
 
         Document document = new Document(PageSize.A4);
         PdfWriter.getInstance(document, response.getOutputStream());
