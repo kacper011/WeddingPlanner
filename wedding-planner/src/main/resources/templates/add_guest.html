@@ -216,11 +216,6 @@
                 <li class="nav-item"><a class="nav-link" th:href="@{/expenses}">Wydatki</a></li>
             </ul>
 
-            <form class="d-flex me-3" method="get" th:action="@{/guests/search}">
-                <input class="form-control me-2" name="nazwisko" placeholder="Wyszukaj po nazwisku">
-                <button class="btn btn-search" type="submit">Szukaj</button>
-            </form>
-
             <ul class="navbar-nav mb-2 mb-lg-0">
                 <li class="nav-item">
                     <span class="nav-link" sec:authorize="isAuthenticated()">Cześć, <span th:text="${#authentication.principal.firstName}"></span></span>
