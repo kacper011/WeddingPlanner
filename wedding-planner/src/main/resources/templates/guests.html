@@ -124,6 +124,35 @@
             min-width: 160px;
         }
 
+        .form-control {
+        width: 100%;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        border-radius: 10px;
+        border: 2px solid #f2c2c2;
+        background-color: #fff1f1;
+        color: #5a5a5a;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+
+    .form-control::placeholder {
+        color: #b88888;
+        font-style: italic;
+    }
+
+    .form-control:focus {
+        border-color: #a65c5c;
+        background-color: #fff7f7;
+        outline: none;
+        box-shadow: 0 0 8px rgba(166, 92, 92, 0.4);
+    }
+
+    textarea.form-control {
+        resize: vertical;
+        min-height: 90px;
+    }
+
         @media (max-width: 576px) {
             .table td, .table th {
                 font-size: 0.75rem;
