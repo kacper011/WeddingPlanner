@@ -105,22 +105,28 @@ public class WeddingController {
         return "guest_details";
     }
 
-    @PostMapping("/update")
-    public String updateGuest(@ModelAttribute Guest guest,
-                              @AuthenticationPrincipal CustomUserDetails principal,
-                              Model model) {
-
-        User currentUser = userService.findByEmail(principal.getUsername());
-        guest.setUser(currentUser);
-
-        if (guest.getId() != null) {
-            Guest existingGuest = guestRepository.findById(guest.getId()).orElseThrow();
-            guest.setKategoria(existingGuest.getKategoria());
-        }
-
+    @PostMapping("/create")
+    public String createGuest(@ModelAttribute Guest guest, @AuthenticationPrincipal CustomUserDetails principal) {
+        guest.setUser(userService.findByEmail(principal.getUsername()));
         guestRepository.save(guest);
-        return "redirect:/guests/confirmed";
+        return "redirect:/guests";
     }
+
+    @PostMapping("/edit/{id}")
+    public String editGuest(@PathVariable Long id, @ModelAttribute Guest guest, @AuthenticationPrincipal CustomUserDetails principal) {
+        try {
+            Guest existingGuest = guestRepository.findById(id).orElseThrow(() -> new RuntimeException("Guest not found with id: " + id));
+            guest.setId(id);
+            guest.setUser(userService.findByEmail(principal.getUsername()));
+            guest.setKategoria(existingGuest.getKategoria());
+            guestRepository.save(guest);
+            return "redirect:/guests/confirmed";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error-page";
+        }
+    }
+
 
     @PostMapping("/delete/{id}")
     public String deleteGuest(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {

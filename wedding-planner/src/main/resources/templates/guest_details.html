@@ -190,7 +190,7 @@
 
 <div class="container">
   <h1 class="text-center">Szczegóły Gościa</h1>
-  <form action="#" th:action="@{/guests/update}" th:object="${guest}" method="post">
+  <form action="#" th:action="@{/guests/edit/{id}(id=${guest.id})}" th:object="${guest}" method="post">
     <input type="hidden" th:field="*{id}" />
     <input type="hidden" th:field="*{potwierdzenieObecnosci}" />
 

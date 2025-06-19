@@ -238,7 +238,7 @@
             <h2 class="text-center">Dodaj Gościa</h2>
         </div>
         <div class="card-body">
-            <form method="post" role="form" th:action="@{/guests/update}" th:object="${guest}">
+            <form method="post" role="form" th:action="@{/guests/create}" th:object="${guest}">
                 <input type="hidden" th:field="*{id}" />
 
                 <div class="form-group mb-3">
