@@ -9,177 +9,191 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap');
 
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            font-family: 'Open Sans', sans-serif;
-        }
+ /* ============ PODSTAWOWE USTAWIENIA ============ */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', sans-serif;
+}
 
-        body {
-            background-image: url('/images/bgc.jpg');
-            color: #5a5a5a;
-            display: flex;
-            flex-direction: column;
-        }
+body {
+    background-image: url('/images/bgc.jpg');
+    color: #5a5a5a;
+    display: flex;
+    flex-direction: column;
+}
 
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            background-color: #f4d7d7;
-            box-shadow: 0 2px 8px rgba(166, 92, 92, 0.1);
-        }
+/* ============ NAWIGACJA ============ */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #f4d7d7;
+    box-shadow: 0 2px 8px rgba(166, 92, 92, 0.1);
+}
 
-        .navbar-brand {
-            font-family: 'Great Vibes', cursive;
-            color: #a65c5c !important;
-        }
+.navbar-brand {
+    font-family: 'Great Vibes', cursive;
+    color: #a65c5c !important;
+}
 
-        .navbar-toggler {
-            position: relative;
-            z-index: 1100;
-            border: 1px solid red;
-        }
+.navbar-toggler {
+    position: relative;
+    z-index: 1100;
+    border: 1px solid red; /* usuń jeśli niepotrzebne */
+}
 
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(166, 92, 92, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-        }
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(166, 92, 92, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
 
+.nav-link {
+    font-weight: 600;
+    color: #7c5c5c !important;
+}
 
-        .nav-link {
-            font-weight: 600;
-            color: #7c5c5c !important;
-        }
+.nav-link:hover,
+.nav-link.active {
+    color: #a65c5c !important;
+    background-color: #fce8e8;
+}
 
-        .nav-link:hover,
-        .nav-link.active {
-            color: #a65c5c !important;
-            background-color: #fce8e8;
-        }
+.btn-search {
+    background-color: #a65c5c;
+    color: white;
+}
 
-        .container {
-            background: #fff7f7;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-            margin-top: 100px;
-            max-width: 1000px;
-            width: 100%;
-        }
+/* ============ KONTEJNER GŁÓWNY ============ */
+.container {
+    background: #fff7f7;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    margin-top: 100px;
+    max-width: 1000px;
+    width: 100%;
+}
 
-        h1 {
-            color: #a65c5c;
-            font-family: 'Great Vibes', cursive;
-        }
+/* ============ NAGŁÓWKI ============ */
+h1 {
+    color: #a65c5c;
+    font-family: 'Great Vibes', cursive;
+}
 
-        .table {
-            width: 100%;
-            table-layout: auto;
-            font-size: 0.9rem;
-        }
+/* ============ TABELA ============ */
+.table {
+    width: 100%;
+    table-layout: auto;
+    font-size: 0.9rem;
+}
 
-        .table thead {
-            background-color: #f4d7d7;
-        }
+.table thead {
+    background-color: #f4d7d7;
+}
 
-        .table td, .table th {
-            text-align: center;
-            padding: 0.5rem;
-            word-break: break-word;
-        }
+.table td,
+.table th {
+    text-align: center;
+    padding: 0.5rem;
+    word-break: break-word;
+}
 
-        .btn-success, .btn-danger {
-            font-size: 0.75rem;
-            padding: 4px 10px;
-        }
+/* ============ PRZYCISKI ============ */
+.btn-success,
+.btn-danger {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+}
 
-        .btn-export-pdf {
-            background-color: #a65c5c;
-            color: white;
-            padding: 8px 16px;
-            font-family: 'Great Vibes', cursive;
-            border-radius: 12px;
-            border: none;
-            box-shadow: 0 3px 6px rgba(166, 92, 92, 0.4);
-        }
+.btn-export-pdf {
+    background-color: #a65c5c;
+    color: white;
+    padding: 8px 16px;
+    font-family: 'Great Vibes', cursive;
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 3px 6px rgba(166, 92, 92, 0.4);
+}
 
+/* ============ FORMULARZE ============ */
+.filter-form {
+    background: #fff0f0;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    gap: 10px;
+}
 
-        .btn-search {
-            background-color: #a65c5c;
-            color: white;
-        }
+.filter-form select.form-select {
+    min-width: 160px;
+}
 
+.form-control {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    border-radius: 10px;
+    border: 2px solid #f2c2c2;
+    background-color: #fff1f1;
+    color: #5a5a5a;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
 
-        .filter-form {
-            background: #fff0f0;
-            padding: 10px;
-            border-radius: 10px;
-            display: flex;
-            gap: 10px;
-        }
+.form-control::placeholder {
+    color: #b88888;
+    font-style: italic;
+}
 
-        .filter-form select.form-select {
-            min-width: 160px;
-        }
+.form-control:focus {
+    border-color: #a65c5c;
+    background-color: #fff7f7;
+    outline: none;
+    box-shadow: 0 0 8px rgba(166, 92, 92, 0.4);
+}
 
-        .form-control {
+textarea.form-control {
+    resize: vertical;
+    min-height: 90px;
+}
+
+/* ============ RESPONSYWNOŚĆ ============ */
+@media (max-width: 576px) {
+    .table td,
+    .table th {
+        font-size: 0.75rem;
+        white-space: normal;
+    }
+
+    .filter-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-success,
+    .btn-danger {
+        display: block;
         width: 100%;
-        padding: 8px 12px;
-        font-size: 0.9rem;
-        border-radius: 10px;
-        border: 2px solid #f2c2c2;
-        background-color: #fff1f1;
-        color: #5a5a5a;
-        transition: all 0.3s ease;
-        box-sizing: border-box;
+        margin-bottom: 4px;
     }
 
-    .form-control::placeholder {
-        color: #b88888;
-        font-style: italic;
+    .btn-export-pdf {
+        background-color: #a65c5c;
+        color: white;
+        padding: 8px 16px;
+        font-family: 'Great Vibes', cursive;
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 3px 6px rgba(166, 92, 92, 0.4);
     }
 
-    .form-control:focus {
-        border-color: #a65c5c;
-        background-color: #fff7f7;
-        outline: none;
-        box-shadow: 0 0 8px rgba(166, 92, 92, 0.4);
+    .nav-link {
+        display: block;
+        padding: 10px;
     }
-
-    textarea.form-control {
-        resize: vertical;
-        min-height: 90px;
-    }
-
-        @media (max-width: 576px) {
-            .table td, .table th {
-                font-size: 0.75rem;
-                white-space: normal;
-            }
-
-            .filter-form {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .btn-success, .btn-danger {
-                display: block;
-                width: 100%;
-                margin-bottom: 4px;
-            }
-
-            .btn-export-pdf {
-            background-color: #a65c5c;
-            color: white;
-            padding: 8px 16px;
-            font-family: 'Great Vibes', cursive;
-            border-radius: 12px;
-            border: none;
-            box-shadow: 0 3px 6px rgba(166, 92, 92, 0.4);
-            }
-        }
+}
 
     </style>
 </head>
