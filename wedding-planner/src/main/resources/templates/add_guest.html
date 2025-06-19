@@ -8,45 +8,47 @@
 
     @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap');
 
-    html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        overflow-x: hidden;
-        font-family: 'Open Sans', sans-serif;
-    }
+/* ===== RESET & PODSTAWOWE ===== */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            font-family: 'Open Sans', sans-serif;
+        }
 
-    body {
-        background-image: url('/images/bgc.jpg');
-        color: #5a5a5a;
-        display: flex;
-        flex-direction: column;
-    }
+        body {
+            background-image: url('/images/bgc.jpg');
+            color: #5a5a5a;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .navbar {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 1000;
-        background-color: #f4d7d7;
-        box-shadow: 0 2px 8px rgba(166, 92, 92, 0.1);
-    }
+        /* ===== NAWIGACJA ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: #f4d7d7;
+            box-shadow: 0 2px 8px rgba(166, 92, 92, 0.1);
+        }
 
-    .navbar-brand {
-        font-family: 'Great Vibes', cursive;
-        color: #a65c5c !important;
-    }
+        .navbar-brand {
+            font-family: 'Great Vibes', cursive;
+            color: #a65c5c !important;
+        }
 
         .navbar-toggler {
             position: relative;
             z-index: 1100;
-            border: 1px solid red;
+            border: none;
+            background: transparent;
         }
 
         .navbar-toggler-icon {
             background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(166, 92, 92, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
         }
-
 
         .nav-link {
             font-weight: 600;
@@ -59,139 +61,138 @@
             background-color: #fce8e8;
         }
 
-    /* ===== Karta formularza ===== */
-    .main-container {
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        min-height: calc(100vh - 80px);
-        margin: 0 auto;
-        padding-top: 100px;
-        padding-bottom: 20px;
-        min-height: calc(100vh - 100px);
-        overflow: hidden;
-    }
-
-    .card {
-        background: #fff6f6;
-        border-radius: 15px;
-        box-shadow: 0 8px 20px rgba(166, 92, 92, 0.25);
-        padding: 15px 20px;
-        border: 1px solid #f3d6d6;
-        max-width: 450px;
-        width: 90vw;
-        max-height: 600px;
-        overflow-y: auto;
-        font-size: 0.9rem;
-        overflow: visible;
-        box-sizing: border-box;
-    }
-
-    .card-header {
-        text-align: center;
-        font-family: 'Great Vibes', cursive;
-        font-size: 2rem;
-        color: #a65c5c;
-        margin-bottom: 15px;
-        user-select: none;
-        background: transparent;
-        padding: 0;
-        border: none;
-    }
-
-    .card-header h2 {
-        margin: 0;
-        color: #a65c5c;
-    }
-
-    .card-body {
-        padding: 0;
-    }
-
-    h1, h2, h3, label, input, textarea, button {
-        font-family: 'Open Sans', sans-serif !important;
-        color: #5a5a5a;
-    }
-
-    .form-label {
-        font-weight: 600;
-        color: #9a5757;
-        font-size: 0.85rem;
-        display: block;
-        margin-bottom: 6px;
-        letter-spacing: 0.03em;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    .form-control {
-        width: 100%;
-        padding: 8px 12px;
-        font-size: 0.9rem;
-        border-radius: 10px;
-        border: 2px solid #f2c2c2;
-        background-color: #fff1f1;
-        color: #5a5a5a;
-        transition: all 0.3s ease;
-        box-sizing: border-box;
-    }
-
-    .form-control::placeholder {
-        color: #b88888;
-        font-style: italic;
-    }
-
-    .form-control:focus {
-        border-color: #a65c5c;
-        background-color: #fff7f7;
-        outline: none;
-        box-shadow: 0 0 8px rgba(166, 92, 92, 0.4);
-    }
-
-    textarea.form-control {
-        resize: vertical;
-        min-height: 90px;
-    }
-
-    .btn-primary {
-        width: 100%;
-        padding: 4px 0;
-        background-color: #a65c5c;
-        border: none;
-        border-radius: 12px;
-        font-family: 'Great Vibes', cursive;
-        font-size: 1.3rem;
-        color: #fff;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        user-select: none;
-        box-shadow: 0 6px 12px rgba(166, 92, 92, 0.35);
-    }
-
-    .btn-search {
-       background-color: #a65c5c;
-       color: white;
-    }
-
-    .btn-primary:hover,
-    .btn-primary:focus {
-        background-color: #8c4c4c;
-        box-shadow: 0 8px 16px rgba(140, 76, 76, 0.6);
-    }
-
-    @media (max-width: 480px) {
+        /* ===== KARTA FORMULARZA ===== */
         .main-container {
-            padding-top: 40px;
-            margin: 0 15px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: calc(100vh - 100px);
+            margin: 0 auto;
+            padding-top: 100px;
+            padding-bottom: 20px;
+            overflow: hidden;
         }
 
         .card {
-            padding: 25px 20px;
-            max-width: 100%;
+            background: #fff6f6;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(166, 92, 92, 0.25);
+            padding: 15px 20px;
+            border: 1px solid #f3d6d6;
+            max-width: 450px;
+            width: 90vw;
+            overflow-y: auto;
+            font-size: 0.9rem;
         }
-    }
+
+        .card-header {
+            text-align: center;
+            font-family: 'Great Vibes', cursive;
+            font-size: 2rem;
+            color: #a65c5c;
+            margin-bottom: 15px;
+            background: transparent;
+            padding: 0;
+            border: none;
+        }
+
+        .card-header h2 {
+            margin: 0;
+            color: #a65c5c;
+        }
+
+        .card-body {
+            padding: 0;
+        }
+
+        /* ============ NAGŁÓWKI ============ */
+        h1 {
+            color: #a65c5c;
+            font-family: 'Great Vibes', cursive;
+        }
+
+        /* ===== FORMULARZE ===== */
+        .form-label {
+            font-weight: 600;
+            color: #9a5757;
+            font-size: 0.85rem;
+            display: block;
+            margin-bottom: 6px;
+            letter-spacing: 0.03em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            border-radius: 10px;
+            border: 2px solid #f2c2c2;
+            background-color: #fff1f1;
+            color: #5a5a5a;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-control::placeholder {
+            color: #b88888;
+            font-style: italic;
+        }
+
+        .form-control:focus {
+            border-color: #a65c5c;
+            background-color: #fff7f7;
+            outline: none;
+            box-shadow: 0 0 8px rgba(166, 92, 92, 0.4);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        /* ===== PRZYCISKI ===== */
+        .btn-primary {
+            width: 100%;
+            padding: 4px 0;
+            background-color: #a65c5c;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.3rem;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            user-select: none;
+            box-shadow: 0 6px 12px rgba(166, 92, 92, 0.35);
+        }
+
+        .btn-search {
+            background-color: #a65c5c;
+            color: white;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background-color: #8c4c4c;
+            box-shadow: 0 8px 16px rgba(140, 76, 76, 0.6);
+        }
+
+        /* ===== RESPONSYWNOŚĆ ===== */
+        @media (max-width: 480px) {
+            .main-container {
+                padding-top: 40px;
+                margin: 0 15px;
+            }
+
+            .card {
+                padding: 25px 20px;
+                max-width: 100%;
+            }
+        }
 
 </style>
 
