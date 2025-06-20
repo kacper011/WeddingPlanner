@@ -3,17 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <title>Odliczanie do Ślubu</title>
-  <link
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-          crossorigin="anonymous"
-  />
-  <link
-          href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap"
-          rel="stylesheet"
-  />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
+
+  @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap');
+
     html,
     body {
       height: 100%;
@@ -28,76 +22,47 @@
       flex-direction: column;
     }
 
-    /* ============================
-           NAVIGATION STYLES (START)
-        ============================ */
-        .navbar {
-            width: 100%;
-            position: fixed;
-            top: 0;
-            z-index: 1000;
-            background-color: #f4d7d7;
-            color: #5a5a5a;
-            font-family: 'Open Sans', sans-serif;
-            box-shadow: 0 2px 8px rgba(166, 92, 92, 0.1);
-            padding: 0.75rem 1.5rem;
-        }
+    /* ============ NAWIGACJA ============ */
+      .navbar {
+          position: fixed;
+          top: 0;
+          width: 100%;
+          z-index: 1000;
+          background-color: #f4d7d7;
+          box-shadow: 0 2px 8px rgba(166, 92, 92, 0.1);
+      }
 
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
-            font-family: 'Great Vibes', cursive;
-            color: #a65c5c;
-            user-select: none;
-            text-decoration: none;
-        }
+      .navbar-brand {
+          font-family: 'Great Vibes', cursive;
+          color: #a65c5c !important;
+      }
 
-        .nav-link {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #7c5c5c !important;
-            transition: all 0.3s ease-in-out;
-            padding: 8px 12px;
-            border-radius: 6px;
-            letter-spacing: 0.3px;
-            background: transparent;
-            text-decoration: none;
-        }
+      .navbar-toggler {
+          position: relative;
+          z-index: 1100;
+          border: 1px solid red; /* usuń jeśli niepotrzebne */
+      }
 
-        .nav-link:hover,
-        .nav-link.active {
-            color: #a65c5c !important;
-            background-color: #fce8e8;
-            text-decoration: none;
-        }
+      .navbar-toggler-icon {
+          background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(166, 92, 92, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+      }
 
-        .logout-btn {
-            font-size: 0.85rem;
-            padding: 5px 10px;
-            margin-left: 10px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-family: 'Open Sans', sans-serif;
-        }
+      .nav-link {
+          font-weight: 600;
+          color: #7c5c5c !important;
+      }
 
-        .btn-search {
-            background-color: #a65c5c;
-            color: white;
-            border: none;
-            padding: 0.375rem 0.75rem;
-            font-size: 0.85rem;
-            border-radius: 6px;
-            font-family: 'Open Sans', sans-serif;
-            transition: background-color 0.3s ease;
-        }
+      .nav-link:hover,
+      .nav-link.active {
+          color: #a65c5c !important;
+          background-color: #fce8e8;
+      }
 
-        .btn-search:hover {
-            background-color: #924949;
-        }
-        /* ============================
-           NAVIGATION STYLES (END)
-        ============================ */
+      .btn-search {
+          background-color: #a65c5c;
+          color: white;
+      }
+
 
     /* MAIN CONTENT - układ obok siebie */
     main.content-wrapper {
@@ -284,22 +249,14 @@
   </style>
 </head>
 <body>
-<!-- NAVBAR (oryginalna, bez zmian) -->
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #f4d7d7;">
   <div class="container-fluid">
     <a class="navbar-brand" href="/guests">Wedding Guest Management</a>
-    <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-    >
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+    <div class="collapse navbar-collapse" id="navbarContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item"><a class="nav-link" th:href="@{/guests/new}">Dodaj gościa</a></li>
         <li class="nav-item"><a class="nav-link" th:href="@{/guests/confirmed}">Obecni</a></li>
@@ -309,21 +266,20 @@
         <li class="nav-item"><a class="nav-link" th:href="@{/expenses}">Wydatki</a></li>
       </ul>
 
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item d-flex align-items-center me-2">
-              <span class="nav-link disabled" sec:authorize="isAuthenticated()">
-                Cześć, <span th:text="${#authentication.principal.firstName}"></span>
-              </span>
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item">
+          <span class="nav-link" sec:authorize="isAuthenticated()">Cześć, <span th:text="${#authentication.principal.firstName}"></span></span>
         </li>
         <li class="nav-item">
-          <form th:action="@{/logout}" method="post" style="margin: 0;">
-            <button type="submit" class="btn btn-outline-danger ms-3">Wyloguj</button>
+          <form th:action="@{/logout}" method="post" class="d-inline">
+            <button class="btn btn-outline-danger">Wyloguj</button>
           </form>
         </li>
       </ul>
     </div>
   </div>
 </nav>
+
 
 <!-- MAIN CONTENT -->
 <main class="content-wrapper">
@@ -382,6 +338,6 @@
     /*]]>*/
   </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
