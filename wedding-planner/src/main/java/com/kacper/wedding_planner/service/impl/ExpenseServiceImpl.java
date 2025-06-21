@@ -33,6 +33,13 @@ public class ExpenseServiceImpl implements ExpenseService {
     public BigDecimal getTotalForUser(String userEmail) {
         List<Expense> expenses = getExpensesForUser(userEmail);
 
+        boolean hasNullFields = expenses.stream()
+                .anyMatch(expense -> expense.getKwota() == null || expense.getNazwa() == null);
+
+        if (hasNullFields) {
+            throw new IllegalArgumentException("Należy uzupełnić wszystkie pola wydatków (kwota i nazwa)");
+        }
+
         return expenses.stream()
                 .map(Expense::getKwota)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
