@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Kalendarz Wydarzeń</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+  <style>
+        #calendar {
+            max-width: 900px;
+            margin: 40px auto;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Kalendarz Wydarzeń Ślubnych</h2>
+  <div id="calendar"></div>
+</div>
+
+<!-- Moduł dodawania wydarzeń -->
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form id="eventForm" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eventModalLabel">Dodaj wydarzenie</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="eventTitle" class="form-label">Tytuł wydarzenia</label>
+          <input type="text" class="form-control" id="eventTitle" required>
+        </div>
+        <input type="hidden" id="eventDate">
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Zapisz</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const calendarEl = document.getElementById('calendar');
+        const eventModal = new bootstrap.Modal(document.getElementById('eventModal'));
+        const eventForm = document.getElementById('eventForm');
+        const eventTitle = document.getElementById('eventTitle');
+        const eventDate = document.getElementById('eventDate');
+
+        const savedEvents = JSON.parse(localStorage.getItem('events')) || [];
+
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'pl',
+            selectable: true,
+            events: savedEvents,
+            dateClick: function (info) {
+                eventDate.value = info.dateStr;
+                eventTitle.value = '';
+                eventModal.show();
+            }
+        });
+
+        calendar.render();
+
+        eventForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const newEvent = {
+                title: eventTitle.value,
+                start: eventDate.value
+            };
+            calendar.addEvent(newEvent);
+            savedEvents.push(newEvent);
+            localStorage.setItem('events', JSON.stringify(savedEvents));
+            eventModal.hide();
+        });
+    });
+</script>
+
+</body>
+</html>
