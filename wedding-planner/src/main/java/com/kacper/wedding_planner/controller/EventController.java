@@ -7,10 +7,7 @@ import com.kacper.wedding_planner.repository.EventRepository;
 import com.kacper.wedding_planner.repository.UserRepository;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,6 +36,17 @@ public class EventController {
         return eventRepository.save(event);
     }
 
+    @PutMapping("/{id}")
+    public Event updateEvent(@PathVariable Long id, @RequestBody Event updated, @AuthenticationPrincipal CustomUserDetails principal) {
+        return eventRepository.findById(id)
+                .filter(event -> event.getUser().getEmail().equals(principal.getUsername()))
+                .map(event -> {
+                    event.setTitle(updated.getTitle());
+                    event.setDate(updated.getDate());
+                    return eventRepository.save(event);
+                })
+                .orElseThrow(() -> new RuntimeException("Event not found or unauthorized"));
+    }
     
 
 }
