@@ -7,6 +7,7 @@ import com.kacper.wedding_planner.repository.EventRepository;
 import com.kacper.wedding_planner.repository.UserRepository;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,11 +25,14 @@ public class EventController {
     }
 
     @GetMapping
-    public List<Event> getAllEvents(@AuthenticationPrincipal CustomUserDetails principal) {
-        return eventRepository.findByUserEmail(principal.getUsername());
+    public String showCalendarPage(Model model, @AuthenticationPrincipal CustomUserDetails principal) {
+        List<Event> events = eventRepository.findByUserEmail(principal.getUsername());
+        model.addAttribute("events", events);
+        return "events";
     }
 
     @PostMapping
+    @ResponseBody
     public Event createEvent(@RequestBody Event event, @AuthenticationPrincipal CustomUserDetails principal) {
         User user = userRepository.findByEmail(principal.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -37,6 +41,7 @@ public class EventController {
     }
 
     @PutMapping("/{id}")
+    @ResponseBody
     public Event updateEvent(@PathVariable Long id, @RequestBody Event updated, @AuthenticationPrincipal CustomUserDetails principal) {
         return eventRepository.findById(id)
                 .filter(event -> event.getUser().getEmail().equals(principal.getUsername()))
@@ -47,6 +52,13 @@ public class EventController {
                 })
                 .orElseThrow(() -> new RuntimeException("Event not found or unauthorized"));
     }
-    
+
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public void deleteEvent(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails principal) {
+        eventRepository.findById(id)
+                .filter(event -> event.getUser().getEmail().equals(principal.getUsername()))
+                .ifPresent(eventRepository::delete);
+    }
 
 }

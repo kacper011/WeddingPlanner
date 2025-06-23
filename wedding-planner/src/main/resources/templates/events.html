@@ -103,7 +103,7 @@
         <li class="nav-item"><a class="nav-link" th:href="@{/guests/receptions}">Poprawiny</a></li>
         <li class="nav-item"><a class="nav-link" th:href="@{/guests/countdown}">Odliczanie</a></li>
         <li class="nav-item"><a class="nav-link" th:href="@{/expenses}">Wydatki</a></li>
-        <li class="nav-item"><a class="nav-link active" th:href="@{/calendar}">Kalendarz</a></li>
+        <li class="nav-item"><a class="nav-link active" th:href="@{/events}">Kalendarz</a></li>
       </ul>
       <ul class="navbar-nav mb-2 mb-lg-0">
         <li class="nav-item">
@@ -164,23 +164,12 @@
     const eventIdInput = document.getElementById('eventId');
     const deleteBtn = document.getElementById('deleteEventBtn');
 
-    let savedEvents = JSON.parse(localStorage.getItem('events')) || [];
-
-    function saveEventsToStorage(events) {
-      localStorage.setItem('events', JSON.stringify(events));
-    }
-
-    function generateId() {
-      return '_' + Math.random().toString(36).substr(2, 9);
-    }
-
     const calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'dayGridMonth',
       locale: 'pl',
       selectable: true,
-      events: savedEvents,
+      events: '/events', // Pobiera wydarzenia z backendu
       dateClick: function (info) {
-        // Nowe wydarzenie
         eventTitle.value = '';
         eventDate.value = info.dateStr;
         eventIdInput.value = '';
@@ -188,7 +177,6 @@
         eventModal.show();
       },
       eventClick: function (info) {
-        // Edycja wydarzenia
         eventTitle.value = info.event.title;
         eventDate.value = info.event.startStr;
         eventIdInput.value = info.event.id;
@@ -205,44 +193,69 @@
       const title = eventTitle.value;
       const date = eventDate.value;
 
-      if (id) {
-        // Edycja istniejącego wydarzenia
-        const existingEvent = calendar.getEventById(id);
-        if (existingEvent) {
-          existingEvent.setProp('title', title);
+      const payload = {
+        title: title,
+        date: date
+      };
+
+      const url = id ? `/events/${id}` : '/events';
+      const method = id ? 'PUT' : 'POST';
+
+      fetch(url, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Błąd zapisu');
+        return response.json();
+      })
+      .then(data => {
+        if (id) {
+          const existingEvent = calendar.getEventById(id);
+          if (existingEvent) {
+            existingEvent.setProp('title', title);
+          }
+        } else {
+          calendar.addEvent({
+            id: data.id,
+            title: data.title,
+            start: data.date
+          });
         }
-
-        savedEvents = savedEvents.map(ev =>
-          ev.id === id ? { ...ev, title: title } : ev
-        );
-      } else {
-        // Dodanie nowego wydarzenia
-        const newId = generateId();
-        const newEvent = {
-          id: newId,
-          title: title,
-          start: date
-        };
-        calendar.addEvent(newEvent);
-        savedEvents.push(newEvent);
-      }
-
-      saveEventsToStorage(savedEvents);
-      eventModal.hide();
+        eventModal.hide();
+      })
+      .catch(error => {
+        console.error(error);
+        alert('Wystąpił błąd podczas zapisywania wydarzenia.');
+      });
     });
 
     deleteBtn.addEventListener('click', function () {
       const id = eventIdInput.value;
-      const event = calendar.getEventById(id);
-      if (event) {
-        event.remove();
-        savedEvents = savedEvents.filter(ev => ev.id !== id);
-        saveEventsToStorage(savedEvents);
+      if (!id) return;
+
+      fetch(`/events/${id}`, {
+        method: 'DELETE'
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Błąd usuwania');
+        const event = calendar.getEventById(id);
+        if (event) {
+          event.remove();
+        }
         eventModal.hide();
-      }
+      })
+      .catch(error => {
+        console.error(error);
+        alert('Wystąpił błąd podczas usuwania wydarzenia.');
+      });
     });
   });
 </script>
+
 
 
 
