@@ -67,12 +67,11 @@ body {
 
 /* Kontener kalendarza */
 #calendarContainer {
+  margin-top: 60px;
   flex: 1;
-  display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding-top: 20px; /* mniej niż 85px */
+  padding-top: 20px;
   overflow: hidden;
 }
 
@@ -89,27 +88,23 @@ body {
 
 /* Kalendarz */
 #calendar {
-  width: 90%;
-  max-width: 900px;
-  height: 80%; /* mniej niż pełna wysokość */
+  width: 100%;
+  max-width: none;
+  height: 650px;
   background-color: rgba(255, 255, 255, 0.95);
-  padding: 10px;
+  padding: 20px;
   border-radius: 15px;
   border: 2px dashed #f0c5c5;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  font-size: 0.75rem;
-  overflow: hidden;
+  font-size: 1rem;
+  overflow: auto;
 }
 
-
 @media (max-width: 768px) {
-    #calendar {
-        font-size: 0.7rem;
-    }
-
-    h2 {
-        font-size: 2rem;
-    }
+  #calendar {
+    height: 450px;
+    font-size: 0.85rem;
+  }
 }
 
 </style>
@@ -151,10 +146,26 @@ body {
   </div>
 </nav>
 
-<!-- Kalendarz -->
-<div id="calendarContainer" class="container">
-  <h2 class="mb-3">Kalendarz Wydarzeń Ślubnych</h2>
-  <div id="calendar"></div>
+
+<!-- Layout z okienkiem i kalendarzem -->
+<div class="container-fluid pt-5" id="calendarContainer">
+  <div class="row gx-3">
+    <!-- Najbliższe wydarzenie -->
+    <div class="col-md-3 mb-3" style="padding-left: 0;">
+      <div class="card shadow-sm" style="background-color: rgba(255,255,255,0.9); border-left: 4px solid #a65c5c;">
+        <div class="card-body" style="padding: 0.75rem 1rem;">
+          <h5 class="card-title" style="color: #a65c5c;">Najbliższe wydarzenie</h5>
+          <p class="card-text" id="nextEventText">Brak nadchodzących wydarzeń.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kalendarz -->
+    <div class="col-md-9">
+      <h2 class="mb-3 text-center" style="color: #a65c5c;">Kalendarz Wydarzeń Ślubnych</h2>
+      <div id="calendar"></div>
+    </div>
+  </div>
 </div>
 
 <!-- Modal dodawania wydarzenia -->
@@ -197,28 +208,32 @@ body {
     const deleteBtn = document.getElementById('deleteEventBtn');
 
     const calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
-      locale: 'pl',
-      selectable: true,
-      events: '/events/data',
-      buttonText: {
-        today: 'Dzisiaj'
-      },
-      dateClick: function (info) {
-        eventTitle.value = '';
-        eventDate.value = info.dateStr;
-        eventIdInput.value = '';
-        deleteBtn.style.display = 'none';
-        eventModal.show();
-      },
-      eventClick: function (info) {
-        eventTitle.value = info.event.title;
-        eventDate.value = info.event.startStr;
-        eventIdInput.value = info.event.id;
-        deleteBtn.style.display = 'inline-block';
-        eventModal.show();
-      }
-    });
+  initialView: 'dayGridMonth',
+  locale: 'pl',
+  selectable: true,
+  events: '/events/data',
+  buttonText: {
+    today: 'Dzisiaj'
+  },
+  dateClick: function (info) {
+    eventTitle.value = '';
+    eventDate.value = info.dateStr;
+    eventIdInput.value = '';
+    deleteBtn.style.display = 'none';
+    eventModal.show();
+  },
+  eventClick: function (info) {
+    eventTitle.value = info.event.title;
+    eventDate.value = info.event.startStr;
+    eventIdInput.value = info.event.id;
+    deleteBtn.style.display = 'inline-block';
+    eventModal.show();
+  },
+  eventsSet: function(events) {
+    updateNextEvent(events);
+  }
+});
+
 
     calendar.render();
 
@@ -289,6 +304,30 @@ body {
       });
     });
   });
+
+  // Znajdź najbliższe wydarzenie i wyświetl w okienku
+function updateNextEvent(events) {
+  if (!events.length) {
+    document.getElementById('nextEventText').textContent = 'Brak nadchodzących wydarzeń.';
+    return;
+  }
+
+  const now = new Date();
+  const futureEvents = events.filter(e => new Date(e.start) >= now);
+
+  if (futureEvents.length === 0) {
+    document.getElementById('nextEventText').textContent = 'Brak nadchodzących wydarzeń.';
+    return;
+  }
+
+  futureEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
+  const next = futureEvents[0];
+  const date = new Date(next.start);
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const formatted = date.toLocaleDateString('pl-PL', options);
+
+  document.getElementById('nextEventText').textContent = `${next.title} — ${formatted}`;
+}
 </script>
 
 
