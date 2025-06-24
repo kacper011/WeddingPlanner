@@ -25,10 +25,14 @@ public class EventController {
     }
 
     @GetMapping
-    public String showCalendarPage(Model model, @AuthenticationPrincipal CustomUserDetails principal) {
-        List<Event> events = eventRepository.findByUserEmail(principal.getUsername());
-        model.addAttribute("events", events);
+    public String showCalendarPage() {
         return "events";
+    }
+
+    @GetMapping("/data")
+    @ResponseBody
+    public List<Event> getEventsJson(@AuthenticationPrincipal CustomUserDetails principal) {
+        return eventRepository.findByUserEmail(principal.getUsername());
     }
 
     @PostMapping
