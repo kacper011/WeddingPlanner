@@ -7,13 +7,13 @@
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
-   html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  overflow: hidden; /* blokuje scroll */
-  font-family: 'Open Sans', sans-serif;
-}
+    html, body {
+      margin: 0;
+      padding: 0 0 30px 0; /* dolny padding 30px */
+      height: 100%;
+      /* overflow: hidden;  usuń lub zakomentuj tę linię */
+      font-family: 'Open Sans', sans-serif;
+    }
 
 body {
   background-image: url('/images/bgc.jpg');
@@ -67,13 +67,10 @@ body {
 
 /* Kontener kalendarza */
 #calendarContainer {
-  margin-top: 60px;
-  flex: 1;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 20px;
-  overflow: hidden;
-}
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+  }
 
 /* Tytuł */
 #calendarContainer h2 {
@@ -86,11 +83,17 @@ body {
   border-radius: 8px;
 }
 
+#sidebar {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    max-width: 300px;
+  }
+
 /* Kalendarz */
 #calendar {
   width: 100%;
-  max-width: none;
-  height: 650px;
+  max-width: 100%;
+  height: 350px;
   background-color: rgba(255, 255, 255, 0.95);
   padding: 20px;
   border-radius: 15px;
@@ -147,23 +150,24 @@ body {
 </nav>
 
 
-<!-- Layout z okienkiem i kalendarzem -->
-<div class="container-fluid pt-5" id="calendarContainer">
-  <div class="row gx-3">
-    <!-- Najbliższe wydarzenie -->
-    <div class="col-md-3 mb-3" style="padding-left: 0;">
-      <div class="card shadow-sm" style="background-color: rgba(255,255,255,0.9); border-left: 4px solid #a65c5c;">
-        <div class="card-body" style="padding: 0.75rem 1rem;">
-          <h5 class="card-title" style="color: #a65c5c;">Najbliższe wydarzenie</h5>
-          <p class="card-text" id="nextEventText">Brak nadchodzących wydarzeń.</p>
-        </div>
-      </div>
-    </div>
+<div class="container-fluid" style="padding-top: 120px; padding-bottom: 100px;">
+  <div class="row justify-content-center">
 
-    <!-- Kalendarz -->
-    <div class="col-md-9">
-      <h2 class="mb-3 text-center" style="color: #a65c5c;">Kalendarz Wydarzeń Ślubnych</h2>
-      <div id="calendar"></div>
+    <!-- Kalendarz i notka obok siebie -->
+    <div class="col-lg-10 d-flex flex-row flex-wrap justify-content-center align-items-start gap-4">
+
+      <!-- Kalendarz -->
+      <div class="p-4 shadow-sm rounded" style="background-color: rgba(255,255,255,0.95); border: 2px dashed #f0c5c5; flex-grow: 1; min-width: 600px; max-width: 70%;">
+        <h2 class="mb-3 text-center" style="color: #a65c5c;">Kalendarz Wydarzeń Ślubnych</h2>
+        <div id="calendar" style="height: 450px;"></div>
+      </div>
+
+      <!-- Najbliższe wydarzenie -->
+      <div class="card shadow-sm p-3 mt-1" style="background-color: rgba(255,255,255,0.9); border-left: 4px solid #a65c5c; min-width: 250px; max-width: 300px;">
+        <h5 class="card-title" style="color: #a65c5c;">Najbliższe wydarzenie</h5>
+        <p class="card-text" id="nextEventText">Brak nadchodzących wydarzeń.</p>
+      </div>
+
     </div>
   </div>
 </div>
@@ -180,6 +184,10 @@ body {
         <div class="mb-3">
           <label for="eventTitle" class="form-label">Tytuł wydarzenia</label>
           <input type="text" class="form-control" id="eventTitle" required>
+        </div>
+        <div class="mb-3">
+          <label for="eventDateVisible" class="form-label">Data wydarzenia</label>
+          <input type="date" class="form-control" id="eventDateVisible" required>
         </div>
         <input type="hidden" id="eventDate">
         <input type="hidden" id="eventId">
@@ -204,44 +212,59 @@ body {
     const eventForm = document.getElementById('eventForm');
     const eventTitle = document.getElementById('eventTitle');
     const eventDate = document.getElementById('eventDate');
+    const eventDateVisible = document.getElementById('eventDateVisible');
     const eventIdInput = document.getElementById('eventId');
     const deleteBtn = document.getElementById('deleteEventBtn');
 
     const calendar = new FullCalendar.Calendar(calendarEl, {
-  initialView: 'dayGridMonth',
-  locale: 'pl',
-  selectable: true,
-  events: '/events/data',
-  buttonText: {
-    today: 'Dzisiaj'
-  },
-  dateClick: function (info) {
-    eventTitle.value = '';
-    eventDate.value = info.dateStr;
-    eventIdInput.value = '';
-    deleteBtn.style.display = 'none';
-    eventModal.show();
-  },
-  eventClick: function (info) {
-    eventTitle.value = info.event.title;
-    eventDate.value = info.event.startStr;
-    eventIdInput.value = info.event.id;
-    deleteBtn.style.display = 'inline-block';
-    eventModal.show();
-  },
-  eventsSet: function(events) {
-    updateNextEvent(events);
-  }
-});
-
+      initialView: 'dayGridMonth',
+      locale: 'pl',
+      timeZone: 'local',
+      selectable: true,
+      events: '/events/data',
+      buttonText: {
+        today: 'Dzisiaj'
+      },
+      dateClick: function (info) {
+        eventTitle.value = '';
+        eventDate.value = info.dateStr;
+        eventDateVisible.value = info.dateStr;
+        eventIdInput.value = '';
+        deleteBtn.style.display = 'none';
+        eventModal.show();
+      },
+      eventClick: function (info) {
+        const date = info.event.startStr.split('T')[0];
+        eventTitle.value = info.event.title;
+        eventDate.value = date;
+        eventDateVisible.value = date;
+        eventIdInput.value = info.event.id;
+        deleteBtn.style.display = 'inline-block';
+        eventModal.show();
+      },
+      eventsSet: function (events) {
+        updateNextEvent(events);
+      }
+    });
 
     calendar.render();
 
+    // Synchronizacja daty widocznej z ukrytą
+    eventDateVisible.addEventListener('input', function () {
+      eventDate.value = this.value;
+    });
+
+    // Walidacja i zapis
     eventForm.addEventListener('submit', function (e) {
       e.preventDefault();
       const id = eventIdInput.value;
-      const title = eventTitle.value;
+      const title = eventTitle.value.trim();
       const date = eventDate.value;
+
+      if (!title) {
+        alert('Tytuł wydarzenia nie może być pusty.');
+        return;
+      }
 
       const payload = {
         title: title,
@@ -267,6 +290,7 @@ body {
           const existingEvent = calendar.getEventById(id);
           if (existingEvent) {
             existingEvent.setProp('title', title);
+            existingEvent.setStart(date);
           }
         } else {
           calendar.addEvent({
@@ -305,29 +329,29 @@ body {
     });
   });
 
-  // Znajdź najbliższe wydarzenie i wyświetl w okienku
-function updateNextEvent(events) {
-  if (!events.length) {
-    document.getElementById('nextEventText').textContent = 'Brak nadchodzących wydarzeń.';
-    return;
+  function updateNextEvent(events) {
+    if (!events.length) {
+      document.getElementById('nextEventText').textContent = 'Brak nadchodzących wydarzeń.';
+      return;
+    }
+
+    const now = new Date();
+    const futureEvents = events.filter(e => new Date(e.start) >= now);
+
+    if (futureEvents.length === 0) {
+      document.getElementById('nextEventText').textContent = 'Brak nadchodzących wydarzeń.';
+      return;
+    }
+
+    futureEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
+    const next = futureEvents[0];
+    const date = new Date(next.start);
+    const formatted = date.toLocaleDateString('pl-PL', {
+      year: 'numeric', month: '2-digit', day: '2-digit'
+    });
+
+    document.getElementById('nextEventText').textContent = `${next.title} — ${formatted}`;
   }
-
-  const now = new Date();
-  const futureEvents = events.filter(e => new Date(e.start) >= now);
-
-  if (futureEvents.length === 0) {
-    document.getElementById('nextEventText').textContent = 'Brak nadchodzących wydarzeń.';
-    return;
-  }
-
-  futureEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
-  const next = futureEvents[0];
-  const date = new Date(next.start);
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  const formatted = date.toLocaleDateString('pl-PL', options);
-
-  document.getElementById('nextEventText').textContent = `${next.title} — ${formatted}`;
-}
 </script>
 
 
