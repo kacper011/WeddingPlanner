@@ -45,7 +45,6 @@ public class WeddingController {
 
     @GetMapping
     public String listGuests(Model model, @AuthenticationPrincipal CustomUserDetails principal, @RequestParam(required = false) String kategoria) {
-
         if (principal == null) {
             return "redirect:/login";
         }
@@ -53,6 +52,7 @@ public class WeddingController {
         User currentUser = userService.findByEmail(principal.getUsername());
         List<Guest> guests = guestRepository.findByUser(currentUser);
 
+        // KATEGORIA
         if (kategoria != null && !kategoria.isEmpty()) {
             try {
                 GuestCategory selectedCategory = GuestCategory.valueOf(kategoria);
@@ -64,10 +64,24 @@ public class WeddingController {
             }
         }
 
+        // SORTOWANIE
         guests.sort(Comparator.comparing(Guest::getNazwisko));
+
+        // STATYSTYKI
+        long totalGuests = guests.size();
+        long confirmedGuests = guests.stream().filter(g -> "TAK".equalsIgnoreCase(g.getPotwierdzenieObecnosci())).count();
+        long notConfirmedGuests = guests.stream().filter(g -> "NIE".equalsIgnoreCase(g.getPotwierdzenieObecnosci())).count();
+        long receptionGuests = guests.stream().filter(g -> "TAK".equalsIgnoreCase(g.getPoprawiny())).count();
+
+        // DODANIE DO MODELU
         model.addAttribute("guests", guests);
         model.addAttribute("kategorie", GuestCategory.values());
         model.addAttribute("selectedCategory", kategoria);
+        model.addAttribute("totalGuests", totalGuests);
+        model.addAttribute("confirmedGuests", confirmedGuests);
+        model.addAttribute("notConfirmedGuests", notConfirmedGuests);
+        model.addAttribute("receptionGuests", receptionGuests);
+
         return "guests";
     }
 
