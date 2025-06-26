@@ -9,10 +9,12 @@
   <style>
     html, body {
       margin: 0;
-      padding: 0 0 30px 0; /* dolny padding 30px */
-      height: 100%;
-      /* overflow: hidden;  usuń lub zakomentuj tę linię */
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
       font-family: 'Open Sans', sans-serif;
+      display: flex;
+      flex-direction: column;
     }
 
 body {
@@ -92,15 +94,40 @@ body {
 /* Kalendarz */
 #calendar {
   width: 100%;
-  max-width: 100%;
-  height: 350px;
-  background-color: rgba(255, 255, 255, 0.95);
-  padding: 20px;
+  height: 100%;
+  max-height: 480px;
+  font-size: 0.85rem;
+  overflow: visible;
+  padding: 10px;
   border-radius: 15px;
   border: 2px dashed #f0c5c5;
+  background-color: rgba(255, 255, 255, 0.95);
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.fc-daygrid-day-frame {
+  padding: 1px;
+}
+
+.fc .fc-daygrid-day-number {
+  font-size: 0.7rem;
+}
+
+.fc .fc-event {
+  font-size: 0.65rem;
+  padding: 1px 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-title {
   font-size: 1rem;
-  overflow: auto;
+  margin-bottom: 0.5rem;
+}
+
+.card-text {
+  font-size: 0.85rem;
 }
 
 @media (max-width: 768px) {
@@ -150,16 +177,16 @@ body {
 </nav>
 
 
-<div class="container-fluid" style="padding-top: 120px; padding-bottom: 100px;">
-  <div class="row justify-content-center">
+<div class="container-fluid" style="padding-top: 80px; height: calc(100vh - 70px); overflow: hidden;">
+  <div class="row justify-content-center" style="height: 100%; overflow: hidden;">
 
     <!-- Kalendarz i notka obok siebie -->
-    <div class="col-lg-10 d-flex flex-row flex-wrap justify-content-center align-items-start gap-4">
+    <div class="col-12 d-flex flex-wrap justify-content-center align-items-start gap-4">
 
       <!-- Kalendarz -->
-      <div class="p-4 shadow-sm rounded" style="background-color: rgba(255,255,255,0.95); border: 2px dashed #f0c5c5; flex-grow: 1; min-width: 600px; max-width: 70%;">
+      <div class="p-4 shadow-sm rounded flex-grow-1" style="background-color: rgba(255,255,255,0.95); border: 2px dashed #f0c5c5; max-width: 100%;">
         <h2 class="mb-3 text-center" style="color: #a65c5c;">Kalendarz Wydarzeń Ślubnych</h2>
-        <div id="calendar" style="height: 450px;"></div>
+        <div id="calendar"></div>
       </div>
 
       <!-- Najbliższe wydarzenie -->
