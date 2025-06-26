@@ -191,8 +191,10 @@ body {
 
       <!-- Najbliższe wydarzenie -->
       <div class="card shadow-sm p-3 mt-1" style="background-color: rgba(255,255,255,0.9); border-left: 4px solid #a65c5c; min-width: 250px; max-width: 300px;">
-        <h5 class="card-title" style="color: #a65c5c;">Najbliższe wydarzenie</h5>
-        <p class="card-text" id="nextEventText">Brak nadchodzących wydarzeń.</p>
+        <h5 class="card-title" style="color: #a65c5c;">Najbliższe wydarzenia</h5>
+        <ul class="card-text" id="nextEventsList" style="padding-left: 1rem; margin: 0; list-style-type: disc;">
+          <li>Brak nadchodzących wydarzeń.</li>
+        </ul>
       </div>
 
     </div>
@@ -357,28 +359,36 @@ body {
   });
 
   function updateNextEvent(events) {
-    if (!events.length) {
-      document.getElementById('nextEventText').textContent = 'Brak nadchodzących wydarzeń.';
-      return;
-    }
+  const listEl = document.getElementById('nextEventsList');
+  listEl.innerHTML = '';
 
-    const now = new Date();
-    const futureEvents = events.filter(e => new Date(e.start) >= now);
+  if (!events.length) {
+    listEl.innerHTML = '<li>Brak nadchodzących wydarzeń.</li>';
+    return;
+  }
 
-    if (futureEvents.length === 0) {
-      document.getElementById('nextEventText').textContent = 'Brak nadchodzących wydarzeń.';
-      return;
-    }
+  const now = new Date();
+  const futureEvents = events.filter(e => new Date(e.start) >= now);
 
-    futureEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
-    const next = futureEvents[0];
-    const date = new Date(next.start);
+  if (futureEvents.length === 0) {
+    listEl.innerHTML = '<li>Brak nadchodzących wydarzeń.</li>';
+    return;
+  }
+
+  futureEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
+
+  const eventsToShow = futureEvents.slice(0, 5);
+  for (const ev of eventsToShow) {
+    const date = new Date(ev.start);
     const formatted = date.toLocaleDateString('pl-PL', {
       year: 'numeric', month: '2-digit', day: '2-digit'
     });
-
-    document.getElementById('nextEventText').textContent = `${next.title} — ${formatted}`;
+    const li = document.createElement('li');
+    li.textContent = `${ev.title} — ${formatted}`;
+    listEl.appendChild(li);
   }
+}
+
 </script>
 
 
