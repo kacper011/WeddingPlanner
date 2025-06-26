@@ -23,6 +23,8 @@ public class Event {
     private String title;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
+    @Column(name = "przypomnienie_wyslane")
+    private boolean reminderSent = false;
     @ManyToOne
     private User user;
 }
