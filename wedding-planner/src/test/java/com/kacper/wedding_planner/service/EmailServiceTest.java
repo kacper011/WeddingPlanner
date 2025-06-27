@@ -4,7 +4,6 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import java.time.LocalDate;
@@ -57,6 +56,29 @@ public class EmailServiceTest {
         );
 
         System.out.println("Exception message: " + exception.getMessage());
+        assertNotNull(exception.getCause());
+        assertTrue(exception.getCause() instanceof MessagingException);
+    }
+
+    @Test
+    void shouldThrowExceptionIfReminderEmailFails() throws MessagingException {
+        // 1. Mockujemy MimeMessage, aby createMimeMessage() zwróciło poprawny obiekt
+        MimeMessage mockMessage = mock(MimeMessage.class);
+        when(mailSender.createMimeMessage()).thenReturn(mockMessage);
+
+        // 2. Symulujemy błąd wysyłki maila przypominającego — rzucamy RuntimeException z MessagingException jako przyczyną
+        doThrow(new RuntimeException(new MessagingException("Symulowana awaria")))
+                .when(mailSender).send(any(MimeMessage.class));
+
+        // 3. Sprawdzamy, czy metoda rzuca RuntimeException
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+                emailService.sendReminderEmail("user@example.com", "Kacper", "Wesele", LocalDate.now())
+        );
+
+        // 4. Debug — wypisujemy wiadomość wyjątku
+        System.out.println("Exception message: " + exception.getMessage());
+
+        // 5. Sprawdzamy, czy wyjątek zawiera poprawną przyczynę
         assertNotNull(exception.getCause());
         assertTrue(exception.getCause() instanceof MessagingException);
     }
