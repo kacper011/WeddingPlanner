@@ -1,12 +1,17 @@
 package com.kacper.wedding_planner.service;
 
+import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import java.time.LocalDate;
 
+import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class EmailServiceTest {
@@ -39,5 +44,22 @@ public class EmailServiceTest {
 
         verify(mailSender, times(1)).send(any(MimeMessage.class));
     }
+
+    @Test
+    void shouldThrowExceptionIfWelcomeEmailFails() throws MessagingException {
+        MimeMessage mockMessage = mock(MimeMessage.class);
+        when(mailSender.createMimeMessage()).thenReturn(mockMessage);
+
+        doThrow(new RuntimeException(new MessagingException("Symulowana awaria"))).when(mailSender).send(any(MimeMessage.class));
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+                emailService.sendWelcomeEmail("user@example.com", "Kacper")
+        );
+
+        System.out.println("Exception message: " + exception.getMessage());
+        assertNotNull(exception.getCause());
+        assertTrue(exception.getCause() instanceof MessagingException);
+    }
+
 }
 
