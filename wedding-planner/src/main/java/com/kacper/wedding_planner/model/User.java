@@ -4,6 +4,9 @@ package com.kacper.wedding_planner.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,5 +24,7 @@ public class User {
     private String password;
     @Column(name = "first_name", nullable = false)
     private String firstName;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Guest> guests = new ArrayList<>();
 
 }
