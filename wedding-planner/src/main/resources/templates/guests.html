@@ -267,15 +267,18 @@ textarea.form-control {
     </div>
     <h1 class="text-center mb-4">Lista Gości Weselnych</h1>
 
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start mb-3">
-        <a href="/guests/export/pdf" class="btn-export-pdf">📄 Eksportuj do PDF</a>
-        <form method="get" th:action="@{/guests}" class="filter-form">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 mb-3 flex-wrap">
+        <a href="/guests/export/pdf" class="btn btn-outline-secondary">📄 Eksportuj do PDF</a>
+
+        <form method="get" th:action="@{/guests}" class="d-flex align-items-center gap-2">
             <select class="form-select" name="kategoria">
                 <option value="">-- Wybierz kategorię --</option>
                 <option th:each="k : ${kategorie}" th:value="${k.name()}" th:text="${k.displayName}" th:selected="${k.name() == selectedCategory}"></option>
             </select>
             <button class="btn btn-primary">Filtruj</button>
         </form>
+
+        <a href="/tables" class="btn btn-outline-primary">🪑 Rozplanuj usadzenie gości</a>
     </div>
 
     <div class="table-responsive">

@@ -53,4 +53,7 @@ public class Guest {
     @Column(name = "kategoria_goscia")
     //@NotNull(message = "Wybierz kategorię")
     private GuestCategory kategoria;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "table_id")
+    private GuestTable table;
 }

@@ -25,7 +25,7 @@ public class GuestTable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToMany(mappedBy = "stoly", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "table", cascade = CascadeType.ALL)
     private List<Guest> goscie;
 
 }

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Plan sali</title>
+    <style>
+        .table-box {
+            position: absolute;
+            border: 1px solid #888;
+            padding: 10px;
+            background: #eee;
+            border-radius: 8px;
+            width: 150px;
+        }
+    </style>
+</head>
+<body>
+
+<div style="position: relative; width: 800px; height: 600px; border: 1px solid black;">
+    <div th:each="stol : ${stoly}"
+         th:style="'position:absolute; left:' + ${stol.pozycjaX} + 'px; top:' + ${stol.pozycjaY} + 'px;'"
+         class="table-box">
+        <h4 th:text="${stol.nazwa}">Stół 1</h4>
+        <ul>
+            <li th:each="gosc : ${stol.goscie}" th:text="${gosc.imie} + ' ' + ${gosc.nazwisko}">Jan Kowalski</li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>
