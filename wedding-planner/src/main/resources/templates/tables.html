@@ -45,6 +45,7 @@
 
         .container {
             margin-top: 80px;
+            max-width: 900px;
         }
 
         .table-box {
@@ -53,7 +54,7 @@
             border: 1px solid #ccc;
             border-radius: 6px;
             padding: 8px;
-            min-width: 100px;
+            min-width: 120px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
@@ -107,6 +108,52 @@
 </nav>
 
 <div class="container">
+
+    <!-- FORMULARZ DODAWANIA STOŁU -->
+    <div class="mb-4">
+        <form th:action="@{/tables/add}" method="post" class="row g-3 align-items-end">
+            <div class="col-md-6">
+                <label for="tableName" class="form-label">Nazwa nowego stołu</label>
+                <input id="tableName" name="nazwa" class="form-control" required>
+            </div>
+            <div class="col-md-3">
+                <label for="posX" class="form-label">Pozycja X (px)</label>
+                <input id="posX" name="pozycjaX" type="number" class="form-control" value="100" required>
+            </div>
+            <div class="col-md-3">
+                <label for="posY" class="form-label">Pozycja Y (px)</label>
+                <input id="posY" name="pozycjaY" type="number" class="form-control" value="100" required>
+            </div>
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-success mt-2">Dodaj nowy stół</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- FORMULARZ PRZYPISANIA GOŚCIA DO STOŁU -->
+    <div class="mb-4">
+        <form th:action="@{/tables/assign}" method="post" class="row g-3 align-items-end">
+            <div class="col-md-6">
+                <label for="guestInput" class="form-label">Wpisz nazwisko gościa</label>
+                <input id="guestInput" name="guestName" class="form-control" autocomplete="off" list="guests" required>
+                <input type="hidden" id="guestId" name="guestId">
+                <datalist id="guests">
+                    <option th:each="g : ${allGuests}" th:value="${g.imie + ' ' + g.nazwisko}" th:data-id="${g.id}"></option>
+                </datalist>
+            </div>
+            <div class="col-md-4">
+                <label for="tableId" class="form-label">Wybierz stół</label>
+                <select id="tableId" name="tableId" class="form-select" required>
+                    <option th:each="t : ${stoly}" th:value="${t.id}" th:text="${t.nazwa}"></option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Przypisz</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- PLAN SALI -->
     <div style="position: relative; width: 800px; height: 600px; border: 1px solid black; margin: auto;">
         <div th:each="stol : ${stoly}"
              th:style="'left:' + ${stol.pozycjaX} + 'px; top:' + ${stol.pozycjaY} + 'px;'"
@@ -117,9 +164,29 @@
             </ul>
         </div>
     </div>
+
 </div>
 
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const guestInput = document.getElementById('guestInput');
+    const guestIdInput = document.getElementById('guestId');
+    const datalist = document.getElementById('guests');
+
+    guestInput.addEventListener('input', function() {
+        const val = this.value;
+        const opts = datalist.options;
+        guestIdInput.value = ''; // reset
+        for(let i = 0; i < opts.length; i++) {
+            if(opts[i].value === val) {
+                guestIdInput.value = opts[i].dataset.id; // ustaw ID gościa
+                break;
+            }
+        }
+    });
+</script>
 
 </body>
 </html>
