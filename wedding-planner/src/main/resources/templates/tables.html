@@ -8,9 +8,9 @@
         @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap');
 
         html, body {
-            height: 100%;
             margin: 0;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
         body {
@@ -45,7 +45,8 @@
 
         .container {
             margin-top: 80px;
-            max-width: 900px;
+            width: 100%;
+            padding: 0 2rem;
         }
 
         .table-box {
@@ -74,10 +75,10 @@
         }
         .room-plan {
             position: relative;
-            width: 800px;
-            height: 600px;
+            width: 100%;
+            min-height: 1000px;
             border: 1px solid black;
-            margin: auto;
+            margin: 0 auto 2rem auto;
             overflow: hidden;
         }
         .table-box form button {
@@ -124,21 +125,17 @@
     <!-- FORMULARZ DODAWANIA STOŁU -->
     <div class="mb-4">
         <form th:action="@{/tables/add}" method="post" class="row g-3 align-items-end">
-            <div class="col-md-6">
-                <label for="tableName" class="form-label">Nazwa nowego stołu</label>
-                <input id="tableName" name="nazwa" class="form-control" required>
+            <div class="col-md-6 d-flex align-items-end">
+                <div class="flex-grow-1">
+                    <label for="tableName" class="form-label">Nazwa nowego stołu</label>
+                    <input id="tableName" name="nazwa" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-success ms-3 mb-2">Dodaj nowy stół</button>
             </div>
-            <div class="col-md-3">
-                <label for="posX" class="form-label">Pozycja X (px)</label>
-                <input id="posX" name="pozycjaX" type="number" class="form-control" value="100" required>
-            </div>
-            <div class="col-md-3">
-                <label for="posY" class="form-label">Pozycja Y (px)</label>
-                <input id="posY" name="pozycjaY" type="number" class="form-control" value="100" required>
-            </div>
-            <div class="col-md-12">
-                <button type="submit" class="btn btn-success mt-2">Dodaj nowy stół</button>
-            </div>
+
+            <!-- Ukryte pola pozycja X i Y -->
+            <input id="posX" name="pozycjaX" type="hidden" value="100" required>
+            <input id="posY" name="pozycjaY" type="hidden" value="100" required>
         </form>
     </div>
 
