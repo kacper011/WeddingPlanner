@@ -94,4 +94,10 @@ public class SeatingPlanController {
 
         return ResponseEntity.ok(Map.of("status", "success"));
     }
+
+    @PostMapping("/delete")
+    public String deleteTable(@RequestParam Long id) {
+        guestTableRepository.deleteById(id);
+        return "redirect:/tables";
+    }
 }

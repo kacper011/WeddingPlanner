@@ -80,6 +80,10 @@
             margin: auto;
             overflow: hidden;
         }
+        .table-box form button {
+            font-size: 0.8rem;
+            line-height: 1;
+        }
     </style>
 </head>
 <body>
@@ -167,7 +171,13 @@
              th:style="'left:' + ${stol.pozycjaX} + 'px; top:' + ${stol.pozycjaY} + 'px;'"
              class="table-box draggable"
              th:attr="data-id=${stol.id}">
-            <h4 th:text="${stol.nazwa}">Stół 1</h4>
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 th:text="${stol.nazwa}" class="mb-0">Stół 1</h4>
+                <form th:action="@{/tables/delete}" method="post" th:object="${stol}" onsubmit="return confirm('Czy na pewno chcesz usunąć ten stół?')" style="margin: 0;">
+                    <input type="hidden" name="id" th:value="${stol.id}" />
+                    <button type="submit" class="btn btn-sm btn-danger ms-2 py-0 px-2" title="Usuń stół">✖</button>
+                </form>
+            </div>
             <ul>
                 <li th:each="gosc : ${stol.goscie}" th:text="${gosc.imie} + ' ' + ${gosc.nazwisko}">Jan Kowalski</li>
             </ul>
