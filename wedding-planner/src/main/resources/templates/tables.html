@@ -72,6 +72,14 @@
         .table-box li {
             font-size: 0.85rem;
         }
+        .room-plan {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            border: 1px solid black;
+            margin: auto;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -154,10 +162,11 @@
     </div>
 
     <!-- PLAN SALI -->
-    <div style="position: relative; width: 800px; height: 600px; border: 1px solid black; margin: auto;">
+    <div id="room-plan" class="room-plan">
         <div th:each="stol : ${stoly}"
              th:style="'left:' + ${stol.pozycjaX} + 'px; top:' + ${stol.pozycjaY} + 'px;'"
-             class="table-box">
+             class="table-box draggable"
+             th:attr="data-id=${stol.id}">
             <h4 th:text="${stol.nazwa}">Stół 1</h4>
             <ul>
                 <li th:each="gosc : ${stol.goscie}" th:text="${gosc.imie} + ' ' + ${gosc.nazwisko}">Jan Kowalski</li>
@@ -185,6 +194,68 @@
                 break;
             }
         }
+    });
+    document.querySelectorAll('.draggable').forEach(draggable => {
+        let isDragging = false;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        draggable.addEventListener('mousedown', function (e) {
+            isDragging = true;
+            const parentRect = draggable.parentElement.getBoundingClientRect();
+            const rect = draggable.getBoundingClientRect();
+
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+
+            const onMouseMove = function (e) {
+                if (!isDragging) return;
+
+                let x = e.clientX - parentRect.left - offsetX;
+                let y = e.clientY - parentRect.top - offsetY;
+
+                // Ograniczenie do wnętrza kontenera
+                const maxX = parentRect.width - draggable.offsetWidth;
+                const maxY = parentRect.height - draggable.offsetHeight;
+
+                x = Math.max(0, Math.min(x, maxX));
+                y = Math.max(0, Math.min(y, maxY));
+
+                draggable.style.left = `${x}px`;
+                draggable.style.top = `${y}px`;
+            };
+
+            const onMouseUp = function () {
+                isDragging = false;
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+
+                const posX = parseInt(draggable.style.left);
+                const posY = parseInt(draggable.style.top);
+                const id = draggable.dataset.id;
+
+                // 📨 Wyślij pozycję do backendu
+                fetch('/tables/update-position', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]')?.getAttribute('content') || ''
+                    },
+                    body: JSON.stringify({ id, posX, posY })
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Błąd zapisu pozycji');
+                    return response.json();
+                })
+                .then(data => console.log('Pozycja zapisana:', data))
+                .catch(err => console.error('Błąd:', err));
+            };
+
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        });
+
+        draggable.style.cursor = 'grab';
     });
 </script>
 

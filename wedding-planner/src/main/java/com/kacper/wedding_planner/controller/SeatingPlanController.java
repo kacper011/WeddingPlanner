@@ -8,15 +8,14 @@ import com.kacper.wedding_planner.repository.GuestRepository;
 import com.kacper.wedding_planner.repository.GuestTableRepository;
 import com.kacper.wedding_planner.repository.UserRepository;
 import com.kacper.wedding_planner.service.GuestTableService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/tables")
@@ -77,5 +76,22 @@ public class SeatingPlanController {
         guestTableRepository.save(newTable);
 
         return "redirect:/tables";
+    }
+
+    @PostMapping("/update-position")
+    @ResponseBody
+    public ResponseEntity<?> updateTablePosition(@RequestBody Map<String, Object> payload) {
+        Long tableId = Long.valueOf(payload.get("id").toString());
+        int posX = (int) payload.get("posX");
+        int posY = (int) payload.get("posY");
+
+        GuestTable table = guestTableRepository.findById(tableId)
+                .orElseThrow(() -> new RuntimeException("Table not found"));
+
+        table.setPozycjaX(posX);
+        table.setPozycjaY(posY);
+        guestTableRepository.save(table);
+
+        return ResponseEntity.ok(Map.of("status", "success"));
     }
 }
