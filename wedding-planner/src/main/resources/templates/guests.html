@@ -209,8 +209,6 @@ textarea.form-control {
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item"><a class="nav-link" th:href="@{/guests/new}">Dodaj gościa</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/guests/confirmed}">Obecni</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/guests/notConfirmed}">Nieobecni</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/guests/receptions}">Poprawiny</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/guests/countdown}">Odliczanie</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/expenses}">Wydatki</a></li>
@@ -247,16 +245,20 @@ textarea.form-control {
             </div>
         </div>
         <div class="col-md-3 mb-2">
-            <div class="p-3 bg-success bg-opacity-10 border rounded shadow-sm">
-                <h5 class="text-muted">Potwierdzeni</h5>
-                <h3 th:text="${confirmedGuests}">0</h3>
-            </div>
+            <a href="/guests/confirmed" class="text-decoration-none text-dark">
+                <div class="p-3 bg-success bg-opacity-10 border rounded shadow-sm">
+                    <h5 class="text-muted">Potwierdzeni</h5>
+                    <h3 th:text="${confirmedGuests}">0</h3>
+                </div>
+            </a>
         </div>
         <div class="col-md-3 mb-2">
-            <div class="p-3 bg-warning bg-opacity-10 border rounded shadow-sm">
-                <h5 class="text-muted">Niepotwierdzeni</h5>
-                <h3 th:text="${notConfirmedGuests}">0</h3>
-            </div>
+            <a href="/guests/notConfirmed" class="text-decoration-none text-dark">
+                <div class="p-3 bg-warning bg-opacity-10 border rounded shadow-sm">
+                    <h5 class="text-muted">Niepotwierdzeni</h5>
+                    <h3 th:text="${notConfirmedGuests}">0</h3>
+                </div>
+            </a>
         </div>
         <div class="col-md-3 mb-2">
             <div class="p-3 bg-info bg-opacity-10 border rounded shadow-sm">
