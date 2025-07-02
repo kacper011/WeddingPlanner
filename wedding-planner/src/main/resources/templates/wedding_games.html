@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- DODANE -->
+  <title>Zabawy weselne</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap');
+
+        body {
+            background-color: #fde8e8;
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+        }
+
+        /* ============ NAWIGACJA ============ */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: #f4d7d7;
+            box-shadow: 0 2px 8px rgba(166, 92, 92, 0.1);
+        }
+
+        .navbar-brand {
+            font-family: 'Great Vibes', cursive;
+            color: #a65c5c !important;
+        }
+
+        .navbar-toggler {
+            position: relative;
+            z-index: 1100;
+            border: 1px solid red; /* usuń jeśli niepotrzebne */
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(166, 92, 92, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }
+
+        .nav-link {
+            font-weight: 600;
+            color: #7c5c5c !important;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #a65c5c !important;
+            background-color: #fce8e8;
+        }
+
+        .btn-search {
+            background-color: #a65c5c;
+            color: white;
+        }
+        .question-label {
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .generate-btn {
+            margin-top: 1.5rem;
+        }
+        .answer-box {
+            border: 1px solid #ccc;
+            min-height: 2.5rem;
+            margin-top: 0.5rem;
+            padding: 0.4rem;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #f4d7d7;">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/guests">Wedding Guest Management</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" th:href="@{/guests/new}">Dodaj gościa</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/guests/countdown}">Odliczanie</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/expenses}">Wydatki</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/events}">Kalendarz</a></li>
+      </ul>
+
+      <form class="d-flex me-3" method="get" th:action="@{/guests/search}">
+        <input class="form-control me-2" name="nazwisko" placeholder="Wyszukaj po nazwisku">
+        <button class="btn btn-search" type="submit">Szukaj</button>
+      </form>
+
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item">
+          <span class="nav-link" sec:authorize="isAuthenticated()">Cześć, <span th:text="${#authentication.principal.firstName}"></span></span>
+        </li>
+        <li class="nav-item">
+          <form th:action="@{/logout}" method="post" class="d-inline">
+            <button class="btn btn-outline-danger">Wyloguj</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <h1 class="mb-4 text-center" style="font-family: 'Great Vibes', cursive; color: #a65c5c;">Wybierz pytania do quizu</h1>
+
+  <form id="quizForm" method="post" th:action="@{/wedding_games/generate}">
+    <div class="mb-3" style="max-height: 400px; overflow-y: auto; border: 1px solid #a65c5c; padding: 1rem; border-radius: 6px; background: #fff0f0;">
+      <div class="form-check" th:each="q,iterStat : ${questions}">
+        <input class="form-check-input" type="checkbox" th:id="'q' + ${iterStat.index}" th:name="selectedQuestions" th:value="${q}" />
+        <label class="form-check-label question-label" th:for="'q' + ${iterStat.index}" th:text="${q}"></label>
+        <div class="answer-box" contenteditable="true" placeholder="Miejsce na odpowiedź (nie jest wymagane)"></div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary generate-btn w-100">Generuj quiz (PDF)</button>
+  </form>
+</div>
+
+<script>
+    // Zapewnimy, że odpowiedzi (w answer-box) zostaną wysłane razem z formularzem:
+    const form = document.getElementById('quizForm');
+    form.addEventListener('submit', (e) => {
+        const answerBoxes = document.querySelectorAll('.answer-box');
+        answerBoxes.forEach((box, idx) => {
+            const checkbox = document.querySelector(`#q${idx}`);
+            if (checkbox.checked) {
+                // Dodajemy ukryte pole input z treścią odpowiedzi
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'answers';
+                input.value = box.textContent.trim();
+                form.appendChild(input);
+            }
+        });
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
