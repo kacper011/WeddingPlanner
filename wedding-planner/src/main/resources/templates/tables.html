@@ -49,20 +49,43 @@
             padding: 0 2rem;
         }
 
+        .border-pink {
+            border: 1px solid #f3cfcf !important;
+        }
+
+        .btn-outline-pink {
+            color: #a65c5c;
+            border: 2px solid #f3cfcf;
+            background-color: #fff8f9;
+        }
+
+        .btn-outline-pink:hover {
+            background-color: #fce4ec;
+            border-color: #dfa4a4;
+            color: #7c4f4f;
+        }
+
         .table-box {
             position: absolute;
-            background-color: rgba(255, 255, 255, 0.85);
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            padding: 8px;
-            min-width: 120px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            background-color: #fff8f8;
+            border: 2px solid #f3cfcf;
+            border-radius: 12px;
+            padding: 12px;
+            min-width: 140px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+        }
+
+        .table-box:hover {
+            transform: scale(1.03);
         }
 
         .table-box h4 {
-            font-size: 1rem;
-            margin-bottom: 5px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 6px;
             color: #a65c5c;
+            font-family: 'Great Vibes', cursive;
         }
 
         .table-box ul {
@@ -77,9 +100,12 @@
             position: relative;
             width: 100%;
             min-height: 1000px;
-            border: 1px solid black;
+            background: linear-gradient(145deg, #fff0f5, #ffe4e1);
+            border: 2px dashed #e6b6b6;
+            border-radius: 16px;
             margin: 0 auto 2rem auto;
             overflow: hidden;
+            box-shadow: inset 0 0 30px rgba(255, 235, 235, 0.6);
         }
         .table-box form button {
             font-size: 0.8rem;
@@ -122,22 +148,24 @@
 
 <div class="container">
 
-    <!-- FORMULARZ DODAWANIA STOŁU -->
-    <div class="mb-4">
-        <form th:action="@{/tables/add}" method="post" class="row g-3 align-items-end">
-            <div class="col-md-6 d-flex align-items-end">
-                <div class="flex-grow-1">
-                    <label for="tableName" class="form-label">Nazwa nowego stołu</label>
-                    <input id="tableName" name="nazwa" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-success ms-3 mb-2">Dodaj nowy stół</button>
-            </div>
+    <!-- FORMULARZ DODAWANIA STOŁU --><div class="mb-5 p-4 rounded-4 shadow-sm" style="background-color: #fff0f4; border: 1px solid #f3cfcf;">
+    <form th:action="@{/tables/add}" method="post" class="row g-3 align-items-end">
+        <div class="col-md-8">
+            <label for="tableName" class="form-label" style="font-weight: 600; color: #a65c5c;">Nazwa nowego stołu</label>
+            <input id="tableName" name="nazwa" class="form-control rounded-3 border-pink" placeholder="np. Stół Młodych" required>
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+            <button type="submit" class="btn btn-outline-pink w-100 py-2 rounded-3" style="font-weight: 600;">
+                💒 Dodaj nowy stół
+            </button>
+        </div>
 
-            <!-- Ukryte pola pozycja X i Y -->
-            <input id="posX" name="pozycjaX" type="hidden" value="100" required>
-            <input id="posY" name="pozycjaY" type="hidden" value="100" required>
-        </form>
-    </div>
+        <!-- Ukryte pola pozycja X i Y -->
+        <input id="posX" name="pozycjaX" type="hidden" value="100" required>
+        <input id="posY" name="pozycjaY" type="hidden" value="100" required>
+    </form>
+</div>
+
 
     <!-- FORMULARZ PRZYPISANIA GOŚCIA DO STOŁU -->
     <div class="mb-4">
