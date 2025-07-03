@@ -15,7 +15,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.print.Doc;
 import java.awt.*;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -152,4 +155,44 @@ public class PDFExportController {
         document.close();
     }
 
+    @PostMapping("/wedding_games/export/pdf")
+    public void exportQuestionsToPDF(@RequestParam(name = "selectedQuestions", required = false) List<String> selectedQuestions,
+                                     HttpServletResponse response, @AuthenticationPrincipal CustomUserDetails principal) throws IOException {
+
+        if (principal == null) {
+            response.sendRedirect("/login");
+            return;
+        }
+
+        if (selectedQuestions == null || selectedQuestions.isEmpty()) {
+            response.sendRedirect("/wedding_games?error=NoQuestionsSelected");
+            return;
+        }
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=quiz_weselny.pdf");
+
+        Document document = new Document(PageSize.A4);
+        PdfWriter.getInstance(document, response.getOutputStream());
+        document.open();
+
+        BaseFont baseFont = BaseFont.createFont(BaseFont.HELVETICA, "Cp1250", BaseFont.NOT_EMBEDDED);
+        Font fontTitle = new Font(baseFont, 18, Font.BOLD, Color.PINK);
+        Font fontQuestion = new Font(baseFont, 14, Font.BOLD, Color.BLACK);
+
+        Paragraph title = new Paragraph("Quiz - Zabawy Weselne", fontTitle);
+        title.setAlignment(Element.ALIGN_CENTER);
+        title.setSpacingAfter(20);
+        document.add(title);
+
+        for (int i = 0; i < selectedQuestions.size(); i++) {
+            String question = selectedQuestions.get(i);
+
+            Paragraph questionPara = new Paragraph((i + 1) + ". " + question, fontQuestion);
+            questionPara.setSpacingAfter(15);
+            document.add(questionPara);
+        }
+
+        document.close();
+    }
 }
