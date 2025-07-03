@@ -18,13 +18,20 @@
 
         body {
             background-image: url('/images/bgc.jpg');
+            background-size: cover;
+            background-position: center;
             color: #5a5a5a;
+            margin: 0;
+            padding-top: 60px;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
         }
 
         .container {
-            margin-top: 100px;
+            margin-top: 20px;
+            max-height: 600px;
         }
 
         /* ============ NAWIGACJA ============ */
@@ -72,7 +79,7 @@
             font-weight: 600;
         }
         .generate-btn {
-            margin-top: 1.5rem;
+            margin-top: 0px;
         }
         .answer-box {
             border: 1px solid #ccc;
@@ -81,6 +88,20 @@
             padding: 0.4rem;
             border-radius: 4px;
             background-color: #fff;
+        }
+        #quizForm {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .question-container {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #a65c5c;
+            padding: 1rem;
+            border-radius: 6px;
+            background: #fff0f0;
+            min-height: 0;
         }
     </style>
 </head>
@@ -121,9 +142,9 @@
   </div>
 </nav>
 
-<div class="container mt-5">
-  <form id="quizForm" method="post" th:action="@{/wedding_games/generate}">
-    <div class="mb-3" style="max-height: 400px; overflow-y: auto; border: 1px solid #a65c5c; padding: 1rem; border-radius: 6px; background: #fff0f0;">
+<div class="container d-flex flex-column" style="flex: 1; min-height: 0;">
+  <form id="quizForm" method="post" th:action="@{/wedding_games/generate}" style="display: flex; flex-direction: column; flex-grow: 1;">
+    <div class="question-container" style="flex: 1; overflow-y: auto; border: 1px solid #a65c5c; padding: 1rem; border-radius: 6px; background: #fff0f0; max-height: 600px;">
 
       <h1 class="mb-4 text-center" style="font-family: 'Great Vibes', cursive; color: #a65c5c;">Wybierz pytania do quizu</h1>
 
@@ -133,7 +154,11 @@
         <div class="answer-box" contenteditable="true" placeholder="Miejsce na odpowiedź (nie jest wymagane)"></div>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary generate-btn w-100 mt-3">Generuj quiz (PDF)</button>
+    <button type="submit"
+            class="btn btn-primary"
+            style="margin-top: auto; width: 100%; background-color: #0066ff; border: none;">
+      Generuj quiz (PDF)
+    </button>
   </form>
 </div>
 
