@@ -54,6 +54,6 @@ public class Guest {
     //@NotNull(message = "Wybierz kategorię")
     private GuestCategory kategoria;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "table_id")
+    @JoinColumn(name = "table_id", nullable = true)
     private GuestTable table;
 }

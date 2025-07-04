@@ -151,7 +151,6 @@
       <div class="form-check" th:each="q,iterStat : ${questions}">
         <input class="form-check-input" type="checkbox" th:id="'q' + ${iterStat.index}" th:name="selectedQuestions" th:value="${q}" />
         <label class="form-check-label question-label" th:for="'q' + ${iterStat.index}" th:text="${q}"></label>
-        <div class="answer-box" contenteditable="true" placeholder="Miejsce na odpowiedź (nie jest wymagane)"></div>
       </div>
     </div>
     <button type="submit"

@@ -62,6 +62,7 @@ public class SeatingPlanController {
     public String addTable(@RequestParam String nazwa,
                            @RequestParam(defaultValue = "100") int pozycjaX,
                            @RequestParam(defaultValue = "100") int pozycjaY,
+                           @RequestParam String ksztalt,
                            @AuthenticationPrincipal CustomUserDetails principal) {
 
         User user = userRepository.findByEmail(principal.getUsername())
@@ -71,6 +72,7 @@ public class SeatingPlanController {
         newTable.setNazwa(nazwa);
         newTable.setPozycjaX(pozycjaX);
         newTable.setPozycjaY(pozycjaY);
+        newTable.setKsztalt(ksztalt);
         newTable.setUser(user);
 
         guestTableRepository.save(newTable);
@@ -97,7 +99,7 @@ public class SeatingPlanController {
 
     @PostMapping("/delete")
     public String deleteTable(@RequestParam Long id) {
-        guestTableRepository.deleteById(id);
+        guestTableService.deleteTableById(id);
         return "redirect:/tables";
     }
 }

@@ -22,10 +22,11 @@ public class GuestTable {
     private String nazwa;
     private Integer pozycjaX;
     private Integer pozycjaY;
+    private String ksztalt;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToMany(mappedBy = "table", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "table")
     private List<Guest> goscie;
 
 }
