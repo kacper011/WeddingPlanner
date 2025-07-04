@@ -111,6 +111,23 @@
             font-size: 0.8rem;
             line-height: 1;
         }
+        .table-box.prostokatny {
+            border-radius: 12px;
+            width: 160px;
+            height: auto;
+        }
+
+        .table-box.okragly {
+            border-radius: 50%;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
@@ -154,6 +171,13 @@
             <label for="tableName" class="form-label" style="font-weight: 600; color: #a65c5c;">Nazwa nowego stołu</label>
             <input id="tableName" name="nazwa" class="form-control rounded-3 border-pink" placeholder="np. Stół Młodych" required>
         </div>
+        <div class="col-md-4">
+            <label for="tableShape" class="form-label" style="font-weight: 600; color: #a65c5c;">Kształt stołu</label>
+            <select id="tableShape" name="ksztalt" class="form-select border-pink" required>
+                <option value="prostokatny">Prostokątny</option>
+                <option value="okragly">Okrągły</option>
+            </select>
+        </div>
         <div class="col-md-4 d-flex align-items-end">
             <button type="submit" class="btn btn-outline-pink w-100 py-2 rounded-3" style="font-weight: 600;">
                 💒 Dodaj nowy stół
@@ -194,7 +218,7 @@
     <div id="room-plan" class="room-plan">
         <div th:each="stol : ${stoly}"
              th:style="'left:' + ${stol.pozycjaX} + 'px; top:' + ${stol.pozycjaY} + 'px;'"
-             class="table-box draggable"
+             th:class="'table-box draggable ' + ${stol.ksztalt}"
              th:attr="data-id=${stol.id}">
             <div class="d-flex justify-content-between align-items-center">
                 <h4 th:text="${stol.nazwa}" class="mb-0">Stół 1</h4>
