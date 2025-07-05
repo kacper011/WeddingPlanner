@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -62,6 +63,21 @@ class EventServiceImplTest {
         assertEquals(mockUser, event.getUser());
         verify(eventRepository, times(1)).save(event);
         verify(userRepository, times(1)).findByEmail(email);
+    }
+
+    @Test
+    void saveEventForUserShouldThrowWhenUserNotFound() {
+        // given
+        String email = "missing@example.com";
+        Event event = new Event();
+        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+
+        // then
+        assertThrows(NoSuchElementException.class, () -> {
+            eventService.saveEventForUser(event, email);
+        });
+
+        verify(eventRepository, never()).save(any());
     }
 
 }
