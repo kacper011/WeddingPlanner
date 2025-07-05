@@ -1,6 +1,7 @@
 package com.kacper.wedding_planner.service.impl;
 
 import com.kacper.wedding_planner.model.Event;
+import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.EventRepository;
 import com.kacper.wedding_planner.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -42,6 +44,24 @@ class EventServiceImplTest {
         verify(eventRepository, times(1)).findByUserEmail(email);
     }
 
+    @Test
+    void saveEventForUserShouldSetUserAndSave() {
+        // given
+        String email = "test@example.com";
+        User mockUser = new User();
+        mockUser.setEmail(email);
 
+        Event event = new Event();
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
+
+        // when
+        eventService.saveEventForUser(event, email);
+
+        // then
+        assertEquals(mockUser, event.getUser());
+        verify(eventRepository, times(1)).save(event);
+        verify(userRepository, times(1)).findByEmail(email);
+    }
 
 }
