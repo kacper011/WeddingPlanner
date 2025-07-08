@@ -313,7 +313,7 @@
 
 <!-- Weather Modal -->
 <div class="modal fade" id="weatherModal" tabindex="-1" aria-labelledby="weatherModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="weatherModalLabel">Prognoza pogody</h5>
@@ -352,6 +352,7 @@
       updateCountdown();
     }
     /*]]>*/
+    /*weather*/
    document.getElementById("showWeatherBtn").addEventListener("click", function () {
     const modalBody = document.getElementById("weatherContent");
     modalBody.innerHTML = "Ładowanie danych pogodowych...";
@@ -367,12 +368,27 @@
             const minTemps = data.daily.temperature_2m_min;
             const precipitation = data.daily.precipitation_sum;
 
-            let html = "<ul>";
-            for (let i = 0; i < dates.length; i++) {
-                html += `<li>${dates[i]}: max ${maxTemps[i]}°C, min ${minTemps[i]}°C, opady ${precipitation[i]}mm</li>`;
-            }
-            html += "</ul>";
+            let html = `<div class="row row-cols-1 row-cols-md-3 row-cols-xl-4 g-4">`;
 
+            for (let i = 0; i < dates.length; i++) {
+                const icon = getWeatherIcon(precipitation[i], maxTemps[i]);
+                const rainClass = precipitation[i] >= 10 ? "border-danger bg-light text-danger" : "border-secondary";
+
+                html += `
+                  <div class="col">
+                    <div class="card h-100 ${rainClass}" style="border-left: 6px solid;">
+                      <div class="card-body">
+                        <h6 class="card-title">${dates[i]}</h6>
+                        <p class="card-text" style="font-size: 0.95rem;">
+                          ${icon} max <strong>${maxTemps[i]}°C</strong>, min <strong>${minTemps[i]}°C</strong><br />
+                          Opady: ${precipitation[i]}mm
+                        </p>
+                      </div>
+                    </div>
+                  </div>`;
+            }
+
+            html += `</div>`;
             modalBody.innerHTML = html;
 
             const weatherModal = new bootstrap.Modal(document.getElementById("weatherModal"));
@@ -383,6 +399,14 @@
             const weatherModal = new bootstrap.Modal(document.getElementById("weatherModal"));
             weatherModal.show();
         });
+
+    function getWeatherIcon(precip, maxTemp) {
+        if (precip >= 15) return "🌧️";
+        if (precip >= 5) return "🌦️";
+        if (maxTemp > 26) return "☀️";
+        if (maxTemp > 20) return "🌤️";
+        return "⛅";
+    }
 });
   </script>
 
