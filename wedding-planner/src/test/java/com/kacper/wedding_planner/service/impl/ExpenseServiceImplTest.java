@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -53,6 +54,27 @@ class ExpenseServiceImplTest {
 
         assertThrows(UsernameNotFoundException.class,
                 () -> expenseService.getExpensesForUser("notfound@example.com"));
+    }
+
+    @Test
+    void shouldCalculateTotalExpensesCorrectly() {
+        User user = new User();
+        user.setEmail("test@example.com");
+
+        Expense e1 = new Expense();
+        e1.setKwota(BigDecimal.valueOf(100));
+        e1.setNazwa("Test1");
+
+        Expense e2 = new Expense();
+        e2.setKwota(BigDecimal.valueOf(200));
+        e2.setNazwa("Test2");
+
+        when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(user));
+        when(expenseRepository.findByUser(user)).thenReturn(Arrays.asList(e1, e2));
+
+        BigDecimal total = expenseService.getTotalForUser("test@example.com");
+
+        assertEquals(BigDecimal.valueOf(300), total);
     }
 
 }
