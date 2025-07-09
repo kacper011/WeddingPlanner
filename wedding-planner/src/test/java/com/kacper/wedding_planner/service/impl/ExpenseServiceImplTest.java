@@ -6,6 +6,7 @@ import com.kacper.wedding_planner.repository.ExpenseRepository;
 import com.kacper.wedding_planner.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -44,6 +45,14 @@ class ExpenseServiceImplTest {
 
         assertEquals(1, result.size());
         assertEquals("Test", result.get(0).getNazwa());
+    }
+
+    @Test
+    void shouldThrowWhenUserNotFound() {
+        when(userRepository.findByEmail("notfound@example.com")).thenReturn(Optional.empty());
+
+        assertThrows(UsernameNotFoundException.class,
+                () -> expenseService.getExpensesForUser("notfound@example.com"));
     }
 
 }
