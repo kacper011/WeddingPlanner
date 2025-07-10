@@ -6,6 +6,7 @@ import com.kacper.wedding_planner.repository.ExpenseRepository;
 import com.kacper.wedding_planner.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.math.BigDecimal;
@@ -13,6 +14,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
+import static org.mockito.Mockito.verify;
+import org.mockito.ArgumentCaptor;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -91,5 +94,25 @@ class ExpenseServiceImplTest {
 
         assertThrows(IllegalArgumentException.class,
                 () -> expenseService.getTotalForUser("test@example.com"));
+    }
+
+    @Test
+    void shouldSaveExpenseWithUser() {
+        User user = new User();
+        user.setEmail("test@example.com");
+
+        Expense expense = new Expense();
+        expense.setNazwa("Test");
+        expense.setKwota(BigDecimal.valueOf(50));
+
+        expenseService.saveExpense(expense, user);
+
+        ArgumentCaptor<Expense> captor = ArgumentCaptor.forClass(Expense.class);
+        verify(expenseRepository).save(captor.capture());
+
+        Expense savedExpense = captor.getValue();
+        assertEquals("Test", savedExpense.getNazwa());
+        assertEquals(BigDecimal.valueOf(50), savedExpense.getKwota());
+        assertEquals(user, savedExpense.getUser());
     }
 }
