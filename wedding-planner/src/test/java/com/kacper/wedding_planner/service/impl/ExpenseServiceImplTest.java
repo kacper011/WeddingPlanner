@@ -115,4 +115,20 @@ class ExpenseServiceImplTest {
         assertEquals(BigDecimal.valueOf(50), savedExpense.getKwota());
         assertEquals(user, savedExpense.getUser());
     }
+
+    @Test
+    void shouldDeleteExpenseIfAuthorized() {
+        User user = new User();
+        user.setEmail("user@example.com");
+
+        Expense expense = new Expense();
+        expense.setId(1L);
+        expense.setUser(user);
+
+        when(expenseRepository.findById(1L)).thenReturn(Optional.of(expense));
+
+        expenseService.deleteExpenseByIdAndUser(1L, "user@example.com");
+
+        verify(expenseRepository).delete(expense);
+    }
 }
