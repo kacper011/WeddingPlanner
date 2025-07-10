@@ -77,4 +77,19 @@ class ExpenseServiceImplTest {
         assertEquals(BigDecimal.valueOf(300), total);
     }
 
+    @Test
+    void shouldThrowIfExpenseHasNullFields() {
+        User user = new User();
+        user.setEmail("test@example.com");
+
+        Expense e1 = new Expense();
+        e1.setKwota(null);
+        e1.setNazwa("Test1");
+
+        when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(user));
+        when(expenseRepository.findByUser(user)).thenReturn(Collections.singletonList(e1));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> expenseService.getTotalForUser("test@example.com"));
+    }
 }
