@@ -131,4 +131,19 @@ class ExpenseServiceImplTest {
 
         verify(expenseRepository).delete(expense);
     }
+
+    @Test
+    void shouldThrowIfDeletingUnauthorizedExpense() {
+        User user = new User();
+        user.setEmail("owner@example.com");
+
+        Expense expense = new Expense();
+        expense.setId(1L);
+        expense.setUser(user);
+
+        when(expenseRepository.findById(1L)).thenReturn(Optional.of(expense));
+
+        assertThrows(RuntimeException.class,
+                () -> expenseService.deleteExpenseByIdAndUser(1L, "other@example.com"));
+    }
 }
