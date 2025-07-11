@@ -146,4 +146,12 @@ class ExpenseServiceImplTest {
         assertThrows(RuntimeException.class,
                 () -> expenseService.deleteExpenseByIdAndUser(1L, "other@example.com"));
     }
+
+    @Test
+    void shouldThrowIfExpenseToDeleteNotFound() {
+        when(expenseRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class,
+                () -> expenseService.deleteExpenseByIdAndUser(1L, "user@example.com"));
+    }
 }
