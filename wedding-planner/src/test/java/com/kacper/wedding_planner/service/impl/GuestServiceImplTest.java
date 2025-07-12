@@ -33,4 +33,10 @@ class GuestServiceImplTest {
         assertEquals(2, result.size());
         verify(guestRepository).findAll();
     }
+
+    @Test
+    void shouldDeleteGuestById() {
+        guestService.deleteGuest(1L);
+        verify(guestRepository).deleteById(1L);
+    }
 }
