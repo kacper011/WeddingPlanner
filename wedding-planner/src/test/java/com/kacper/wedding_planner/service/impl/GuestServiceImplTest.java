@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -38,5 +39,16 @@ class GuestServiceImplTest {
     void shouldDeleteGuestById() {
         guestService.deleteGuest(1L);
         verify(guestRepository).deleteById(1L);
+    }
+
+    @Test
+    void shouldUpdatePresence() {
+        Guest guest = new Guest();
+        when(guestRepository.findById(1L)).thenReturn(Optional.of(guest));
+
+        guestService.updatePresence(1L, "tak");
+
+        assertEquals("tak", guest.getPotwierdzenieObecnosci());
+        verify(guestRepository).save(guest);
     }
 }
