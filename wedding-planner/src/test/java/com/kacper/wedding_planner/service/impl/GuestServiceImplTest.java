@@ -1,0 +1,36 @@
+package com.kacper.wedding_planner.service.impl;
+
+import com.kacper.wedding_planner.model.Guest;
+import com.kacper.wedding_planner.repository.GuestRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+
+class GuestServiceImplTest {
+
+    private GuestRepository guestRepository;
+    private GuestServiceImpl guestService;
+
+    @BeforeEach
+    void setUp() {
+        guestRepository = mock(GuestRepository.class);
+        guestService = new GuestServiceImpl(guestRepository);
+    }
+
+    @Test
+    void shouldReturnAllGuests() {
+        List<Guest> guests = Arrays.asList(new Guest(), new Guest());
+        when(guestRepository.findAll()).thenReturn(guests);
+
+        List<Guest> result = guestService.getAllGuests();
+
+        assertEquals(2, result.size());
+        verify(guestRepository).findAll();
+    }
+}
