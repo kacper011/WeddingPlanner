@@ -72,4 +72,15 @@ class GuestServiceImplTest {
         assertEquals("Tak", guest.getTransport());
         verify(guestRepository).save(guest);
     }
+
+    @Test
+    void shouldUpdateLodging() {
+        Guest guest = new Guest();
+        when(guestRepository.findById(1L)).thenReturn(Optional.of(guest));
+
+        guestService.updateLodging(1L, "Tak");
+
+        assertEquals("Tak", guest.getNocleg());
+        verify(guestRepository).save(guest);
+    }
 }
