@@ -61,4 +61,15 @@ class GuestServiceImplTest {
 
         assertEquals("Guest not found", exception.getMessage());
     }
+
+    @Test
+    void shouldUpdateTransport() {
+        Guest guest = new Guest();
+        when(guestRepository.findById(1L)).thenReturn(Optional.of(guest));
+
+        guestService.updateTransport(1L, "Tak");
+
+        assertEquals("Tak", guest.getTransport());
+        verify(guestRepository).save(guest);
+    }
 }
