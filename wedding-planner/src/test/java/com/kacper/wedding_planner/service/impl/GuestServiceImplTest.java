@@ -51,4 +51,14 @@ class GuestServiceImplTest {
         assertEquals("tak", guest.getPotwierdzenieObecnosci());
         verify(guestRepository).save(guest);
     }
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingPresenceAndGuestNotFound() {
+        when(guestRepository.findById(1L)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+                guestService.updatePresence(1L, "tak"));
+
+        assertEquals("Guest not found", exception.getMessage());
+    }
 }
