@@ -120,4 +120,15 @@ class GuestServiceImplTest {
         assertEquals(1, guests.size());
         verify(guestRepository).findByUser(user);
     }
+
+    @Test
+    void shouldSaveGuest() {
+        Guest guest = new Guest();
+        when(guestRepository.save(guest)).thenReturn(guest);
+
+        Guest saved = guestService.saveGuest(guest);
+
+        assertEquals(guest, saved);
+        verify(guestRepository).save(guest);
+    }
 }
