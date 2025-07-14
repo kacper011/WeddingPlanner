@@ -96,4 +96,16 @@ class GuestServiceImplTest {
         assertEquals(2, guests.size());
         verify(guestRepository).findByUserAndPotwierdzenieObecnosci(user, "tak");
     }
+
+    @Test
+    void shouldFindByPoprawiny() {
+        User user = new User();
+        when(guestRepository.findByUserAndPoprawiny(user, "tak"))
+                .thenReturn(List.of(new Guest()));
+
+        List<Guest> guests = guestService.findByPoprawiny(user, "tak");
+
+        assertEquals(1, guests.size());
+        verify(guestRepository).findByUserAndPoprawiny(user, "tak");
+    }
 }
