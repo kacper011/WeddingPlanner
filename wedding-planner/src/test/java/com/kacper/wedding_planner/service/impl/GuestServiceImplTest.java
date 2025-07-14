@@ -108,4 +108,16 @@ class GuestServiceImplTest {
         assertEquals(1, guests.size());
         verify(guestRepository).findByUserAndPoprawiny(user, "tak");
     }
+
+    @Test
+    void shouldGetAllGuestsByUser() {
+        User user = new User();
+        when(guestRepository.findByUser(user))
+                .thenReturn(List.of(new Guest()));
+
+        List<Guest> guests = guestService.getAllGuestsByUser(user);
+
+        assertEquals(1, guests.size());
+        verify(guestRepository).findByUser(user);
+    }
 }
