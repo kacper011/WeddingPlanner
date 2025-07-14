@@ -1,6 +1,7 @@
 package com.kacper.wedding_planner.service.impl;
 
 import com.kacper.wedding_planner.model.Guest;
+import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.GuestRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -82,5 +83,17 @@ class GuestServiceImplTest {
 
         assertEquals("Tak", guest.getNocleg());
         verify(guestRepository).save(guest);
+    }
+
+    @Test
+    void shouldFindByConfirmedPresence() {
+        User user = new User();
+        when(guestRepository.findByUserAndPotwierdzenieObecnosci(user, "tak"))
+                .thenReturn(List.of(new Guest(), new Guest()));
+
+        List<Guest> guests = guestService.findByConfirmedPresence(user, "tak");
+
+        assertEquals(2, guests.size());
+        verify(guestRepository).findByUserAndPotwierdzenieObecnosci(user, "tak");
     }
 }
