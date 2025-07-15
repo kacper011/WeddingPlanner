@@ -1,5 +1,6 @@
 package com.kacper.wedding_planner.service.impl;
 
+import com.kacper.wedding_planner.model.Guest;
 import com.kacper.wedding_planner.model.GuestTable;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.GuestRepository;
@@ -7,9 +8,12 @@ import com.kacper.wedding_planner.repository.GuestTableRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 class GuestTableServiceImplTest {
@@ -36,6 +40,31 @@ class GuestTableServiceImplTest {
 
         assertEquals(2, result.size());
         verify(guestTableRepository).findByUser(user);
+    }
+
+    @Test
+    void shouldDetachGuestsFromTable() {
+        Long tableId = 1L;
+
+        Guest guest1 = new Guest();
+        guest1.setId(1L);
+
+        Guest guest2 = new Guest();
+        guest2.setId(2L);
+
+        GuestTable table = new GuestTable();
+        table.setId(tableId);
+        table.setGoscie(Arrays.asList(guest1, guest2));
+
+        when(guestTableRepository.findById(tableId)).thenReturn(Optional.of(table));
+
+        guestTableService.detachGuestsFromTable(tableId);
+
+        assertNull(guest1.getTable());
+        assertNull(guest2.getTable());
+
+        verify(guestRepository, times(2)).save(any(Guest.class));
+        verify(guestRepository).flush();
     }
 
 }
