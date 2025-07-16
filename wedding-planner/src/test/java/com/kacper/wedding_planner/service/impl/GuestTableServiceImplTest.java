@@ -12,8 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class GuestTableServiceImplTest {
@@ -65,6 +64,18 @@ class GuestTableServiceImplTest {
 
         verify(guestRepository, times(2)).save(any(Guest.class));
         verify(guestRepository).flush();
+    }
+
+    @Test
+    void shouldThrowExceptionIfTableNotFoundWhenDetachingGuests() {
+        Long tableId = 1L;
+        when(guestTableRepository.findById(tableId)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            guestTableService.detachGuestsFromTable(tableId);
+        });
+
+        assertEquals("Nie znaleziono stołu o id: " + tableId, exception.getMessage());
     }
 
 }
