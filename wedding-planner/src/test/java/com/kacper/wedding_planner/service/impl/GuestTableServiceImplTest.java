@@ -78,4 +78,27 @@ class GuestTableServiceImplTest {
         assertEquals("Nie znaleziono stołu o id: " + tableId, exception.getMessage());
     }
 
+    @Test
+    void shouldDeleteTableAndDetachGuests() {
+        Long tableId = 1L;
+
+        Guest guest = new Guest();
+        guest.setId(1L);
+        GuestTable table = new GuestTable();
+        table.setId(tableId);
+        table.setGoscie(List.of(guest));
+        guest.setTable(table);
+
+        when(guestTableRepository.findById(tableId)).thenReturn(Optional.of(table));
+
+        guestTableService.deleteTableById(tableId);
+
+        assertNull(guest.getTable(), "Guest should be detached from table");
+        
+        verify(guestRepository).save(guest);
+        verify(guestRepository).flush();
+        verify(guestTableRepository).deleteById(tableId);
+    }
+
+
 }
