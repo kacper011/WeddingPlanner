@@ -94,7 +94,7 @@ class GuestTableServiceImplTest {
         guestTableService.deleteTableById(tableId);
 
         assertNull(guest.getTable(), "Guest should be detached from table");
-        
+
         verify(guestRepository).save(guest);
         verify(guestRepository).flush();
         verify(guestTableRepository).deleteById(tableId);
