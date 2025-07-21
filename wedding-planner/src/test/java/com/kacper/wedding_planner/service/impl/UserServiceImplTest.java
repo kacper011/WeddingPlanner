@@ -71,4 +71,16 @@ class UserServiceImplTest {
         verify(userRepository, never()).save(any());
         verify(emailService, never()).sendWelcomeEmail(any(), any());
     }
+
+    @Test
+    void testFindByEmailUserFound() {
+
+        User user = new User();
+        user.setEmail(email);
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+
+        User result = userService.findByEmail(email);
+
+        assertEquals(email, result.getEmail());
+    }
 }
