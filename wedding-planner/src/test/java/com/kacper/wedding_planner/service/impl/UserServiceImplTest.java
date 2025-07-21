@@ -15,8 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 
@@ -58,4 +58,17 @@ class UserServiceImplTest {
         verify(emailService).sendWelcomeEmail(email, firstName);
     }
 
+    @Test
+    void testRegisterUserEmailAlreadyExistsThrowsException() {
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(new User()));
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.registerUser(email, password, firstName);
+        });
+
+        assertEquals("Email już istnieje.", exception.getMessage());
+        verify(userRepository, never()).save(any());
+        verify(emailService, never()).sendWelcomeEmail(any(), any());
+    }
 }
