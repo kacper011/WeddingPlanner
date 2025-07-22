@@ -142,23 +142,72 @@
   </div>
 </nav>
 
-<div class="container d-flex flex-column" style="flex: 1; min-height: 0;">
-  <form id="quizForm" method="post" th:action="@{/wedding_games/export/pdf}" style="display: flex; flex-direction: column; flex-grow: 1;">
-    <div class="question-container" style="flex: 1; overflow-y: auto; border: 1px solid #a65c5c; padding: 1rem; border-radius: 6px; background: #fff0f0; max-height: 600px;">
+<div class="container py-4 d-flex flex-column align-items-center" style="flex: 1; min-height: 0;">
+  <form id="quizForm"
+        method="post"
+        th:action="@{/wedding_games/export/pdf}"
+        class="w-100"
+        style="max-width: 700px; width: 100%; display: flex; flex-direction: column; flex-grow: 1;">
+
+    <div class="question-container shadow-lg"
+         style="flex: 1; overflow-y: auto; border: none; padding: 2rem; border-radius: 12px; background: rgba(255, 255, 255, 0.9); max-height: 600px;">
 
       <h1 class="mb-4 text-center" style="font-family: 'Great Vibes', cursive; color: #a65c5c;">Wybierz pytania do quizu</h1>
 
-      <div class="form-check" th:each="q,iterStat : ${questions}">
-        <input class="form-check-input" type="checkbox" th:id="'q' + ${iterStat.index}" th:name="selectedQuestions" th:value="${q}" />
-        <label class="form-check-label question-label" th:for="'q' + ${iterStat.index}" th:text="${q}"></label>
+      <div class="row row-cols-1 gy-3">
+        <div class="col form-check ps-0"
+             th:each="q,iterStat : ${questions}">
+          <div class="d-flex align-items-start p-3 border rounded bg-white shadow-sm">
+            <input class="form-check-input mt-1 me-3"
+                   type="checkbox"
+                   th:id="'q' + ${iterStat.index}"
+                   th:name="selectedQuestions"
+                   th:value="${q}" />
+            <label class="form-check-label question-label w-100"
+                   th:for="'q' + ${iterStat.index}"
+                   th:text="${q}"
+                   style="font-weight: 500;"></label>
+          </div>
+        </div>
       </div>
     </div>
-    <button type="submit"
-            class="btn btn-primary"
-            style="margin-top: auto; width: 100%; background-color: #0066ff; border: none;">
-      Generuj quiz (PDF)
-    </button>
+
+    <div class="d-flex flex-column flex-md-row justify-content-between gap-2 mt-4">
+      <button type="button"
+              class="btn shadow-sm w-100"
+              style="background-color: #a65c5c; color: white; font-weight: 600;"
+              data-bs-toggle="modal"
+              data-bs-target="#previewModal"
+              onclick="updatePreview()">
+        👁 Podgląd pytań
+      </button>
+
+      <button type="submit"
+              class="btn btn-primary shadow-sm w-100"
+              style="background-color: #0066ff; border: none;">
+        📄 Generuj quiz (PDF)
+      </button>
+    </div>
   </form>
+</div>
+
+<!-- MODAL PODGLĄDU -->
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-light">
+        <h5 class="modal-title" id="previewModalLabel">Podgląd wybranych pytań</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"></button>
+      </div>
+      <div class="modal-body">
+        <ul id="previewList" class="list-group">
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -180,7 +229,31 @@
     });
 </script>
 
+<script>
+  function updatePreview() {
+    const selected = document.querySelectorAll('input[name="selectedQuestions"]:checked');
+    const previewList = document.getElementById('previewList');
+    previewList.innerHTML = '';
+
+    if (selected.length === 0) {
+      const li = document.createElement('li');
+      li.className = 'list-group-item text-muted';
+      li.textContent = 'Brak zaznaczonych pytań.';
+      previewList.appendChild(li);
+    } else {
+      selected.forEach(cb => {
+        const label = document.querySelector(`label[for="${cb.id}"]`);
+        const li = document.createElement('li');
+        li.className = 'list-group-item';
+        li.textContent = label.textContent.trim();
+        previewList.appendChild(li);
+      });
+    }
+  }
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 
 </body>
 </html>
