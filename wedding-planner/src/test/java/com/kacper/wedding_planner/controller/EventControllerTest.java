@@ -20,10 +20,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(EventController.class)
@@ -72,5 +76,32 @@ class EventControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].title").value("Test event"));
+    }
+
+    @Test
+    @WithMockUser(username = "test@example.com", roles = {"USER"})
+    void shouldCreateEvent() throws Exception {
+
+        Event event = new Event();
+        event.setTitle("New Event");
+        event.setDate(LocalDate.now());
+
+        when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(testUser));
+
+        Event savedEvent = new Event();
+        savedEvent.setId(1L);
+        savedEvent.setTitle(event.getTitle());
+        savedEvent.setDate(event.getDate());
+        savedEvent.setUser(testUser);
+
+        when(eventRepository.save(any(Event.class))).thenReturn(savedEvent);
+
+        mockMvc.perform(post("/events")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(event)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.title").value("New Event"));
     }
 }
