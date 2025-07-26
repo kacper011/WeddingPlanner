@@ -79,9 +79,8 @@ class EventControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "test@example.com", roles = {"USER"})
+    @WithMockUser(username = "test@example.com")
     void shouldCreateEvent() throws Exception {
-
         Event event = new Event();
         event.setTitle("New Event");
         event.setDate(LocalDate.now());
@@ -104,4 +103,5 @@ class EventControllerTest {
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.title").value("New Event"));
     }
+
 }
