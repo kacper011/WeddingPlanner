@@ -8,6 +8,7 @@ import com.kacper.wedding_planner.repository.EventRepository;
 import com.kacper.wedding_planner.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -17,17 +18,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(EventController.class)
@@ -102,6 +101,33 @@ class EventControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.title").value("New Event"));
+    }
+
+    @Test
+    @WithMockUser(username = "test@example.com")
+    void shouldUpdateEvent() throws Exception {
+        Event existing = new Event();
+        existing.setId(1L);
+        existing.setTitle("Old Title");
+        existing.setDate(LocalDate.of(2025, 1, 1));
+        existing.setUser(testUser);
+
+        Event updated = new Event();
+        updated.setTitle("Updated Title");
+        updated.setDate(LocalDate.of(2025, 12, 25));
+
+        Mockito.when(eventRepository.findById(1L)).thenReturn(Optional.of(existing));
+        Mockito.when(eventRepository.save(any(Event.class))).thenReturn(existing);
+
+        mockMvc.perform(put("/events/1")
+                        .with(csrf())
+                        .with(authentication(
+                                new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities())
+                        ))
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(updated)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Updated Title"));
     }
 
 }
