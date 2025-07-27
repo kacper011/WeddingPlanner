@@ -130,4 +130,25 @@ class EventControllerTest {
                 .andExpect(jsonPath("$.title").value("Updated Title"));
     }
 
+    @Test
+    @WithMockUser(username = "test@example.com")
+    void shouldDeleteEvent() throws Exception {
+        Event existing = new Event();
+        existing.setId(1L);
+        existing.setUser(testUser);
+
+        Mockito.when(eventRepository.findById(1L)).thenReturn(Optional.of(existing));
+
+        mockMvc.perform(delete("/events/1")
+                        .with(csrf())
+                        .with(authentication(
+                                new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities())
+                        )))
+                .andExpect(status().isOk());
+
+        Mockito.verify(eventRepository).delete(existing);
+    }
+
+    
+
 }
