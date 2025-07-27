@@ -149,6 +149,12 @@ class EventControllerTest {
         Mockito.verify(eventRepository).delete(existing);
     }
 
-    
+    @Test
+    @WithMockUser(username = "test@example.com")
+    void shouldReturnEventsView() throws Exception {
+        mockMvc.perform(get("/events"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("events"));
+    }
 
 }
