@@ -96,4 +96,23 @@ class ExpenseControllerTest {
         Mockito.verify(expenseService).saveExpense(any(Expense.class), Mockito.eq(testUser));
     }
 
+    @Test
+    @WithMockUser(username = "testuser@example.com")
+    void shouldReturnExpensesViewWhenValidationErrors() throws Exception {
+
+        when(expenseService.getExpensesForUser("testuser@example.com"))
+                .thenReturn(List.of());
+        when(expenseService.getTotalForUser("testuser@example.com"))
+                .thenReturn(BigDecimal.ZERO);
+
+        mockMvc.perform(post("/expenses")
+                        .with(csrf())
+                        .param("name", "")
+                        .param("amount", "-10"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("expenses"))
+                .andExpect(model().attributeExists("expenses"))
+                .andExpect(model().attributeExists("total"));
+    }
+
 }
