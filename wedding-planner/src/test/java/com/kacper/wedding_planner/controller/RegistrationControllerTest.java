@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -46,5 +47,21 @@ class RegistrationControllerTest {
                 .andExpect(redirectedUrl("/login?success"));
 
         Mockito.verify(userService).registerUser("test@example.com", "secret123", "John");
+    }
+
+    @Test
+    void shouldReturnErrorOnRegistrationFailure() throws Exception {
+        doThrow(new IllegalArgumentException("Email already exists"))
+                .when(userService)
+                .registerUser("test@example.com", "secret123", "John");
+
+        mockMvc.perform(post("/register")
+                        .param("email", "test@example.com")
+                        .param("password", "secret123")
+                        .param("firstName", "John"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("register"))
+                .andExpect(model().attributeExists("error"))
+                .andExpect(model().attributeDoesNotExist("user")); 
     }
 }
