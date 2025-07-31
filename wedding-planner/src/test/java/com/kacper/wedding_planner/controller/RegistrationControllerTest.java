@@ -62,6 +62,6 @@ class RegistrationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("register"))
                 .andExpect(model().attributeExists("error"))
-                .andExpect(model().attributeDoesNotExist("user")); 
+                .andExpect(model().attributeDoesNotExist("user"));
     }
 }
