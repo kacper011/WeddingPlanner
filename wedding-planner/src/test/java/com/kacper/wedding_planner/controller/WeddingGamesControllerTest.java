@@ -10,14 +10,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(WeddingGamesController.class)
@@ -45,7 +44,6 @@ public class WeddingGamesControllerTest {
     }
 
 
-    @WithMockUser
     @Test
     public void shouldWeddingGamesPageReturnsViewWithQuestions() throws Exception {
 
@@ -56,6 +54,18 @@ public class WeddingGamesControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("wedding_games"))
                 .andExpect(model().attributeExists("questions"));
+    }
+
+    @Test
+    public void shouldInitMethodLoadsQuestions() throws IOException {
+        // Arrange
+        WeddingGamesController controller = new WeddingGamesController();
+        controller.init();
+
+        // Assert
+        assertThat(controller).hasFieldOrProperty("questions");
+        assertThat(controller.weddingGamesPage(new org.springframework.ui.ExtendedModelMap()))
+                .isEqualTo("wedding_games");
     }
 
 
