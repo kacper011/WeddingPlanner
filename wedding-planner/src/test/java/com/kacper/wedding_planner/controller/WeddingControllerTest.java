@@ -87,6 +87,16 @@ class WeddingControllerTest {
                 .andExpect(model().attribute("notConfirmedGuests", 1L))
                 .andExpect(model().attribute("receptionGuests", 1L));
     }
-    
+
+    @Test
+    void shouldShowCreateGuestForm() throws Exception {
+        mockMvc.perform(get("/guests/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("add_guest"))
+                .andExpect(model().attributeExists("guest"))
+                .andExpect(model().attributeExists("categories"))
+                .andExpect(model().attribute("guest", org.hamcrest.Matchers.hasProperty("kategoria", org.hamcrest.Matchers.nullValue())))
+                .andExpect(model().attribute("categories", GuestCategory.values()));
+    }
 }
 
