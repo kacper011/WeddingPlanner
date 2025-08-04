@@ -21,8 +21,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(WeddingController.class)
@@ -97,6 +101,20 @@ class WeddingControllerTest {
                 .andExpect(model().attributeExists("categories"))
                 .andExpect(model().attribute("guest", org.hamcrest.Matchers.hasProperty("kategoria", org.hamcrest.Matchers.nullValue())))
                 .andExpect(model().attribute("categories", GuestCategory.values()));
+    }
+
+    @Test
+    void shouldAddGuestSuccessfullyWhenFormIsValid() throws Exception {
+        mockMvc.perform(post("/guests")
+                .with(csrf())
+                .param("name", "Jan Kowalski")
+                .param("category", "RODZINA_PANA_MLODEGO")
+                .param("present", "TAK")
+                .param("confirmed", "NIE"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/guests"));
+
+        verify(guestService).saveGuest(any(Guest.class));
     }
 }
 
