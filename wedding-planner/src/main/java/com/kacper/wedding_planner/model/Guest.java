@@ -1,6 +1,7 @@
 package com.kacper.wedding_planner.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -21,9 +22,11 @@ public class Guest {
     private Long id;
 
     @Column(name = "nazwisko", nullable = false)
+    @NotBlank(message = "Nazwisko jest wymagane")
     private String nazwisko;
 
     @Column(name = "imie", nullable = false)
+    @NotBlank(message = "Imię jest wymagane")
     private String imie;
 
     @Column(name = "potwierdzeni_obecnosci")
@@ -51,7 +54,7 @@ public class Guest {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "kategoria_goscia")
-    //@NotNull(message = "Wybierz kategorię")
+    @NotNull(message = "Wybierz kategorię")
     private GuestCategory kategoria;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "table_id", nullable = true)

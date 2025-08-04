@@ -22,8 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -115,6 +114,21 @@ class WeddingControllerTest {
                 .andExpect(redirectedUrl("/guests"));
 
         verify(guestService).saveGuest(any(Guest.class));
+    }
+
+    @Test
+    void shouldReturnFormWithErrorsWhenFormIsInvalid() throws Exception {
+        mockMvc.perform(post("/guests")
+                .with(csrf())
+                .param("category", "ZNAJOMI")
+                .param("present", "NIE")
+                .param("confirmed", "TAK"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("add_guest"))
+                .andExpect(model().attributeHasFieldErrors("guest", "imie"))
+                .andExpect(model().attributeExists("categories"));
+
+        verify(guestService, never()).saveGuest(any());
     }
 }
 
