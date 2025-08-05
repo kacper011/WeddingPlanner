@@ -16,14 +16,17 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -48,6 +51,8 @@ class WeddingControllerTest {
 
     @MockBean
     private WeddingInfoService weddingInfoService;
+
+    private Guest guest;
 
     private User mockUser;
     private List<Guest> mockGuests;
@@ -129,6 +134,21 @@ class WeddingControllerTest {
                 .andExpect(model().attributeExists("categories"));
 
         verify(guestService, never()).saveGuest(any());
+    }
+
+    @Test
+    @WithMockUser(username = "test@example.com", roles = "USER")
+    void shouldReturnGuestDetailsView() throws Exception {
+
+        guest = createGuest("Kowalski", GuestCategory.RODZINA_PANA_MLODEGO, "TAK", "TAK");
+        guest.setId(1L);
+        when(guestRepository.findById(1L)).thenReturn(Optional.of(guest));
+
+        mockMvc.perform(get("/guests/details/1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("guest_details"))
+                .andExpect(model().attributeExists("guest"))
+                .andExpect(model().attribute("guest", guest));
     }
 }
 
