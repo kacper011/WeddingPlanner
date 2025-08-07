@@ -150,5 +150,14 @@ class WeddingControllerTest {
                 .andExpect(model().attributeExists("guest"))
                 .andExpect(model().attribute("guest", guest));
     }
+
+    @Test
+    @WithMockUser(username = "test@example.com", roles = "USER")
+    void shouldReturn404WhenGuestNotFound() throws Exception {
+        when(guestRepository.findById(99L)).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/guests/details/99"))
+                .andExpect(status().isNotFound());
+    }
 }
 
