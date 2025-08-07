@@ -177,5 +177,20 @@ class WeddingControllerTest {
 
         verify(guestRepository).save(any(Guest.class));
     }
+
+    @Test
+    @WithMockUser(username = "test@example.com", roles = "USER")
+    void shouldReturnToFormWhenGuestDataIsInvalid() throws Exception {
+        mockMvc.perform(post("/guests/create")
+                        .with(csrf())
+                        .param("nazwisko", "Kowalski")
+                        .param("kategoria", "RODZINA_PANA_MLODEGO"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("add_guest"))
+                .andExpect(model().attributeHasFieldErrors("guest", "imie"))
+                .andExpect(model().attributeExists("categories"));
+
+        verify(guestRepository, never()).save(any());
+    }
 }
 
