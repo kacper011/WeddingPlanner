@@ -159,5 +159,23 @@ class WeddingControllerTest {
         mockMvc.perform(get("/guests/details/99"))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    @WithMockUser(username = "test@example.com", roles = "USER")
+    void shouldCreateGuestSuccessfully() throws Exception {
+        when(userService.findByEmail("test@example.com")).thenReturn(mockUser);
+
+        mockMvc.perform(post("/guests/create")
+                .with(csrf())
+                .param("imie", "Jan")
+                .param("nazwisko", "Kowalski")
+                .param("kategoria", "RODZINA_PANA_MLODEGO")
+                .param("potwierdzenieObecnosci", "TAK")
+                .param("poprawiny", "TAK"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/guests"));
+
+        verify(guestRepository).save(any(Guest.class));
+    }
 }
 
