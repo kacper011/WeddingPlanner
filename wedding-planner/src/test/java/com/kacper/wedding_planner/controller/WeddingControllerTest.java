@@ -192,5 +192,28 @@ class WeddingControllerTest {
 
         verify(guestRepository, never()).save(any());
     }
+
+    @Test
+    @WithMockUser(username = "test@example.com", roles = "USER")
+    void shouldEditGuestSuccessfullyWhenDataIsInvalid() throws Exception {
+
+        Guest existingGuest = createGuest("Kowalski", GuestCategory.RODZINA_PANA_MLODEGO, "TAK", "TAK");
+        existingGuest.setId(1L);
+
+        when(guestRepository.findById(1L)).thenReturn(Optional.of(existingGuest));
+        when(userService.findByEmail("test@example.com")).thenReturn(mockUser);
+
+        mockMvc.perform(post("/guests/edit/1")
+                .with(csrf())
+                .param("imie", "Jan")
+                .param("nazwisko", "Nowak")
+                .param("potwierdzenieObecnosci", "TAK")
+                .param("poprawiny", "Nie")
+                .param("kategoria", "RODZINA_PANA_MLODEGO"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/guests/confirmed"));
+
+        verify(guestRepository).save(any(Guest.class));
+    }
 }
 
