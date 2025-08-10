@@ -195,7 +195,7 @@ class WeddingControllerTest {
 
     @Test
     @WithMockUser(username = "test@example.com", roles = "USER")
-    void shouldEditGuestSuccessfullyWhenDataIsInvalid() throws Exception {
+    void shouldEditGuestSuccessfullyWhenDataIsValid() throws Exception {
 
         Guest existingGuest = createGuest("Kowalski", GuestCategory.RODZINA_PANA_MLODEGO, "TAK", "TAK");
         existingGuest.setId(1L);
@@ -214,6 +214,34 @@ class WeddingControllerTest {
                 .andExpect(redirectedUrl("/guests/confirmed"));
 
         verify(guestRepository).save(any(Guest.class));
+    }
+
+    @Test
+    @WithMockUser(username = "test@example.com", roles = "USER")
+    void shouldEditGuestSuccessfully() throws Exception {
+
+        Guest existingGuest = createGuest("Kowalski", GuestCategory.RODZINA_PANA_MLODEGO, "TAK", "TAK");
+        existingGuest.setId(1L);
+
+        when(guestRepository.findById(1L)).thenReturn(Optional.of(existingGuest));
+        when(userService.findByEmail("test@example.com")).thenReturn(mockUser);
+
+        mockMvc.perform(post("/guests/edit/1")
+                        .with(csrf())
+                        .param("imie", "Jan")
+                        .param("nazwisko", "Nowak")
+                        .param("potwierdzenieObecnosci", "TAK")
+                        .param("poprawiny", "NIE"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/guests/confirmed"));
+
+        verify(guestRepository).save(argThat(savedGuest ->
+                savedGuest.getId().equals(1L) &&
+                        savedGuest.getNazwisko().equals("Nowak") &&
+                        savedGuest.getImie().equals("Jan") &&
+                        savedGuest.getKategoria() == GuestCategory.RODZINA_PANA_MLODEGO &&
+                        savedGuest.getUser().equals(mockUser)
+        ));
     }
 }
 
