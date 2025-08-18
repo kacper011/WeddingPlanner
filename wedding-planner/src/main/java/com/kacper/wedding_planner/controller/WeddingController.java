@@ -135,17 +135,22 @@ public class WeddingController {
     }
 
     @PostMapping("/edit/{id}")
-    public String editGuest(@PathVariable Long id, @ModelAttribute Guest guest, @AuthenticationPrincipal CustomUserDetails principal) {
+    public String editGuest(@PathVariable Long id,
+                            @ModelAttribute Guest guest,
+                            @AuthenticationPrincipal CustomUserDetails principal) {
         try {
-            Guest existingGuest = guestRepository.findById(id).orElseThrow(() -> new RuntimeException("Guest not found with id: " + id));
+            Guest existingGuest = guestRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Guest not found with id: " + id));
+
             guest.setId(id);
             guest.setUser(userService.findByEmail(principal.getUsername()));
             guest.setKategoria(existingGuest.getKategoria());
             guestRepository.save(guest);
+
             return "redirect:/guests/confirmed";
         } catch (Exception e) {
             e.printStackTrace();
-            return "error-page";
+            return "error";
         }
     }
 

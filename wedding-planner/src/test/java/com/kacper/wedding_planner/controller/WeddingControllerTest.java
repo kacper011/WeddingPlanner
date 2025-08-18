@@ -195,29 +195,6 @@ class WeddingControllerTest {
 
     @Test
     @WithMockUser(username = "test@example.com", roles = "USER")
-    void shouldEditGuestSuccessfullyWhenDataIsValid() throws Exception {
-
-        Guest existingGuest = createGuest("Kowalski", GuestCategory.RODZINA_PANA_MLODEGO, "TAK", "TAK");
-        existingGuest.setId(1L);
-
-        when(guestRepository.findById(1L)).thenReturn(Optional.of(existingGuest));
-        when(userService.findByEmail("test@example.com")).thenReturn(mockUser);
-
-        mockMvc.perform(post("/guests/edit/1")
-                .with(csrf())
-                .param("imie", "Jan")
-                .param("nazwisko", "Nowak")
-                .param("potwierdzenieObecnosci", "TAK")
-                .param("poprawiny", "Nie")
-                .param("kategoria", "RODZINA_PANA_MLODEGO"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/guests/confirmed"));
-
-        verify(guestRepository).save(any(Guest.class));
-    }
-
-    @Test
-    @WithMockUser(username = "test@example.com", roles = "USER")
     void shouldEditGuestSuccessfully() throws Exception {
 
         Guest existingGuest = createGuest("Kowalski", GuestCategory.RODZINA_PANA_MLODEGO, "TAK", "TAK");
@@ -242,6 +219,24 @@ class WeddingControllerTest {
                         savedGuest.getKategoria() == GuestCategory.RODZINA_PANA_MLODEGO &&
                         savedGuest.getUser().equals(mockUser)
         ));
+    }
+
+    @Test
+    @WithMockUser(username = "test@example.com", roles = "USER")
+    void shouldReturnErrorPageWhenGuestNotFound() throws Exception {
+        // given
+        when(guestRepository.findById(99L)).thenReturn(Optional.empty());
+
+        // when & then
+        mockMvc.perform(post("/guests/edit/99")
+                        .with(csrf())
+                        .param("nazwisko", "Nowak")
+                        .param("imie", "Jan")
+                        .param("kategoria", GuestCategory.RODZINA_PANA_MLODEGO.name()))
+                .andExpect(status().isOk())   
+                .andExpect(view().name("error"));
+
+        verify(guestRepository, never()).save(any());
     }
 }
 
