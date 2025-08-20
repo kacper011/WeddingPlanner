@@ -233,10 +233,25 @@ class WeddingControllerTest {
                         .param("nazwisko", "Nowak")
                         .param("imie", "Jan")
                         .param("kategoria", GuestCategory.RODZINA_PANA_MLODEGO.name()))
-                .andExpect(status().isOk())   
+                .andExpect(status().isOk())
                 .andExpect(view().name("error"));
 
         verify(guestRepository, never()).save(any());
+    }
+
+    @Test
+    @WithMockUser(username = "test@example.com", roles = "USER")
+    void shouldDeleteGuestAndRedirect() throws Exception {
+
+        Long guestId = 1L;
+
+        mockMvc.perform(post("/guests/delete/{id}", guestId)
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/guests"))
+                .andExpect(flash().attribute("message", "Gość został pomyślnie usunięty."));
+
+        verify(guestService, times(1)).deleteGuest(guestId);
     }
 }
 
