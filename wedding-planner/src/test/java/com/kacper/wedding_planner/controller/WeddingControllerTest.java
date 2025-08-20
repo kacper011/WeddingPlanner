@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -252,6 +254,28 @@ class WeddingControllerTest {
                 .andExpect(flash().attribute("message", "Gość został pomyślnie usunięty."));
 
         verify(guestService, times(1)).deleteGuest(guestId);
+    }
+
+    @Test
+    @WithMockUser(username = "test@example.com", roles = "USER")
+    void updatePresenceShouldUpdateGuestAndRedirect() throws Exception {
+
+        Guest guest = new Guest();
+        guest.setId(1L);
+        guest.setPotwierdzenieObecnosci("TAK");
+
+        when(guestRepository.findById(1L)).thenReturn(Optional.of(guest));
+        when(guestRepository.save(any(Guest.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        mockMvc.perform(post("/guests/updatePresence/1")
+                .param("presence", "NIE")
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/guests"));
+
+        assertEquals("NIE", guest.getPotwierdzenieObecnosci());
+        assertNull(guest.getTransport());
+        assertNull(guest.getNocleg());
     }
 }
 
