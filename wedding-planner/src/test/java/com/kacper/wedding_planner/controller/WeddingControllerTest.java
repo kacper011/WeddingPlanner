@@ -277,5 +277,25 @@ class WeddingControllerTest {
         assertNull(guest.getTransport());
         assertNull(guest.getNocleg());
     }
+
+    @Test
+    @WithMockUser(username = "test@example.com", roles = "USER")
+    void updateTransportShouldUpdateGuestAndRedirect() throws Exception {
+
+        Guest guest = new Guest();
+        guest.setId(1L);
+        guest.setTransport(null);
+
+        when(guestRepository.findById(1L)).thenReturn(Optional.of(guest));
+        when(guestRepository.save(any(Guest.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        mockMvc.perform(post("/guests/updateTransport/1")
+                .param("transport", "TAK")
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/guests"));
+
+        assertEquals("TAK", guest.getTransport());
+    }
 }
 
