@@ -317,5 +317,17 @@ class WeddingControllerTest {
 
         assertEquals("NIE", guest.getTransport());
     }
+
+    @Test
+    @WithMockUser(username = "test@example.com", roles = "USER")
+    void updateTransportShouldReturn4XXWhenGuestNotFound() throws Exception {
+
+        when(guestRepository.findById(99L)).thenReturn(Optional.empty());
+
+        mockMvc.perform(post("/guests/updateTransport/99")
+                        .param("transport", "TAK")
+                        .with(csrf()))
+                .andExpect(status().isNotFound());
+    }
 }
 

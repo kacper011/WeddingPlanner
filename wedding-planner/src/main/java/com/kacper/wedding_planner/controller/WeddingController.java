@@ -12,12 +12,14 @@ import com.kacper.wedding_planner.service.GuestService;
 import com.kacper.wedding_planner.service.UserService;
 import com.kacper.wedding_planner.service.WeddingInfoService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Comparator;
@@ -179,7 +181,8 @@ public class WeddingController {
 
     @PostMapping("/updateTransport/{id}")
     public String updateTransport(@PathVariable Long id, @RequestParam String transport) {
-        Guest guest = guestRepository.findById(id).orElseThrow();
+        Guest guest = guestRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Guest not found"));
         guest.setTransport(transport);
         guestRepository.save(guest);
         return "redirect:/guests";
