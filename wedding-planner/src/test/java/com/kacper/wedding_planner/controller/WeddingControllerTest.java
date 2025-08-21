@@ -297,5 +297,25 @@ class WeddingControllerTest {
 
         assertEquals("TAK", guest.getTransport());
     }
+
+    @Test
+    @WithMockUser(username = "test@example.com", roles = "USER")
+    void updateTransportShouldSetTransportToNoAndRedirect() throws Exception {
+
+        Guest guest = new Guest();
+        guest.setId(2L);
+        guest.setTransport("TAK");
+
+        when(guestRepository.findById(2L)).thenReturn(Optional.of(guest));
+        when(guestRepository.save(any(Guest.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        mockMvc.perform(post("/guests/updateTransport/2")
+                .param("transport", "NIE")
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/guests"));
+
+        assertEquals("NIE", guest.getTransport());
+    }
 }
 
