@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -112,11 +111,11 @@ class WeddingControllerTest {
     @Test
     void shouldAddGuestSuccessfullyWhenFormIsValid() throws Exception {
         mockMvc.perform(post("/guests")
-                .with(csrf())
-                .param("name", "Jan Kowalski")
-                .param("category", "RODZINA_PANA_MLODEGO")
-                .param("present", "TAK")
-                .param("confirmed", "NIE"))
+                        .with(csrf())
+                        .param("imie", "Jan")
+                        .param("nazwisko", "Kowalski")
+                        .param("kategoria", "RODZINA_PANA_MLODEGO")
+                        .param("kontakt", "123 123 123"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/guests"));
 
