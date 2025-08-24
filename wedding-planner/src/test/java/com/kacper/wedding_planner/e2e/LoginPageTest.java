@@ -42,5 +42,12 @@ public class LoginPageTest {
         assertTrue(loginButton.isDisplayed(), "Login button must be visible");
     }
 
-    
+    @Test
+    public void testSuccessfulLogin() {
+        driver.findElement(By.id("email")).sendKeys("kacper-szabat@wp.pl");
+        driver.findElement(By.id("password")).sendKeys("Kacper11");
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+
+        assertTrue(driver.getCurrentUrl().contains("/guests"), "It should redirect to the home page after logging in");
+    }
 }
