@@ -1,6 +1,7 @@
-package com.kacper.wedding_planner.controller;
+package com.kacper.wedding_planner.unit.controller;
 
 import com.kacper.wedding_planner.config.SecurityConfig;
+import com.kacper.wedding_planner.controller.RegistrationController;
 import com.kacper.wedding_planner.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

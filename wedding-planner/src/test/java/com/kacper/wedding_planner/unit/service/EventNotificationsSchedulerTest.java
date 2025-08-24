@@ -1,9 +1,11 @@
-package com.kacper.wedding_planner.service;
+package com.kacper.wedding_planner.unit.service;
 
 import com.kacper.wedding_planner.model.Event;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.EventRepository;
 import com.kacper.wedding_planner.repository.UserRepository;
+import com.kacper.wedding_planner.service.EmailService;
+import com.kacper.wedding_planner.service.EventNotificationsScheduler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

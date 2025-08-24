@@ -1,8 +1,9 @@
-package com.kacper.wedding_planner.service.impl;
+package com.kacper.wedding_planner.unit.service.impl;
 
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.UserRepository;
 import com.kacper.wedding_planner.service.EmailService;
+import com.kacper.wedding_planner.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

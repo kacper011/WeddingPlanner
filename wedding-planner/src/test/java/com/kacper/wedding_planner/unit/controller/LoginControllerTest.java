@@ -1,5 +1,6 @@
-package com.kacper.wedding_planner.controller;
+package com.kacper.wedding_planner.unit.controller;
 
+import com.kacper.wedding_planner.controller.LoginController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

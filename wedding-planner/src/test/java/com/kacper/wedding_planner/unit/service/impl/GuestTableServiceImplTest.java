@@ -1,10 +1,11 @@
-package com.kacper.wedding_planner.service.impl;
+package com.kacper.wedding_planner.unit.service.impl;
 
 import com.kacper.wedding_planner.model.Guest;
 import com.kacper.wedding_planner.model.GuestTable;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.GuestRepository;
 import com.kacper.wedding_planner.repository.GuestTableRepository;
+import com.kacper.wedding_planner.service.impl.GuestTableServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

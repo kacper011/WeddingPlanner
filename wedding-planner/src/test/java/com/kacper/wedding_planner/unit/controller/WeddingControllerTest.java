@@ -1,6 +1,7 @@
-package com.kacper.wedding_planner.controller;
+package com.kacper.wedding_planner.unit.controller;
 
 import com.kacper.wedding_planner.config.CustomUserDetails;
+import com.kacper.wedding_planner.controller.WeddingController;
 import com.kacper.wedding_planner.model.Guest;
 import com.kacper.wedding_planner.model.GuestCategory;
 import com.kacper.wedding_planner.model.User;

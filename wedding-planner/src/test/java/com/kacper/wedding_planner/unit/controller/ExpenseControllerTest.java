@@ -1,7 +1,8 @@
-package com.kacper.wedding_planner.controller;
+package com.kacper.wedding_planner.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kacper.wedding_planner.config.CustomUserDetails;
+import com.kacper.wedding_planner.controller.ExpenseController;
 import com.kacper.wedding_planner.model.Expense;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.service.ExpenseService;

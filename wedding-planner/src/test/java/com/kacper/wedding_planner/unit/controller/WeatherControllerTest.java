@@ -1,6 +1,7 @@
-package com.kacper.wedding_planner.controller;
+package com.kacper.wedding_planner.unit.controller;
 
 import com.kacper.wedding_planner.config.CustomUserDetails;
+import com.kacper.wedding_planner.controller.WeatherController;
 import com.kacper.wedding_planner.dto.WeatherResponse;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.service.UserService;

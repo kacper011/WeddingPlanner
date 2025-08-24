@@ -1,5 +1,6 @@
-package com.kacper.wedding_planner.service;
+package com.kacper.wedding_planner.unit.service;
 
+import com.kacper.wedding_planner.service.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.BeforeEach;
