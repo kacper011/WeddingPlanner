@@ -53,4 +53,16 @@ public class RegistrationPageTest {
 
         assertTrue(driver.getCurrentUrl().contains("/login?success"));
     }
+
+    @Test
+    public void testRegistrationWithExistingEmailShowsError() {
+
+        driver.findElement(By.id("firstName")).sendKeys("Jan");
+        driver.findElement(By.id("email")).sendKeys("jan@gmail.com"); //uniqe email
+        driver.findElement(By.id("password")).sendKeys("Jan123");
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+
+        WebElement errorMessage = driver.findElement(By.id("error"));
+        assertTrue(errorMessage.isDisplayed());
+    }
 }
