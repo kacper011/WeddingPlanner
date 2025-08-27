@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GuestPageTest {
@@ -39,5 +40,28 @@ public class GuestPageTest {
     void testGuestListIsVisible() {
         WebElement guestTable = driver.findElement(By.id("guestsTable"));
         assertTrue(guestTable.isDisplayed());
+    }
+
+    @Test
+    void testGuestCountersVisible() {
+
+        WebElement totalGuestsElement = driver.findElement(By.xpath("//h5[text()='Wszyscy goście']/following-sibling::h3"));
+        int totalGuests = Integer.parseInt(totalGuestsElement.getText());
+
+        WebElement confirmedGuestsElement = driver.findElement(By.xpath("//h5[text()='Potwierdzeni']/following-sibling::h3"));
+        int confirmedGuests = Integer.parseInt(confirmedGuestsElement.getText());
+
+        WebElement notConfirmedGuestsElement = driver.findElement(By.xpath("//h5[text()='Niepotwierdzeni']/following-sibling::h3"));
+        int notConfirmedGuests = Integer.parseInt(notConfirmedGuestsElement.getText());
+
+        WebElement receptionGuestsElement = driver.findElement(By.xpath("//h5[text()='Na poprawinach']/following-sibling::h3"));
+        int receptionGuests = Integer.parseInt(receptionGuestsElement.getText());
+
+        assertTrue(totalGuests >= 0);
+        assertTrue(confirmedGuests >= 0);
+        assertTrue(notConfirmedGuests >= 0);
+        assertTrue(receptionGuests >= 0);
+
+        assertEquals(totalGuests, confirmedGuests + notConfirmedGuests);
     }
 }
