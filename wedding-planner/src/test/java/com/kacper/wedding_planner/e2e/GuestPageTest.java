@@ -64,4 +64,29 @@ public class GuestPageTest {
 
         assertEquals(totalGuests, confirmedGuests + notConfirmedGuests);
     }
+
+    @Test
+    void testMenuShouldBeVisible() {
+
+        WebElement logo = driver.findElement(By.linkText("Wedding Guest Management"));
+        WebElement addGuestLink = driver.findElement(By.cssSelector("a.nav-link[href='/guests/new']"));
+        WebElement countdownLink = driver.findElement(By.cssSelector("a.nav-link[href='/guests/countdown']"));
+        WebElement expensesLink = driver.findElement(By.cssSelector("a.nav-link[href='/expenses']"));
+        WebElement calendarLink = driver.findElement(By.cssSelector("a.nav-link[href='/events']"));
+        WebElement gamesLink = driver.findElement(By.cssSelector("a.nav-link[href='/wedding_games']"));
+        WebElement lastNameInput = driver.findElement(By.cssSelector("input.form-control[name='nazwisko']"));
+        WebElement searchButton = driver.findElement(By.cssSelector("button.btn.btn-search[type='submit']"));
+        WebElement logoutButton = driver.findElement(By.cssSelector("button.btn.btn-outline-danger"));
+
+
+        assertTrue(logo.isDisplayed(), "The text “Wedding Guest Management” is not visible.");
+        assertTrue(addGuestLink.isDisplayed(), "The “Add guest” link is not visible.");
+        assertTrue(countdownLink.isDisplayed(), "The link to “/guests/countdown” is not visible.");
+        assertTrue(expensesLink.isDisplayed(), "The link to '/expenses' is not visible.");
+        assertTrue(calendarLink.isDisplayed(), "The link to '/events' is not visible.");
+        assertTrue(gamesLink.isDisplayed(), "The link to '/wedding_games' is not visible.");
+        assertTrue(lastNameInput.isDisplayed(), "The search field by surname is not visible.");
+        assertTrue(searchButton.isDisplayed(), "The button 'Szukaj' is not visble.");
+        assertTrue(logoutButton.isDisplayed(), "The button 'Wyloguj' is not visible.");
+    }
 }
