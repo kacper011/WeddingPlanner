@@ -2,8 +2,10 @@ package com.kacper.wedding_planner.controller;
 
 import com.kacper.wedding_planner.config.CustomUserDetails;
 import com.kacper.wedding_planner.dto.WeatherResponse;
+import com.kacper.wedding_planner.infrastructure.watherClient.WeatherClient;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,31 +15,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 @Controller
+@RequiredArgsConstructor
 public class WeatherController {
 
     private final UserService userService;
-
-    public WeatherController(UserService userService) {
-        this.userService = userService;
-    }
+    private final WeatherClient weatherClient;
 
     @GetMapping("/guests/countdown/weather")
     @ResponseBody
-    public WeatherResponse getWeatherData(@AuthenticationPrincipal CustomUserDetails principal, Model model) {
+    public WeatherResponse getWeatherData(Model model) {
 
-        User user = userService.findByEmail(principal.getUsername());
+        // założenie jest takie że para młoda wskazuje współrzędne gdzie będzie ślub/wesele i trzymasz tą informacje w tabeli
+        // WeedingInfo i z łatwością możesz zmienić logike sprawdzania pogody z zahardkodowanego punktu 51.42, 23.06 na
+        // dowolne miejsce a współrzędne przekazywać jako parametry endpointu
         double latitude = 51.4255;
         double longitude = 23.0617;
 
-        String url = "https://api.open-meteo.com/v1/forecast" +
-                "?latitude=" + latitude +
-                "&longitude=" + longitude +
-                "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum" +
-                "&forecast_days=10" +
-                "&timezone=auto";
-
-        RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(url, WeatherResponse.class);
-
+        return weatherClient.getWeatherData(latitude, longitude);
     }
 }
