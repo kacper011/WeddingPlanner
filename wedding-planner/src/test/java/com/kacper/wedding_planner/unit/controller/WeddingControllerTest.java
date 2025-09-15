@@ -329,5 +329,24 @@ class WeddingControllerTest {
                         .with(csrf()))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    @WithMockUser("testuser@example.com")
+    void shouldUpdateLodgingAndRedirect() throws Exception {
+        Long guestId = 1L;
+        Guest guest = new Guest();
+        guest.setId(guestId);
+
+        when(guestRepository.findById(guestId)).thenReturn(Optional.of(guest));
+
+        mockMvc.perform(post("/guests/updateLodging/{id}", guestId)
+                .with(csrf())
+                .param("lodging", "TAK"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/guests"));
+
+        assertEquals("TAK", guest.getNocleg());
+        verify(guestRepository).save(guest);
+    }
 }
 
