@@ -116,4 +116,20 @@ class ExpenseControllerTest {
                 .andExpect(model().attributeExists("total"));
     }
 
+    @Test
+    @WithMockUser(username = "testuser@example.com")
+    void shouldDeleteExpense() throws Exception {
+
+        Long expenseId = 1L;
+        String username = "testuser@example.com";
+
+        mockMvc.perform(get("/expenses/delete/{id}", expenseId)
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/expenses"));
+
+        Mockito.verify(expenseService)
+                .deleteExpenseByIdAndUser(expenseId, username);
+    }
+
 }
