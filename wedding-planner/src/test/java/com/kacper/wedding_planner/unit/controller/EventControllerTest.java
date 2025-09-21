@@ -77,6 +77,7 @@ class EventControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].title").value("Test event"));
     }
+    
 
     @Test
     @WithMockUser(username = "test@example.com")

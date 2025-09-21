@@ -7,6 +7,7 @@ import com.kacper.wedding_planner.model.Event;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.EventRepository;
 import com.kacper.wedding_planner.repository.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,12 +33,14 @@ public class EventController {
     }
 
     @GetMapping("/data")
-    @ResponseBody
-    public List<EventDTO> getEventsJson(@AuthenticationPrincipal CustomUserDetails principal) {
-        List<Event> events = eventRepository.findByUserEmail(principal.getUsername());
-        return events.stream()
+    public ResponseEntity<List<EventDTO>> getEventsJson(@AuthenticationPrincipal CustomUserDetails principal) {
+        List<EventDTO> events = eventRepository.findByUserEmail(principal.getUsername()).stream()
                 .map(EventMapper::toDTO)
                 .toList();
+
+        return events.isEmpty()
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.ok(events);
     }
 
     @PostMapping
