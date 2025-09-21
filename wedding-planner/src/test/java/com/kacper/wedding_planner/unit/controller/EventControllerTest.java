@@ -77,7 +77,16 @@ class EventControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].title").value("Test event"));
     }
-    
+
+    @Test
+    @WithMockUser(username = "test@example.com")
+    void shouldReturnNoContentWhenNoEvents() throws Exception {
+        when(eventRepository.findByUserEmail("test@example.com"))
+                .thenReturn(List.of());
+
+        mockMvc.perform(get("/events/data"))
+                .andExpect(status().isNoContent());
+    }
 
     @Test
     @WithMockUser(username = "test@example.com")
