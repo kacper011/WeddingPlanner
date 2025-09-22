@@ -57,16 +57,16 @@ public class EventController {
     }
 
     @PutMapping("/{id}")
-    @ResponseBody
-    public EventDTO updateEvent(@PathVariable Long id, @RequestBody Event updated, @AuthenticationPrincipal CustomUserDetails principal) {
+    public ResponseEntity<EventDTO> updateEvent(@PathVariable Long id, @RequestBody Event updated, @AuthenticationPrincipal CustomUserDetails principal) {
         return eventRepository.findById(id)
                 .filter(event -> event.getUser().getEmail().equals(principal.getUsername()))
                 .map(event -> {
                     event.setTitle(updated.getTitle());
                     event.setDate(updated.getDate());
                     Event saved = eventRepository.save(event);
-                    return EventMapper.toDTO(saved);
-                }).orElseThrow(() -> new RuntimeException("Event not found or unauthorized"));
+                    return ResponseEntity.ok(EventMapper.toDTO(saved));
+                })
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
     }
 
     @DeleteMapping("/{id}")
