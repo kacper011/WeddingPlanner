@@ -66,15 +66,18 @@ public class EventController {
                     Event saved = eventRepository.save(event);
                     return ResponseEntity.ok(EventMapper.toDTO(saved));
                 })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found or unauthorized"));
     }
 
     @DeleteMapping("/{id}")
-    @ResponseBody
-    public void deleteEvent(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails principal) {
+    public ResponseEntity<EventDTO> deleteEvent(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails principal) {
         eventRepository.findById(id)
                 .filter(event -> event.getUser().getEmail().equals(principal.getUsername()))
-                .ifPresent(eventRepository::delete);
+                .ifPresentOrElse(eventRepository::delete, () -> {
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found or unauthorized");
+                });
+
+        return ResponseEntity.noContent().build();
     }
 
 }
