@@ -7,11 +7,14 @@ import com.kacper.wedding_planner.model.Event;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.EventRepository;
 import com.kacper.wedding_planner.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -44,13 +47,13 @@ public class EventController {
     }
 
     @PostMapping
-    @ResponseBody
-    public EventDTO createEvent(@RequestBody Event event, @AuthenticationPrincipal CustomUserDetails principal) {
-        User user = userRepository.findByEmail(principal.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
+    public ResponseEntity<EventDTO> createEvent(@RequestBody Event event, @AuthenticationPrincipal CustomUserDetails principal) {
+        User user = userRepository.findByEmail(principal.getUsername())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         event.setUser(user);
         Event saved = eventRepository.save(event);
-        return EventMapper.toDTO(saved);
+        return ResponseEntity.status(HttpStatus.CREATED).body(EventMapper.toDTO(saved));
     }
 
     @PutMapping("/{id}")
