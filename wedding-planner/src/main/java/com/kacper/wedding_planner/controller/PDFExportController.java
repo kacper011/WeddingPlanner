@@ -173,24 +173,26 @@ public class PDFExportController {
 
 
     @PostMapping("/wedding_games/export/pdf")
-    public void exportQuestionsToPDF(@RequestParam(name = "selectedQuestions", required = false) List<String> selectedQuestions,
-                                     HttpServletResponse response, @AuthenticationPrincipal CustomUserDetails principal) throws IOException {
+    public ResponseEntity<byte[]> exportQuestionsToPDF(
+            @RequestParam(name = "selectedQuestions", required = false) List<String> selectedQuestions,
+            @AuthenticationPrincipal CustomUserDetails principal
+    ) throws IOException, DocumentException {
 
         if (principal == null) {
-            response.sendRedirect("/login");
-            return;
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .header(HttpHeaders.LOCATION, "/login")
+                    .build();
         }
 
         if (selectedQuestions == null || selectedQuestions.isEmpty()) {
-            response.sendRedirect("/wedding_games?error=NoQuestionsSelected");
-            return;
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .header(HttpHeaders.LOCATION, "/wedding_games?error=NoQuestionsSelected")
+                    .build();
         }
 
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=quiz_weselny.pdf");
-
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Document document = new Document(PageSize.A4);
-        PdfWriter.getInstance(document, response.getOutputStream());
+        PdfWriter.getInstance(document, baos);
         document.open();
 
         BaseFont baseFont = BaseFont.createFont(BaseFont.HELVETICA, "Cp1250", BaseFont.NOT_EMBEDDED);
@@ -204,12 +206,18 @@ public class PDFExportController {
 
         for (int i = 0; i < selectedQuestions.size(); i++) {
             String question = selectedQuestions.get(i);
-
             Paragraph questionPara = new Paragraph((i + 1) + ". " + question, fontQuestion);
             questionPara.setSpacingAfter(15);
             document.add(questionPara);
         }
 
         document.close();
+        byte[] pdfBytes = baos.toByteArray();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=quiz_weselny.pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfBytes);
     }
+
 }
