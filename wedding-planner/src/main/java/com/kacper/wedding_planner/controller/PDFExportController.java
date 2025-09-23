@@ -108,20 +108,19 @@ public class PDFExportController {
 
 
     @GetMapping("/expenses/export/pdf")
-    public void exportExpensesToPDF(HttpServletResponse response, @AuthenticationPrincipal CustomUserDetails principal) throws IOException {
+    public ResponseEntity<byte[]> exportExpensesToPDF(@AuthenticationPrincipal CustomUserDetails principal) throws IOException, DocumentException {
         if (principal == null) {
-            response.sendRedirect("/login");
-            return;
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .header(HttpHeaders.LOCATION, "/login")
+                    .build();
         }
 
         User currentUser = userService.findByEmail(principal.getUsername());
         List<Expense> expenses = expenseRepository.findByUser(currentUser);
 
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=wydatki.pdf");
-
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Document document = new Document(PageSize.A4);
-        PdfWriter.getInstance(document, response.getOutputStream());
+        PdfWriter.getInstance(document, baos);
         document.open();
 
         BaseFont baseFont = BaseFont.createFont(BaseFont.HELVETICA, "Cp1250", BaseFont.NOT_EMBEDDED);
@@ -163,7 +162,15 @@ public class PDFExportController {
         document.add(summary);
 
         document.close();
+
+        byte[] pdfBytes = baos.toByteArray();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=wydatki.pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfBytes);
     }
+
 
     @PostMapping("/wedding_games/export/pdf")
     public void exportQuestionsToPDF(@RequestParam(name = "selectedQuestions", required = false) List<String> selectedQuestions,
