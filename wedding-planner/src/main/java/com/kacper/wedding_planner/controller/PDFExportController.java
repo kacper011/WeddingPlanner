@@ -12,6 +12,10 @@ import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.pdf.*;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.print.Doc;
 import java.awt.*;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
@@ -40,23 +45,20 @@ public class PDFExportController {
     }
 
     @GetMapping("/guests/export/pdf")
-    public void exportGuestListToPDF(HttpServletResponse response, @AuthenticationPrincipal CustomUserDetails principal) throws IOException {
+    public ResponseEntity<byte[]> exportGuestListToPDF(@AuthenticationPrincipal CustomUserDetails principal) throws IOException, DocumentException {
 
         if (principal == null) {
-            response.sendRedirect("/login");
-            return;
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .header(HttpHeaders.LOCATION, "/login")
+                    .build();
         }
 
         User currentUser = userService.findByEmail(principal.getUsername());
-
         List<Guest> guests = guestRepository.findByUser(currentUser);
 
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=lista_gosci.pdf");
-
-
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Document document = new Document(PageSize.A4);
-        PdfWriter.getInstance(document, response.getOutputStream());
+        PdfWriter.getInstance(document, baos);
         document.open();
 
         BaseFont baseFont = BaseFont.createFont(BaseFont.HELVETICA, "Cp1250", BaseFont.NOT_EMBEDDED);
@@ -95,7 +97,15 @@ public class PDFExportController {
 
         document.add(table);
         document.close();
+
+        byte[] pdfBytes = baos.toByteArray();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=lista_gosci.pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfBytes);
     }
+
 
     @GetMapping("/expenses/export/pdf")
     public void exportExpensesToPDF(HttpServletResponse response, @AuthenticationPrincipal CustomUserDetails principal) throws IOException {
