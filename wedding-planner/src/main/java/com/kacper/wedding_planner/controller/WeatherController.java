@@ -4,6 +4,9 @@ import com.kacper.wedding_planner.config.CustomUserDetails;
 import com.kacper.wedding_planner.dto.WeatherResponse;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +26,7 @@ public class WeatherController {
 
     @GetMapping("/guests/countdown/weather")
     @ResponseBody
-    public WeatherResponse getWeatherData(@AuthenticationPrincipal CustomUserDetails principal, Model model) {
+    public ResponseEntity<WeatherResponse> getWeatherData(@AuthenticationPrincipal CustomUserDetails principal, Model model) {
 
         User user = userService.findByEmail(principal.getUsername());
         double latitude = 51.4255;
@@ -37,7 +40,12 @@ public class WeatherController {
                 "&timezone=auto";
 
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(url, WeatherResponse.class);
+        WeatherResponse response = restTemplate.getForObject(url, WeatherResponse.class);
+
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
+        }
+        return ResponseEntity.ok(response);
 
     }
 }
