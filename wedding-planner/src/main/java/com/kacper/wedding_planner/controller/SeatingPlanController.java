@@ -8,6 +8,7 @@ import com.kacper.wedding_planner.repository.GuestRepository;
 import com.kacper.wedding_planner.repository.GuestTableRepository;
 import com.kacper.wedding_planner.repository.UserRepository;
 import com.kacper.wedding_planner.service.GuestTableService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -83,18 +84,28 @@ public class SeatingPlanController {
     @PostMapping("/update-position")
     @ResponseBody
     public ResponseEntity<?> updateTablePosition(@RequestBody Map<String, Object> payload) {
-        Long tableId = Long.valueOf(payload.get("id").toString());
-        int posX = (int) payload.get("posX");
-        int posY = (int) payload.get("posY");
+        try {
+            Long tableId = Long.valueOf(payload.get("id").toString());
+            int posX = ((Number) payload.get("posX")).intValue();
+            int posY = ((Number) payload.get("posY")).intValue();
 
-        GuestTable table = guestTableRepository.findById(tableId)
-                .orElseThrow(() -> new RuntimeException("Table not found"));
+            GuestTable table = guestTableRepository.findById(tableId)
+                    .orElse(null);
 
-        table.setPozycjaX(posX);
-        table.setPozycjaY(posY);
-        guestTableRepository.save(table);
+            if (table == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("status", "error", "message", "Table not found"));
+            }
 
-        return ResponseEntity.ok(Map.of("status", "success"));
+            table.setPozycjaX(posX);
+            table.setPozycjaY(posY);
+            guestTableRepository.save(table);
+
+            return ResponseEntity.ok(Map.of("status", "success"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("status", "error", "message", e.getMessage()));
+        }
     }
 
     @PostMapping("/delete")
