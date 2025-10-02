@@ -1,5 +1,7 @@
 package com.kacper.wedding_planner.unit.service.impl;
 
+import com.kacper.wedding_planner.dto.EventDTO;
+import com.kacper.wedding_planner.exception.UserNotFoundException;
 import com.kacper.wedding_planner.model.Event;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.EventRepository;
@@ -8,12 +10,12 @@ import com.kacper.wedding_planner.service.impl.EventServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class EventServiceImplTest {
@@ -31,18 +33,28 @@ class EventServiceImplTest {
 
     @Test
     void getEventsForUserShouldReturnEvents() {
-        // given
-        String email = "test@example.com";
-        List<Event> expectedEvents = Arrays.asList(
-                new Event(), new Event()
-        );
+        String email = "test@test.com";
+
+        Event event1 = new Event();
+        event1.setTitle("Wedding");
+        event1.setDate(LocalDate.now());
+
+        Event event2 = new Event();
+        event2.setTitle("Reception");
+        event2.setDate(LocalDate.now().plusDays(1));
+
+        List<Event> expectedEvents = List.of(event1, event2);
+
         when(eventRepository.findByUserEmail(email)).thenReturn(expectedEvents);
 
-        // when
-        List<Event> result = eventService.getEventsForUser(email);
+        List<EventDTO> result = eventService.getEventsForUser(email);
 
-        // then
-        assertEquals(expectedEvents, result);
+        assertEquals(expectedEvents.size(), result.size());
+        assertEquals(expectedEvents.get(0).getTitle(), result.get(0).getTitle());
+        assertEquals(expectedEvents.get(0).getDate(), result.get(0).getDate());
+        assertEquals(expectedEvents.get(1).getTitle(), result.get(1).getTitle());
+        assertEquals(expectedEvents.get(1).getDate(), result.get(1).getDate());
+
         verify(eventRepository, times(1)).findByUserEmail(email);
     }
 
@@ -74,7 +86,7 @@ class EventServiceImplTest {
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
         // then
-        assertThrows(NoSuchElementException.class, () -> {
+        assertThrows(UserNotFoundException.class, () -> {
             eventService.saveEventForUser(event, email);
         });
 

@@ -11,4 +11,13 @@ public class EventMapper {
         dto.setDate(event.getDate());
         return dto;
     }
+
+    public static Event toEntity(EventDTO dto) {
+        Event event = new Event();
+        event.setId(dto.getId());
+        event.setTitle(dto.getTitle());
+        event.setDate(dto.getDate());
+        return event;
+    }
 }
+
