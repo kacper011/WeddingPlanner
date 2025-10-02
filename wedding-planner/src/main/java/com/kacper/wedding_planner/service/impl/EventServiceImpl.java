@@ -5,6 +5,8 @@ import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.EventRepository;
 import com.kacper.wedding_planner.repository.UserRepository;
 import com.kacper.wedding_planner.service.EventService;
+import jakarta.transaction.Transactional;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,9 +27,10 @@ public class EventServiceImpl implements EventService {
         return eventRepository.findByUserEmail(email);
     }
 
+    @Transactional
     @Override
     public void saveEventForUser(Event event, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
         event.setUser(user);
         eventRepository.save(event);
     }
