@@ -1,5 +1,6 @@
 package com.kacper.wedding_planner.service.impl;
 
+import com.kacper.wedding_planner.exception.UserNotFoundException;
 import com.kacper.wedding_planner.model.Expense;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.ExpenseRepository;
@@ -24,7 +25,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public List<Expense> getExpensesForUser(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new UsernameNotFoundException("Nie ma takiego użytkownika."));
+                .orElseThrow(() -> new UserNotFoundException(userEmail));
 
         return expenseRepository.findByUser(user);
     }
