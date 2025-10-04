@@ -1,6 +1,7 @@
 package com.kacper.wedding_planner.service.impl;
 
 import com.kacper.wedding_planner.exception.ExpenseNotFoundException;
+import com.kacper.wedding_planner.exception.InvalidExpenseDataException;
 import com.kacper.wedding_planner.exception.UnauthorizedExpenseAccessException;
 import com.kacper.wedding_planner.exception.UserNotFoundException;
 import com.kacper.wedding_planner.model.Expense;
@@ -8,6 +9,7 @@ import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.ExpenseRepository;
 import com.kacper.wedding_planner.repository.UserRepository;
 import com.kacper.wedding_planner.service.ExpenseService;
+import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -50,10 +52,14 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public void saveExpense(Expense expense, User user) {
+
+        if (expense.getKwota() == null || expense.getNazwa() == null) {
+            throw new InvalidExpenseDataException();
+        }
         expense.setUser(user);
         expenseRepository.save(expense);
     }
-
+    @Transactional
     @Override
     public void deleteExpenseByIdAndUser(Long id, String username) {
         Expense expense = expenseRepository.findById(id)
