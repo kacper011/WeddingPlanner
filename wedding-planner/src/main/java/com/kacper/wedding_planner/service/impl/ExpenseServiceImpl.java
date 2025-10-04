@@ -1,5 +1,7 @@
 package com.kacper.wedding_planner.service.impl;
 
+import com.kacper.wedding_planner.exception.ExpenseNotFoundException;
+import com.kacper.wedding_planner.exception.UnauthorizedExpenseAccessException;
 import com.kacper.wedding_planner.exception.UserNotFoundException;
 import com.kacper.wedding_planner.model.Expense;
 import com.kacper.wedding_planner.model.User;
@@ -55,10 +57,10 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public void deleteExpenseByIdAndUser(Long id, String username) {
         Expense expense = expenseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Wydatek nieznaleziony."));
+                .orElseThrow(() -> new ExpenseNotFoundException(id));
 
         if (!expense.getUser().getEmail().equals(username)) {
-            throw new RuntimeException("Nie jesteś autoryzowany do usunięcia tego wydatku.");
+            throw new UnauthorizedExpenseAccessException();
         }
 
         expenseRepository.delete(expense);
