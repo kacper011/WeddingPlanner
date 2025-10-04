@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.FORBIDDEN)
 public class UnauthorizedExpenseAccessException extends RuntimeException{
 
-    public UnauthorizedExpenseAccessException() {
-        super("Nie jesteś autoryzowany do usunięcia tego wydatku.");
+    public UnauthorizedExpenseAccessException(String email) {
+        super("Użytkownik " + email + " nie jest uprawniony do usunięcia tego wydatku.");
     }
 }

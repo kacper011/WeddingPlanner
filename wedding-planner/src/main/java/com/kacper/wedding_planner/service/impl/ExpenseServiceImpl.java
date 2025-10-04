@@ -10,7 +10,6 @@ import com.kacper.wedding_planner.repository.ExpenseRepository;
 import com.kacper.wedding_planner.repository.UserRepository;
 import com.kacper.wedding_planner.service.ExpenseService;
 import jakarta.transaction.Transactional;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -66,7 +65,7 @@ public class ExpenseServiceImpl implements ExpenseService {
                 .orElseThrow(() -> new ExpenseNotFoundException(id));
 
         if (!expense.getUser().getEmail().equals(username)) {
-            throw new UnauthorizedExpenseAccessException();
+            throw new UnauthorizedExpenseAccessException(username);
         }
 
         expenseRepository.delete(expense);
