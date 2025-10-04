@@ -61,7 +61,7 @@ class GuestServiceImplTest {
         RuntimeException exception = assertThrows(RuntimeException.class, () ->
                 guestService.updatePresence(1L, "tak"));
 
-        assertEquals("Guest not found", exception.getMessage());
+        assertEquals("Gość o identyfikatorze  nie został znaleziony.", exception.getMessage());
     }
 
     @Test

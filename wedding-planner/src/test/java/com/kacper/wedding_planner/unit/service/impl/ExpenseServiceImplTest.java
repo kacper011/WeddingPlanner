@@ -1,5 +1,6 @@
 package com.kacper.wedding_planner.unit.service.impl;
 
+import com.kacper.wedding_planner.exception.UserNotFoundException;
 import com.kacper.wedding_planner.model.Expense;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.ExpenseRepository;
@@ -56,7 +57,7 @@ class ExpenseServiceImplTest {
     void shouldThrowWhenUserNotFound() {
         when(userRepository.findByEmail("notfound@example.com")).thenReturn(Optional.empty());
 
-        assertThrows(UsernameNotFoundException.class,
+        assertThrows(UserNotFoundException.class,
                 () -> expenseService.getExpensesForUser("notfound@example.com"));
     }
 

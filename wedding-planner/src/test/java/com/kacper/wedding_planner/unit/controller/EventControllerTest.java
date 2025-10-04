@@ -109,7 +109,7 @@ class EventControllerTest {
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(event)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.title").value("New Event"));
     }
@@ -155,7 +155,7 @@ class EventControllerTest {
                         .with(authentication(
                                 new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities())
                         )))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         Mockito.verify(eventRepository).delete(existing);
     }
