@@ -1,5 +1,6 @@
 package com.kacper.wedding_planner.service.impl;
 
+import com.kacper.wedding_planner.exception.GuestNotFoundException;
 import com.kacper.wedding_planner.model.Guest;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.GuestRepository;
@@ -32,29 +33,25 @@ public class GuestServiceImpl implements GuestService {
     @Override
     public void updatePresence(Long id, String presence) {
         Guest guest = guestRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Guest not found"));
+                .orElseThrow(() -> new GuestNotFoundException(id));
         guest.setPotwierdzenieObecnosci(presence);
         guestRepository.save(guest);
     }
 
     @Override
     public void updateTransport(Long id, String transport) {
-        Optional<Guest> guestOptional = guestRepository.findById(id);
-        if (guestOptional.isPresent()) {
-            Guest guest = guestOptional.get();
-            guest.setTransport(transport);
-            guestRepository.save(guest);
-        }
+        Guest guest = guestRepository.findById(id)
+                .orElseThrow(() -> new GuestNotFoundException(id));
+        guest.setTransport(transport);
+        guestRepository.save(guest);
     }
 
     @Override
     public void updateLodging(Long id, String lodging) {
-        Optional<Guest> guestOptional = guestRepository.findById(id);
-        if (guestOptional.isPresent()) {
-            Guest guest = guestOptional.get();
-            guest.setNocleg(lodging);
-            guestRepository.save(guest);
-        }
+        Guest guest = guestRepository.findById(id)
+                .orElseThrow(() -> new GuestNotFoundException(id));
+        guest.setNocleg(lodging);
+        guestRepository.save(guest);
     }
 
     @Override
