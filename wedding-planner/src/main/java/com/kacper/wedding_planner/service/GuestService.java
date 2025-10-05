@@ -8,8 +8,6 @@ import java.util.List;
 public interface GuestService {
     Guest saveGuest(Guest guest);
 
-    List<Guest> getAllGuests();
-
     List<Guest> getAllGuestsByUser(User user);
 
     void deleteGuest(Long id);

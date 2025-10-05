@@ -9,7 +9,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class GuestServiceImpl implements GuestService {
@@ -18,12 +17,6 @@ public class GuestServiceImpl implements GuestService {
 
     public GuestServiceImpl(GuestRepository guestRepository) {
         this.guestRepository = guestRepository;
-    }
-
-    @Override
-    public List<Guest> getAllGuests() {
-        List<Guest> guests = guestRepository.findAll();
-        return guests;
     }
 
     @Transactional
@@ -73,6 +66,7 @@ public class GuestServiceImpl implements GuestService {
     public List<Guest> getAllGuestsByUser(User user) {
         return guestRepository.findByUser(user);
     }
+
 
     @Transactional
     @Override
