@@ -1,5 +1,6 @@
 package com.kacper.wedding_planner.service.impl;
 
+import com.kacper.wedding_planner.exception.GuestTableNotFoundException;
 import com.kacper.wedding_planner.model.Guest;
 import com.kacper.wedding_planner.model.GuestTable;
 import com.kacper.wedding_planner.model.User;
@@ -22,22 +23,18 @@ public class GuestTableServiceImpl implements GuestTableService {
     }
 
     @Override
-    public List<GuestTable> getTableForUser(User user) {
+    public List<GuestTable> getTablesForUser(User user) {
         return guestTableRepository.findByUser(user);
     }
 
     @Transactional
     public void detachGuestsFromTable(Long tableId) {
         GuestTable table = guestTableRepository.findById(tableId)
-                .orElseThrow(() -> new RuntimeException("Nie znaleziono stołu o id: " + tableId));
+                .orElseThrow(() -> new GuestTableNotFoundException(tableId));
 
         List<Guest> guests = table.getGoscie();
-        if (guests != null) {
-            for (Guest guest : guests) {
-                guest.setTable(null);
-                guestRepository.save(guest);
-            }
-            guestRepository.flush();
+        if (guests != null && !guests.isEmpty()) {
+            guests.forEach(guest -> guest.setTable(null));
         }
     }
 
