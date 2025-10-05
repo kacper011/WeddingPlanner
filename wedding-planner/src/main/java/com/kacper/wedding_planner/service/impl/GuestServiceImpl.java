@@ -5,6 +5,7 @@ import com.kacper.wedding_planner.model.Guest;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.GuestRepository;
 import com.kacper.wedding_planner.service.GuestService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,11 +26,13 @@ public class GuestServiceImpl implements GuestService {
         return guests;
     }
 
+    @Transactional
     @Override
     public void deleteGuest(Long id) {
         guestRepository.deleteById(id);
     }
 
+    @Transactional
     @Override
     public void updatePresence(Long id, String presence) {
         Guest guest = guestRepository.findById(id)
@@ -38,6 +41,7 @@ public class GuestServiceImpl implements GuestService {
         guestRepository.save(guest);
     }
 
+    @Transactional
     @Override
     public void updateTransport(Long id, String transport) {
         Guest guest = guestRepository.findById(id)
@@ -46,6 +50,7 @@ public class GuestServiceImpl implements GuestService {
         guestRepository.save(guest);
     }
 
+    @Transactional
     @Override
     public void updateLodging(Long id, String lodging) {
         Guest guest = guestRepository.findById(id)
@@ -69,7 +74,7 @@ public class GuestServiceImpl implements GuestService {
         return guestRepository.findByUser(user);
     }
 
-
+    @Transactional
     @Override
     public Guest saveGuest(Guest guest) {
 
