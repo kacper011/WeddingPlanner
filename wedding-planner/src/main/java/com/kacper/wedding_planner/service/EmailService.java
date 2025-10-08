@@ -1,5 +1,6 @@
 package com.kacper.wedding_planner.service;
 
+import com.kacper.wedding_planner.exception.EmailSendException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -7,7 +8,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Service
 public class EmailService {
@@ -51,7 +51,7 @@ public class EmailService {
             System.out.println("✅ E-mail został wysłany pomyślnie!");
         } catch (MessagingException e) {
             System.out.println("❌ Błąd przy wysyłaniu maila do: " + to);
-            throw new RuntimeException("Nie udało się wysłać maila przypominającego", e);
+            throw new EmailSendException("Nie udało się wysłać maila przypominającego", e);
         }
     }
 }
