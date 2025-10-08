@@ -34,12 +34,12 @@ public class EventNotificationsScheduler {
     @Scheduled(cron = "0 * * * * *") // codziennie o 8:00
     public void sendReminders() {
         LocalDate targetDate = LocalDate.now().plusDays(2);
-        log.info("🔄 Sprawdzam wydarzenia na dzień: " + targetDate);
+        log.info("🔄 Checking events for date: " + targetDate);
 
         List<Event> events = eventRepository.findByDateAndReminderSentFalse(targetDate);
 
         if (events.isEmpty()) {
-            System.out.println("ℹ️ Brak wydarzeń do przypomnienia na dzień: " + targetDate);
+            System.out.println("ℹ️ No events to remind for date: " + targetDate);
             return;
         }
 
@@ -57,10 +57,10 @@ public class EventNotificationsScheduler {
                     event.setReminderSent(true);
                     eventRepository.save(event);
 
-                    log.info("✅ Wysłano przypomnienie dla użytkownika {} o wydarzeniu '{}'", user.getEmail(), event.getTitle());
+                    log.info("✅ Reminder sent to user {} for event '{}'", user.getEmail(), event.getTitle());
                 }
             } catch (Exception e) {
-                log.error("❌ Błąd przy wysyłaniu przypomnienia dla wydarzenia ID: {}", event.getId(), e);
+                log.error("❌ Error sending reminder for event ID: {}", event.getId(), e);
             }
         }
     }
