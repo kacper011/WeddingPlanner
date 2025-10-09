@@ -1,6 +1,7 @@
 package com.kacper.wedding_planner.unit.service.impl;
 
 import com.kacper.wedding_planner.exception.UserAlreadyExistsException;
+import com.kacper.wedding_planner.exception.UserNotFoundException;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.UserRepository;
 import com.kacper.wedding_planner.service.EmailService;
@@ -90,7 +91,7 @@ class UserServiceImplTest {
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
-        assertThrows(UsernameNotFoundException.class, () ->
+        assertThrows(UserNotFoundException.class, () ->
             userService.findByEmail(email)
         );
     }
