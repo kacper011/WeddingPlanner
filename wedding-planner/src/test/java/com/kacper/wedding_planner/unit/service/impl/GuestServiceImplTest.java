@@ -6,6 +6,7 @@ import com.kacper.wedding_planner.repository.GuestRepository;
 import com.kacper.wedding_planner.service.impl.GuestServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +19,7 @@ import static org.mockito.Mockito.*;
 class GuestServiceImplTest {
 
     private GuestRepository guestRepository;
+    @InjectMocks
     private GuestServiceImpl guestService;
 
     @BeforeEach
@@ -27,14 +29,15 @@ class GuestServiceImplTest {
     }
 
     @Test
-    void shouldReturnAllGuests() {
+    void shouldReturnAllGuestsForUser() {
+        User testUser = new User();
         List<Guest> guests = Arrays.asList(new Guest(), new Guest());
-        when(guestRepository.findAll()).thenReturn(guests);
+        when(guestRepository.findByUser(testUser)).thenReturn(guests);
 
-        List<Guest> result = guestService.getAllGuests();
+        List<Guest> result = guestService.getAllGuestsByUser(testUser);
 
         assertEquals(2, result.size());
-        verify(guestRepository).findAll();
+        verify(guestRepository).findByUser(testUser);
     }
 
     @Test

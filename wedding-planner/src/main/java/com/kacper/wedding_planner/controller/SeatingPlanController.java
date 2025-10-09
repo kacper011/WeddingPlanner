@@ -39,7 +39,7 @@ public class SeatingPlanController {
         User user = userRepository.findByEmail(principal.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
 
 
-        List<GuestTable> tables = guestTableService.getTableForUser(user);
+        List<GuestTable> tables = guestTableService.getTablesForUser(user);
         List<Guest> guests = guestRepository.findByUser(user);
 
         model.addAttribute("stoly", tables);

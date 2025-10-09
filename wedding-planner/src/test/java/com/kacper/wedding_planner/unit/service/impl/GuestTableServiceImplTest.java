@@ -36,7 +36,7 @@ class GuestTableServiceImplTest {
 
         when(guestTableRepository.findByUser(user)).thenReturn(tables);
 
-        List<GuestTable> result = guestTableService.getTableForUser(user);
+        List<GuestTable> result = guestTableService.getTablesForUser(user);
 
         assertEquals(2, result.size());
         verify(guestTableRepository).findByUser(user);
