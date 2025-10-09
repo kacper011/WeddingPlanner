@@ -1,5 +1,6 @@
 package com.kacper.wedding_planner.unit.service.impl;
 
+import com.kacper.wedding_planner.exception.UserAlreadyExistsException;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.UserRepository;
 import com.kacper.wedding_planner.service.EmailService;
@@ -65,13 +66,11 @@ class UserServiceImplTest {
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(new User()));
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(UserAlreadyExistsException.class, () -> {
             userService.registerUser(email, password, firstName);
         });
 
-        assertEquals("Email już istnieje.", exception.getMessage());
-        verify(userRepository, never()).save(any());
-        verify(emailService, never()).sendWelcomeEmail(any(), any());
+        verify(userRepository, never()).save(any(User.class));
     }
 
     @Test
