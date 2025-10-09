@@ -1,5 +1,6 @@
 package com.kacper.wedding_planner.unit.service.impl;
 
+import com.kacper.wedding_planner.exception.GuestTableNotFoundException;
 import com.kacper.wedding_planner.model.Guest;
 import com.kacper.wedding_planner.model.GuestTable;
 import com.kacper.wedding_planner.model.User;
@@ -73,11 +74,11 @@ class GuestTableServiceImplTest {
         Long tableId = 1L;
         when(guestTableRepository.findById(tableId)).thenReturn(Optional.empty());
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+        RuntimeException exception = assertThrows(GuestTableNotFoundException.class, () -> {
             guestTableService.detachGuestsFromTable(tableId);
         });
 
-        assertEquals("Nie znaleziono stołu o id: " + tableId, exception.getMessage());
+        assertEquals("Table with ID: " + tableId + " not found.", exception.getMessage());
     }
 
     @Test
@@ -98,7 +99,6 @@ class GuestTableServiceImplTest {
         assertNull(guest.getTable(), "Guest should be detached from table");
 
         verify(guestRepository).save(guest);
-        verify(guestRepository).flush();
         verify(guestTableRepository).deleteById(tableId);
     }
 

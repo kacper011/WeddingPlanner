@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class GuestTableNotFoundException extends RuntimeException{
 
     public GuestTableNotFoundException(Long id) {
-        super("Nie znaleziono stołu o id: " + id + ".");
+        super("Table with ID: " + id + " not found.");
     }
 }
