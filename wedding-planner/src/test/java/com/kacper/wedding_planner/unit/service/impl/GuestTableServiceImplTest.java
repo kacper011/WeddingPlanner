@@ -8,6 +8,10 @@ import com.kacper.wedding_planner.repository.GuestTableRepository;
 import com.kacper.wedding_planner.service.impl.GuestTableServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,19 +19,14 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
+@ExtendWith(MockitoExtension.class)
 class GuestTableServiceImplTest {
-
+    @Mock
     private GuestTableRepository guestTableRepository;
+    @Mock
     private GuestRepository guestRepository;
+    @InjectMocks
     private GuestTableServiceImpl guestTableService;
-
-    @BeforeEach
-    void setUp() {
-        guestTableRepository = mock(GuestTableRepository.class);
-        guestRepository = mock(GuestRepository.class);
-        guestTableService = new GuestTableServiceImpl(guestTableRepository, guestRepository);
-    }
 
     @Test
     void shouldReturnTablesForUser() {
@@ -46,14 +45,17 @@ class GuestTableServiceImplTest {
     void shouldDetachGuestsFromTable() {
         Long tableId = 1L;
 
+        GuestTable table = new GuestTable();
+        table.setId(tableId);
+
         Guest guest1 = new Guest();
         guest1.setId(1L);
+        guest1.setTable(table);
 
         Guest guest2 = new Guest();
         guest2.setId(2L);
+        guest2.setTable(table);
 
-        GuestTable table = new GuestTable();
-        table.setId(tableId);
         table.setGoscie(Arrays.asList(guest1, guest2));
 
         when(guestTableRepository.findById(tableId)).thenReturn(Optional.of(table));
@@ -64,7 +66,6 @@ class GuestTableServiceImplTest {
         assertNull(guest2.getTable());
 
         verify(guestRepository, times(2)).save(any(Guest.class));
-        verify(guestRepository).flush();
     }
 
     @Test

@@ -34,7 +34,10 @@ public class GuestTableServiceImpl implements GuestTableService {
 
         List<Guest> guests = table.getGoscie();
         if (guests != null && !guests.isEmpty()) {
-            guests.forEach(guest -> guest.setTable(null));
+            guests.forEach(guest -> {
+                guest.setTable(null);
+                guestRepository.save(guest);
+            });
         }
     }
 
