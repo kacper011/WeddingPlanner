@@ -54,28 +54,24 @@ public class WeddingController {
         User currentUser = userService.findByEmail(principal.getUsername());
         List<Guest> guests = guestRepository.findByUser(currentUser);
 
-        // KATEGORIA
         if (kategoria != null && !kategoria.isEmpty()) {
             try {
                 GuestCategory selectedCategory = GuestCategory.valueOf(kategoria);
                 guests = guests.stream()
-                        .filter(guest -> guest.getKategoria() == selectedCategory)
+                        .filter(guest -> guest.getCategory() == selectedCategory)
                         .collect(Collectors.toList());
             } catch (IllegalArgumentException e) {
                 System.out.println("Nieprawidłowa kategoria: " + kategoria);
             }
         }
 
-        // SORTOWANIE
-        guests.sort(Comparator.comparing(Guest::getNazwisko));
+        guests.sort(Comparator.comparing(Guest::getLastName));
 
-        // STATYSTYKI
         long totalGuests = guests.size();
-        long confirmedGuests = guests.stream().filter(g -> "TAK".equalsIgnoreCase(g.getPotwierdzenieObecnosci())).count();
-        long notConfirmedGuests = guests.stream().filter(g -> "NIE".equalsIgnoreCase(g.getPotwierdzenieObecnosci())).count();
-        long receptionGuests = guests.stream().filter(g -> "TAK".equalsIgnoreCase(g.getPoprawiny())).count();
+        long confirmedGuests = guests.stream().filter(g -> "TAK".equalsIgnoreCase(g.getAttendanceConfirmation())).count();
+        long notConfirmedGuests = guests.stream().filter(g -> "NIE".equalsIgnoreCase(g.getAttendanceConfirmation())).count();
+        long receptionGuests = guests.stream().filter(g -> "TAK".equalsIgnoreCase(g.getAfterParty())).count();
 
-        // DODANIE DO MODELU
         model.addAttribute("guests", guests);
         model.addAttribute("kategorie", GuestCategory.values());
         model.addAttribute("selectedCategory", kategoria);
@@ -90,7 +86,7 @@ public class WeddingController {
     @GetMapping("/new")
     public String showCreateGuestForm(Model model) {
         Guest newGuest = new Guest();
-        newGuest.setKategoria(null);
+        newGuest.setCategory(null);
         model.addAttribute("guest", newGuest);
         model.addAttribute("categories", GuestCategory.values());
         return "add_guest";
@@ -146,7 +142,7 @@ public class WeddingController {
 
             guest.setId(id);
             guest.setUser(userService.findByEmail(principal.getUsername()));
-            guest.setKategoria(existingGuest.getKategoria());
+            guest.setCategory(existingGuest.getCategory());
             guestRepository.save(guest);
 
             return "redirect:/guests/confirmed";
@@ -168,11 +164,11 @@ public class WeddingController {
     public String updatePresence(@PathVariable("id") Long id, @RequestParam("presence") String presence) {
         Guest guest = guestRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid guest Id:" + id));
-        guest.setPotwierdzenieObecnosci(presence);
+        guest.setAttendanceConfirmation(presence);
 
         if ("NIE".equals(presence)) {
             guest.setTransport(null);
-            guest.setNocleg(null);
+            guest.setAccommodation(null);
         }
 
         guestRepository.save(guest);
@@ -191,7 +187,7 @@ public class WeddingController {
     @PostMapping("/updateLodging/{id}")
     public String updateLodging(@PathVariable Long id, @RequestParam String lodging) {
         Guest guest = guestRepository.findById(id).orElseThrow();
-        guest.setNocleg(lodging);
+        guest.setAccommodation(lodging);
         guestRepository.save(guest);
         return "redirect:/guests";
     }
@@ -202,7 +198,7 @@ public class WeddingController {
         User currentUser = userService.findByEmail(principal.getUsername());
         List<Guest> confirmedGuests = guestRepository.findByUserAndPotwierdzenieObecnosci(currentUser, "TAK");
 
-        confirmedGuests.sort(Comparator.comparing(Guest::getNazwisko));
+        confirmedGuests.sort(Comparator.comparing(Guest::getLastName));
         model.addAttribute("confirmedGuests", confirmedGuests);
         return "confirmed_guests";
     }
@@ -213,7 +209,7 @@ public class WeddingController {
         User currentUser = userService.findByEmail(principal.getUsername());
         List<Guest> notConfirmedGuests = guestRepository.findByUserAndPotwierdzenieObecnosci(currentUser, "NIE");
 
-        notConfirmedGuests.sort(Comparator.comparing(Guest::getNazwisko));
+        notConfirmedGuests.sort(Comparator.comparing(Guest::getLastName));
         model.addAttribute("notConfirmedGuests", notConfirmedGuests);
         return "not_confirmed_guests";
     }
@@ -225,7 +221,7 @@ public class WeddingController {
         List<Guest> guests = guestRepository.findByUser(currentUser);
 
         List<Guest> filteredGuests = guests.stream()
-                .filter(guest -> guest.getNazwisko().toLowerCase().contains(nazwisko.toLowerCase()))
+                .filter(guest -> guest.getLastName().toLowerCase().contains(nazwisko.toLowerCase()))
                 .collect(Collectors.toList());
 
         model.addAttribute("guests", filteredGuests);
@@ -247,10 +243,10 @@ public class WeddingController {
         Optional<Guest> optionalGuest = guestRepository.findById(id);
 
         optionalGuest.ifPresent(guest -> {
-            if ("TAK".equals(guest.getPoprawiny())) {
-                guest.setPoprawiny("NIE");
+            if ("TAK".equals(guest.getAfterParty())) {
+                guest.setAfterParty("NIE");
             } else {
-                guest.setPoprawiny("TAK");
+                guest.setAfterParty("TAK");
             }
             guestRepository.save(guest);
         });
