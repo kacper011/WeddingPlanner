@@ -41,7 +41,7 @@ public class ExpenseServiceImpl implements ExpenseService {
                 .anyMatch(expense -> expense.getKwota() == null || expense.getNazwa() == null);
 
         if (hasNullFields) {
-            throw new IllegalArgumentException("Należy uzupełnić wszystkie pola wydatków (kwota i nazwa)");
+            throw new IllegalArgumentException("All expense fields (amount and name) must be completed.");
         }
 
         return expenses.stream()
