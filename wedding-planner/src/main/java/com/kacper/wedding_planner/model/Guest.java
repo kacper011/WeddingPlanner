@@ -14,49 +14,50 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "goscie")
+@Table(name = "guests")
 public class Guest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nazwisko", nullable = false)
-    @NotBlank(message = "Nazwisko jest wymagane")
-    private String nazwisko;
+    @Column(name = "last_name", nullable = false)
+    @NotBlank(message = "Last name is required")
+    private String lastName;
 
-    @Column(name = "imie", nullable = false)
-    @NotBlank(message = "Imię jest wymagane")
-    private String imie;
+    @Column(name = "first_name", nullable = false)
+    @NotBlank(message = "First name is required")
+    private String firstName;
 
-    @Column(name = "potwierdzeni_obecnosci")
-    private String potwierdzenieObecnosci;
+    @Column(name = "attendance_confirmation")
+    private String attendanceConfirmation;
 
     @Column(name = "transport")
     private String transport;
 
-    @Column(name = "nocleg")
-    private String nocleg;
+    @Column(name = "accommodation")
+    private String accommodation;
 
-    @Column(name = "poprawiny")
-    private String poprawiny;
+    @Column(name = "after_party")
+    private String afterParty;
 
-    @Column(name = "kontakt")
-    @Pattern(regexp = "\\d{3} \\d{3} \\d{3}", message = "Numer telefonu musi mieć format xxx xxx xxx")
-    private String kontakt;
+    @Column(name = "contact")
+    @Pattern(regexp = "\\d{3} \\d{3} \\d{3}", message = "Phone number must have format xxx xxx xxx")
+    private String contact;
 
-    @Column(name = "informacje")
-    private String dodatkoweInformacje;
+    @Column(name = "additional_info")
+    private String additionalInfo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "kategoria_goscia")
-    @NotNull(message = "Wybierz kategorię")
-    private GuestCategory kategoria;
+    @Column(name = "guest_category")
+    @NotNull(message = "Please select a category")
+    private GuestCategory category;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "table_id", nullable = true)
+    @JoinColumn(name = "table_id")
     private GuestTable table;
 }
