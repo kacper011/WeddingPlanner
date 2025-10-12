@@ -11,9 +11,6 @@ import java.util.List;
 public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findByUserEmail(String email);
 
-    @Query("SELECT e FROM Event e WHERE e.date = :targetDate")
-    List<Event> findEventsOnDate(@Param("targetDate")LocalDate targetDate);
-
     List<Event> findByDate(LocalDate date);
 
     List<Event> findByDateAndReminderSentFalse(LocalDate targetDate);
