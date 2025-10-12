@@ -30,7 +30,7 @@ public class GuestServiceImpl implements GuestService {
     public void updatePresence(Long id, String presence) {
         Guest guest = guestRepository.findById(id)
                 .orElseThrow(() -> new GuestNotFoundException(id));
-        guest.setPotwierdzenieObecnosci(presence);
+        guest.setAttendanceConfirmation(presence);
         guestRepository.save(guest);
     }
 
@@ -48,7 +48,7 @@ public class GuestServiceImpl implements GuestService {
     public void updateLodging(Long id, String lodging) {
         Guest guest = guestRepository.findById(id)
                 .orElseThrow(() -> new GuestNotFoundException(id));
-        guest.setNocleg(lodging);
+        guest.setAccommodation(lodging);
         guestRepository.save(guest);
     }
 
