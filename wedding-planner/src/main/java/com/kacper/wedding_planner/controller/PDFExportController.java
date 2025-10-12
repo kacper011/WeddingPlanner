@@ -89,10 +89,10 @@ public class PDFExportController {
         table.addCell(header);
 
         for (Guest g : guests) {
-            table.addCell(new Phrase(g.getNazwisko(), fontCell));
-            table.addCell(new Phrase(g.getImie(), fontCell));
-            table.addCell(new Phrase(g.getPotwierdzenieObecnosci(), fontCell));
-            table.addCell(new Phrase(g.getKontakt(), fontCell));
+            table.addCell(new Phrase(g.getLastName(), fontCell));
+            table.addCell(new Phrase(g.getFirstName(), fontCell));
+            table.addCell(new Phrase(g.getAttendanceConfirmation(), fontCell));
+            table.addCell(new Phrase(g.getContact(), fontCell));
         }
 
         document.add(table);
