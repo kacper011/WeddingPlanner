@@ -77,12 +77,12 @@ class WeddingControllerTest {
         when(guestRepository.findByUser(mockUser)).thenReturn(mockGuests);
     }
 
-    private Guest createGuest(String nazwisko, GuestCategory kategoria, String potwierdzenie, String poprawiny) {
+    private Guest createGuest(String lastName, GuestCategory category, String attendanceConfirmation, String afterParty) {
         Guest guest = new Guest();
-        guest.setNazwisko(nazwisko);
-        guest.setKategoria(kategoria);
-        guest.setPotwierdzenieObecnosci(potwierdzenie);
-        guest.setPoprawiny(poprawiny);
+        guest.setLastName(lastName);
+        guest.setCategory(category);
+        guest.setAttendanceConfirmation(attendanceConfirmation);
+        guest.setAfterParty(afterParty);
         return guest;
     }
 
