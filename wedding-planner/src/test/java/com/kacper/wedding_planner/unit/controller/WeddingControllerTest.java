@@ -113,10 +113,10 @@ class WeddingControllerTest {
     void shouldAddGuestSuccessfullyWhenFormIsValid() throws Exception {
         mockMvc.perform(post("/guests")
                         .with(csrf())
-                        .param("imie", "Jan")
-                        .param("nazwisko", "Kowalski")
-                        .param("kategoria", "RODZINA_PANA_MLODEGO")
-                        .param("kontakt", "123 123 123"))
+                        .param("firstName", "Jan")
+                        .param("lastName", "Kowalski")
+                        .param("category", "RODZINA_PANA_MLODEGO")
+                        .param("contact", "123 123 123"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/guests"));
 
