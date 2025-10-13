@@ -177,26 +177,26 @@
   <h1 class="text-center">Szczegóły Gościa</h1>
   <form action="#" th:action="@{/guests/edit/{id}(id=${guest.id})}" th:object="${guest}" method="post">
     <input type="hidden" th:field="*{id}" />
-    <input type="hidden" th:field="*{potwierdzenieObecnosci}" />
+    <input type="hidden" th:field="*{attendanceConfirmation}" />
 
     <div class="mb-3">
-      <label for="nazwisko" class="form-label">Nazwisko</label>
-      <input type="text" class="form-control" id="nazwisko" th:field="*{nazwisko}" required />
+      <label for="lastName" class="form-label">Nazwisko</label>
+      <input type="text" class="form-control" id="lastName" th:field="*{lastName}" required />
     </div>
 
     <div class="mb-3">
-      <label for="imie" class="form-label">Imię</label>
-      <input type="text" class="form-control" id="imie" th:field="*{imie}" required />
+      <label for="firstName" class="form-label">Imię</label>
+      <input type="text" class="form-control" id="firstName" th:field="*{firstName}" required />
     </div>
 
     <div class="mb-3">
-      <label for="telefon" class="form-label">Numer Telefonu</label>
-      <input type="text" class="form-control" id="telefon" th:field="*{kontakt}" required />
+      <label for="contact" class="form-label">Numer Telefonu</label>
+      <input type="text" class="form-control" id="contact" th:field="*{contact}" required />
     </div>
 
     <div class="mb-3">
-      <label for="dodatkoweInformacje" class="form-label">Dodatkowe Informacje</label>
-      <textarea id="dodatkoweInformacje" class="form-control" rows="4" th:field="*{dodatkoweInformacje}"></textarea>
+      <label for="additionalInfo" class="form-label">Dodatkowe Informacje</label>
+      <textarea id="additionalInfo" class="form-control" rows="4" th:field="*{additionalInfo}"></textarea>
     </div>
 
     <div class="form-inline-group mb-3">
@@ -206,23 +206,23 @@
           <input
                   class="form-check-input"
                   type="radio"
-                  id="transportTak"
+                  id="transportYes"
                   th:field="*{transport}"
                   value="TAK"
                   th:checked="${guest.transport} == 'TAK'"
           />
-          <label class="form-check-label" for="transportTak">TAK</label>
+          <label class="form-check-label" for="transportYes">TAK</label>
         </div>
         <div class="form-check">
           <input
                   class="form-check-input"
                   type="radio"
-                  id="transportNie"
+                  id="transportNo"
                   th:field="*{transport}"
                   value="NIE"
                   th:checked="${guest.transport} == 'NIE'"
           />
-          <label class="form-check-label" for="transportNie">NIE</label>
+          <label class="form-check-label" for="transportNo">NIE</label>
         </div>
       </div>
 
@@ -232,23 +232,23 @@
           <input
                   class="form-check-input"
                   type="radio"
-                  id="noclegTak"
-                  th:field="*{nocleg}"
+                  id="accommodationYes"
+                  th:field="*{accommodation}"
                   value="TAK"
-                  th:checked="${guest.nocleg} == 'TAK'"
+                  th:checked="${guest.accommodation} == 'TAK'"
           />
-          <label class="form-check-label" for="noclegTak">TAK</label>
+          <label class="form-check-label" for="accommodationYes">TAK</label>
         </div>
         <div class="form-check">
           <input
                   class="form-check-input"
                   type="radio"
-                  id="noclegNie"
-                  th:field="*{nocleg}"
+                  id="accommodationNo"
+                  th:field="*{accommodation}"
                   value="NIE"
-                  th:checked="${guest.nocleg} == 'NIE'"
+                  th:checked="${guest.accommodation} == 'NIE'"
           />
-          <label class="form-check-label" for="noclegNie">NIE</label>
+          <label class="form-check-label" for="accommodationNo">NIE</label>
         </div>
       </div>
 
@@ -258,23 +258,23 @@
           <input
                   class="form-check-input"
                   type="radio"
-                  id="poprawinyTak"
-                  th:field="*{poprawiny}"
+                  id="afterPartyYes"
+                  th:field="*{afterParty}"
                   value="TAK"
-                  th:checked="${guest.poprawiny} == 'TAK'"
+                  th:checked="${guest.afterParty} == 'TAK'"
           />
-          <label class="form-check-label" for="poprawinyTak">TAK</label>
+          <label class="form-check-label" for="afterPartyYes">TAK</label>
         </div>
         <div class="form-check">
           <input
                   class="form-check-input"
                   type="radio"
-                  id="poprawinyNie"
-                  th:field="*{poprawiny}"
+                  id="afterPartyNo"
+                  th:field="*{afterParty}"
                   value="NIE"
-                  th:checked="${guest.poprawiny} == 'NIE'"
+                  th:checked="${guest.afterParty} == 'NIE'"
           />
-          <label class="form-check-label" for="poprawinyNie">NIE</label>
+          <label class="form-check-label" for="afterPartyNo">NIE</label>
         </div>
       </div>
     </div>

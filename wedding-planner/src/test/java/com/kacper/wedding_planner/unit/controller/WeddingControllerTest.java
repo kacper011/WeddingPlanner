@@ -132,7 +132,7 @@ class WeddingControllerTest {
                 .param("confirmed", "TAK"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("add_guest"))
-                .andExpect(model().attributeHasFieldErrors("guest", "imie"))
+                .andExpect(model().attributeHasFieldErrors("guest", "firstName"))
                 .andExpect(model().attributeExists("categories"));
 
         verify(guestService, never()).saveGuest(any());
