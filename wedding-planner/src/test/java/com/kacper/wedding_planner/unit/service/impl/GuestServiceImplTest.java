@@ -53,7 +53,7 @@ class GuestServiceImplTest {
 
         guestService.updatePresence(1L, "tak");
 
-        assertEquals("tak", guest.getPotwierdzenieObecnosci());
+        assertEquals("tak", guest.getAttendanceConfirmation());
         verify(guestRepository).save(guest);
     }
 
@@ -85,7 +85,7 @@ class GuestServiceImplTest {
 
         guestService.updateLodging(1L, "Tak");
 
-        assertEquals("Tak", guest.getNocleg());
+        assertEquals("Tak", guest.getAccommodation());
         verify(guestRepository).save(guest);
     }
 
