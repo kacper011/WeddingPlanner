@@ -237,23 +237,28 @@
             <h2 class="text-center">Dodaj Gościa</h2>
         </div>
         <div class="card-body">
-            <form method="post" role="form" th:action="@{/guests/create}" th:object="${guest}">
+            <form method="post" th:action="@{/guests/create}" th:object="${guest}">
                 <input type="hidden" th:field="*{id}" />
 
                 <div class="form-group mb-3">
-                    <label class="form-label" for="imie">Imię</label>
-                    <input class="form-control" id="imie" name="imie" placeholder="Wprowadź imię gościa" type="text" th:field="*{imie}" required>
+                    <label class="form-label" for="firstName">Imię</label>
+                    <input class="form-control" id="firstName" name="firstName"
+                           placeholder="Wprowadź imię gościa" type="text"
+                           th:field="*{firstName}" required>
                 </div>
 
                 <div class="form-group mb-3">
-                    <label class="form-label" for="nazwisko">Nazwisko</label>
-                    <input class="form-control" id="nazwisko" name="nazwisko" placeholder="Wprowadź nazwisko gościa" type="text" th:field="*{nazwisko}" required>
+                    <label class="form-label" for="lastName">Nazwisko</label>
+                    <input class="form-control" id="lastName" name="lastName"
+                           placeholder="Wprowadź nazwisko gościa" type="text"
+                           th:field="*{lastName}" required>
                 </div>
 
                 <div class="form-group mb-3">
-                    <label class="form-label" for="kategoria">Kategoria</label>
-                    <select class="form-control" id="kategoria" name="kategoria" th:field="*{kategoria}" required>
-                        <option value="" th:selected="${guest.kategoria == null}">Wybierz kategorię</option>
+                    <label class="form-label" for="category">Kategoria</label>
+                    <select class="form-control" id="category" name="category"
+                            th:field="*{category}" required>
+                        <option value="" th:selected="${guest.category == null}">Wybierz kategorię</option>
                         <option th:each="category : ${categories}"
                                 th:value="${category}"
                                 th:text="${#strings.replace(category.name(), '_', ' ')}">
@@ -262,16 +267,20 @@
                 </div>
 
                 <div class="form-group mb-3">
-                    <label class="form-label" for="kontakt">Numer Telefonu</label>
-                    <input class="form-control" id="kontakt" name="kontakt" placeholder="Numer telefonu musi mieć format xxx xxx xxx" type="text" th:field="*{kontakt}" required>
+                    <label class="form-label" for="contact">Numer Telefonu</label>
+                    <input class="form-control" id="contact" name="contact"
+                           placeholder="Numer telefonu musi mieć format xxx xxx xxx"
+                           type="text" th:field="*{contact}" required>
                 </div>
 
                 <div class="form-group mb-3">
-                    <label class="form-label" for="dodatkoweInformacje">Dodatkowe Informacje</label>
-                    <textarea class="form-control" id="dodatkoweInformacje" name="dodatkoweInformacje" rows="4" placeholder="Wprowadź dodatkowe informacje" th:field="*{dodatkoweInformacje}"></textarea>
+                    <label class="form-label" for="additionalInfo">Dodatkowe Informacje</label>
+                    <textarea class="form-control" id="additionalInfo" name="additionalInfo"
+                              rows="4" placeholder="Wprowadź dodatkowe informacje"
+                              th:field="*{additionalInfo}"></textarea>
                 </div>
 
-                <button class="btn btn-primary" type="submit" onclick="return validatePhoneNumber()">Dodaj</button>
+                <button class="btn btn-primary" type="submit">Dodaj</button>
             </form>
         </div>
     </div>

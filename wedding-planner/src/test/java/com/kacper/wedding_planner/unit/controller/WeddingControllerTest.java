@@ -105,7 +105,7 @@ class WeddingControllerTest {
                 .andExpect(view().name("add_guest"))
                 .andExpect(model().attributeExists("guest"))
                 .andExpect(model().attributeExists("categories"))
-                .andExpect(model().attribute("guest", org.hamcrest.Matchers.hasProperty("kategoria", org.hamcrest.Matchers.nullValue())))
+                .andExpect(model().attribute("guest", org.hamcrest.Matchers.hasProperty("category", org.hamcrest.Matchers.nullValue())))
                 .andExpect(model().attribute("categories", GuestCategory.values()));
     }
 
