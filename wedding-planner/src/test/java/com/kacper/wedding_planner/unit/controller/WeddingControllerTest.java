@@ -216,9 +216,9 @@ class WeddingControllerTest {
 
         verify(guestRepository).save(argThat(savedGuest ->
                 savedGuest.getId().equals(1L) &&
-                        savedGuest.getNazwisko().equals("Nowak") &&
-                        savedGuest.getImie().equals("Jan") &&
-                        savedGuest.getKategoria() == GuestCategory.RODZINA_PANA_MLODEGO &&
+                        savedGuest.getLastName().equals("Nowak") &&
+                        savedGuest.getFirstName().equals("Jan") &&
+                        savedGuest.getCategory() == GuestCategory.RODZINA_PANA_MLODEGO &&
                         savedGuest.getUser().equals(mockUser)
         ));
     }
@@ -262,7 +262,7 @@ class WeddingControllerTest {
 
         Guest guest = new Guest();
         guest.setId(1L);
-        guest.setPotwierdzenieObecnosci("TAK");
+        guest.setAttendanceConfirmation("TAK");
 
         when(guestRepository.findById(1L)).thenReturn(Optional.of(guest));
         when(guestRepository.save(any(Guest.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -273,9 +273,9 @@ class WeddingControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/guests"));
 
-        assertEquals("NIE", guest.getPotwierdzenieObecnosci());
+        assertEquals("NIE", guest.getAttendanceConfirmation());
         assertNull(guest.getTransport());
-        assertNull(guest.getNocleg());
+        assertNull(guest.getAccommodation());
     }
 
     @Test
@@ -345,7 +345,7 @@ class WeddingControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/guests"));
 
-        assertEquals("TAK", guest.getNocleg());
+        assertEquals("TAK", guest.getAccommodation());
         verify(guestRepository).save(guest);
     }
 }
