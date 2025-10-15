@@ -275,9 +275,9 @@ textarea.form-control {
         <a href="/guests/export/pdf" class="btn btn-outline-secondary">📄 Eksportuj do PDF</a>
 
         <form method="get" th:action="@{/guests}" class="d-flex align-items-center gap-2">
-            <select class="form-select" name="kategoria">
+            <select class="form-select" name="category">
                 <option value="">-- Wybierz kategorię --</option>
-                <option th:each="k : ${kategorie}" th:value="${k.name()}" th:text="${k.displayName}" th:selected="${k.name() == selectedCategory}"></option>
+                <option th:each="k : ${categories}" th:value="${k.name()}" th:text="${k.displayName}" th:selected="${k.name() == selectedCategory}"></option>
             </select>
             <button class="btn btn-primary">Filtruj</button>
         </form>
@@ -298,10 +298,10 @@ textarea.form-control {
             </tr>
             </thead>
             <tbody>
-            <tr th:each="guest, iter : ${guests}" th:class="${guest.potwierdzenieObecnosci == 'TAK'} ? 'table-success' : (${guest.potwierdzenieObecnosci == 'NIE'} ? 'table-danger' : '')">
+            <tr th:each="guest, iter : ${guests}" th:class="${guest.attendanceConfirmation == 'TAK'} ? 'table-success' : (${guest.attendanceConfirmation == 'NIE'} ? 'table-danger' : '')">
                 <td th:text="${iter.count}"></td>
-                <td th:text="${guest.nazwisko}"></td>
-                <td th:text="${guest.imie}"></td>
+                <td th:text="${guest.lastName}"></td>
+                <td th:text="${guest.firstName}"></td>
                 <td>
                     <div class="d-flex flex-column flex-md-row gap-1 justify-content-center">
                         <form th:action="@{/guests/updatePresence/{id}(id=${guest.id})}" method="post">
@@ -314,7 +314,7 @@ textarea.form-control {
                         </form>
                     </div>
                 </td>
-                <td th:text="${guest.kontakt}"></td>
+                <td th:text="${guest.contact}"></td>
                 <td>
                     <form th:action="@{/guests/delete/{id}(id=${guest.id})}" method="post">
                         <button class="btn btn-danger btn-sm">Usuń</button>
