@@ -169,11 +169,11 @@ class WeddingControllerTest {
 
         mockMvc.perform(post("/guests/create")
                 .with(csrf())
-                .param("imie", "Jan")
-                .param("nazwisko", "Kowalski")
-                .param("kategoria", "RODZINA_PANA_MLODEGO")
-                .param("potwierdzenieObecnosci", "TAK")
-                .param("poprawiny", "TAK"))
+                .param("firstName", "Jan")
+                .param("lastName", "Kowalski")
+                .param("category", "RODZINA_PANA_MLODEGO")
+                .param("attendanceConfirmation", "TAK")
+                .param("afterParty", "TAK"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/guests"));
 
