@@ -207,10 +207,10 @@ class WeddingControllerTest {
 
         mockMvc.perform(post("/guests/edit/1")
                         .with(csrf())
-                        .param("imie", "Jan")
-                        .param("nazwisko", "Nowak")
-                        .param("potwierdzenieObecnosci", "TAK")
-                        .param("poprawiny", "NIE"))
+                        .param("firstName", "Jan")
+                        .param("lastName", "Nowak")
+                        .param("attendanceConfirmation", "TAK")
+                        .param("afterParty", "NIE"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/guests/confirmed"));
 
