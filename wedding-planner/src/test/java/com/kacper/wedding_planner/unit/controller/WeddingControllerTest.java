@@ -185,11 +185,11 @@ class WeddingControllerTest {
     void shouldReturnToFormWhenGuestDataIsInvalid() throws Exception {
         mockMvc.perform(post("/guests/create")
                         .with(csrf())
-                        .param("nazwisko", "Kowalski")
-                        .param("kategoria", "RODZINA_PANA_MLODEGO"))
+                        .param("lastName", "Kowalski")
+                        .param("category", "RODZINA_PANA_MLODEGO"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("add_guest"))
-                .andExpect(model().attributeHasFieldErrors("guest", "imie"))
+                .andExpect(model().attributeHasFieldErrors("guest", "firstName"))
                 .andExpect(model().attributeExists("categories"));
 
         verify(guestRepository, never()).save(any());
