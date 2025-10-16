@@ -196,7 +196,7 @@ public class WeddingController {
     public String getConfirmedGuests(Model model,
                                      @AuthenticationPrincipal CustomUserDetails principal) {
         User currentUser = userService.findByEmail(principal.getUsername());
-        List<Guest> confirmedGuests = guestRepository.findByUserAndPotwierdzenieObecnosci(currentUser, "TAK");
+        List<Guest> confirmedGuests = guestRepository.findByUserAndAttendanceConfirmation(currentUser, "TAK");
 
         confirmedGuests.sort(Comparator.comparing(Guest::getLastName));
         model.addAttribute("confirmedGuests", confirmedGuests);
@@ -207,7 +207,7 @@ public class WeddingController {
     public String getNotConfirmedGuests(Model model,
                                         @AuthenticationPrincipal CustomUserDetails principal) {
         User currentUser = userService.findByEmail(principal.getUsername());
-        List<Guest> notConfirmedGuests = guestRepository.findByUserAndPotwierdzenieObecnosci(currentUser, "NIE");
+        List<Guest> notConfirmedGuests = guestRepository.findByUserAndAttendanceConfirmation(currentUser, "NIE");
 
         notConfirmedGuests.sort(Comparator.comparing(Guest::getLastName));
         model.addAttribute("notConfirmedGuests", notConfirmedGuests);
@@ -232,7 +232,7 @@ public class WeddingController {
     public String getWeddingReceptionsGuests(Model model,
                                              @AuthenticationPrincipal CustomUserDetails principal) {
         User currentUser = userService.findByEmail(principal.getUsername());
-        List<Guest> weddingReceptionsGuests = guestRepository.findByUserAndPoprawiny(currentUser, "TAK");
+        List<Guest> weddingReceptionsGuests = guestRepository.findByUserAndAfterParty(currentUser, "TAK");
 
         model.addAttribute("weddingReceptionsGuests", weddingReceptionsGuests);
         return "wedding_receptions";

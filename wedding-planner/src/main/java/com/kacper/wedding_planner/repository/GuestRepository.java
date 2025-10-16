@@ -12,7 +12,7 @@ import java.util.List;
 public interface GuestRepository extends JpaRepository<Guest, Long> {
 
     List<Guest> findByUser(User user);
-    List<Guest> findByUserAndPotwierdzenieObecnosci(User user, String status);
-    List<Guest> findByUserAndPoprawiny(User user, String poprawiny);
-    List<Guest> findAllByKategoria(GuestCategory kategoria);
+    List<Guest> findByUserAndAttendanceConfirmation(User user, String status);
+    List<Guest> findByUserAndAfterParty(User user, String afterParty);
+    List<Guest> findAllByCategory(GuestCategory category);
 }
