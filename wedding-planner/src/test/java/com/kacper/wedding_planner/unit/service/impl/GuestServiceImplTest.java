@@ -92,25 +92,25 @@ class GuestServiceImplTest {
     @Test
     void shouldFindByConfirmedPresence() {
         User user = new User();
-        when(guestRepository.findByUserAndPotwierdzenieObecnosci(user, "tak"))
+        when(guestRepository.findByUserAndAttendanceConfirmation(user, "tak"))
                 .thenReturn(List.of(new Guest(), new Guest()));
 
         List<Guest> guests = guestService.findByConfirmedPresence(user, "tak");
 
         assertEquals(2, guests.size());
-        verify(guestRepository).findByUserAndPotwierdzenieObecnosci(user, "tak");
+        verify(guestRepository).findByUserAndAttendanceConfirmation(user, "tak");
     }
 
     @Test
     void shouldFindByPoprawiny() {
         User user = new User();
-        when(guestRepository.findByUserAndPoprawiny(user, "tak"))
+        when(guestRepository.findByUserAndAfterParty(user, "tak"))
                 .thenReturn(List.of(new Guest()));
 
         List<Guest> guests = guestService.findByPoprawiny(user, "tak");
 
         assertEquals(1, guests.size());
-        verify(guestRepository).findByUserAndPoprawiny(user, "tak");
+        verify(guestRepository).findByUserAndAfterParty(user, "tak");
     }
 
     @Test
