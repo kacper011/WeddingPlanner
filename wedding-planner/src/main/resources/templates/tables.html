@@ -205,7 +205,7 @@
                 <input id="guestInput" name="guestName" class="form-control" autocomplete="off" list="guests" required>
                 <input type="hidden" id="guestId" name="guestId">
                 <datalist id="guests">
-                    <option th:each="g : ${allGuests}" th:value="${g.imie + ' ' + g.nazwisko}" th:data-id="${g.id}"></option>
+                    <option th:each="g : ${allGuests}" th:value="${g.firstName + ' ' + g.lastName}" th:data-id="${g.id}"></option>
                 </datalist>
             </div>
             <div class="col-md-4">
@@ -234,7 +234,7 @@
                 </form>
             </div>
             <ul>
-                <li th:each="gosc : ${stol.goscie}" th:text="${gosc.imie} + ' ' + ${gosc.nazwisko}">Jan Kowalski</li>
+                <li th:each="gosc : ${stol.goscie}" th:text="${gosc.firstName} + ' ' + ${gosc.lastName}">Jan Kowalski</li>
             </ul>
         </div>
     </div>
