@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "wydatki")
+@Table(name = "expenses")
 public class Expense {
 
     @Id
@@ -23,10 +23,10 @@ public class Expense {
     private Long id;
     @NotNull(message = "Nazwa jest wymagana")
     @Size(min = 1, message = "Nazwa nie może być pusta")
-    private String nazwa;
+    private String name;
     @NotNull(message = "Kwota jest wymagana")
     @DecimalMin(value = "0.01", message = "Kwota musi być większa od zera")
-    private BigDecimal kwota;
+    private BigDecimal amount;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

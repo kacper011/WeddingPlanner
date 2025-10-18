@@ -13,20 +13,20 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "stoly")
+@Table(name = "tables")
 public class GuestTable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nazwa;
-    private Integer pozycjaX;
-    private Integer pozycjaY;
-    private String ksztalt;
+    private String name;
+    private Integer positionX;
+    private Integer positionY;
+    private String shape;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToMany(mappedBy = "table")
-    private List<Guest> goscie;
+    @OneToMany(mappedBy = "tables")
+    private List<Guest> guests;
 
 }
