@@ -149,9 +149,9 @@ public class PDFExportController {
         BigDecimal total = BigDecimal.ZERO;
 
         for (Expense expense : expenses) {
-            table.addCell(new Phrase(expense.getNazwa(), fontCell));
-            table.addCell(new Phrase(expense.getKwota().toString(), fontCell));
-            total = total.add(expense.getKwota());
+            table.addCell(new Phrase(expense.getName(), fontCell));
+            table.addCell(new Phrase(expense.getAmount().toString(), fontCell));
+            total = total.add(expense.getAmount());
         }
 
         document.add(table);
