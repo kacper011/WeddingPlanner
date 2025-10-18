@@ -1,12 +1,11 @@
 package com.kacper.wedding_planner.model;
 
 public enum GuestCategory {
-    RODZINA_PANA_MLODEGO("Rodzina Pana Młodego"),
-    RODZINA_PANI_MLODEJ("Rodzina Pani Młodej"),
-    ZNAJOMI_PANA_MLODEGO("Znajomi Pana Młodego"),
-    ZNAJOMI_PANI_MLODEJ("Znajomi Pani Młodej"),
-    ZNAJOMI("Znajomi");
-
+    GROOM_FAMILY("Rodzina Pana Młodego"),
+    BRIDE_FAMILY("Rodzina Pani Młodej"),
+    GROOM_FRIENDS("Znajomi Pana Młodego"),
+    BRIDE_FRIENDS("Znajomi Pani Młodej"),
+    FRIENDS("Znajomi");
     private final String displayName;
 
     GuestCategory(String displayName) {

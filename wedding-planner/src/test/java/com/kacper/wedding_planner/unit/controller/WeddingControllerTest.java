@@ -69,8 +69,8 @@ class WeddingControllerTest {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         mockGuests = new ArrayList<>(List.of(
-                createGuest("Kowalski", GuestCategory.RODZINA_PANA_MLODEGO, "TAK", "TAK"),
-                createGuest("Nowak", GuestCategory.ZNAJOMI, "NIE", "NIE")
+                createGuest("Kowalski", GuestCategory.GROOM_FAMILY, "TAK", "TAK"),
+                createGuest("Nowak", GuestCategory.FRIENDS, "NIE", "NIE")
         ));
 
         when(userService.findByEmail("test@example.com")).thenReturn(mockUser);
@@ -142,7 +142,7 @@ class WeddingControllerTest {
     @WithMockUser(username = "test@example.com", roles = "USER")
     void shouldReturnGuestDetailsView() throws Exception {
 
-        guest = createGuest("Kowalski", GuestCategory.RODZINA_PANA_MLODEGO, "TAK", "TAK");
+        guest = createGuest("Kowalski", GuestCategory.GROOM_FAMILY, "TAK", "TAK");
         guest.setId(1L);
         when(guestRepository.findById(1L)).thenReturn(Optional.of(guest));
 
@@ -199,7 +199,7 @@ class WeddingControllerTest {
     @WithMockUser(username = "test@example.com", roles = "USER")
     void shouldEditGuestSuccessfully() throws Exception {
 
-        Guest existingGuest = createGuest("Kowalski", GuestCategory.RODZINA_PANA_MLODEGO, "TAK", "TAK");
+        Guest existingGuest = createGuest("Kowalski", GuestCategory.GROOM_FAMILY, "TAK", "TAK");
         existingGuest.setId(1L);
 
         when(guestRepository.findById(1L)).thenReturn(Optional.of(existingGuest));
@@ -218,7 +218,7 @@ class WeddingControllerTest {
                 savedGuest.getId().equals(1L) &&
                         savedGuest.getLastName().equals("Nowak") &&
                         savedGuest.getFirstName().equals("Jan") &&
-                        savedGuest.getCategory() == GuestCategory.RODZINA_PANA_MLODEGO &&
+                        savedGuest.getCategory() == GuestCategory.GROOM_FAMILY &&
                         savedGuest.getUser().equals(mockUser)
         ));
     }
@@ -234,7 +234,7 @@ class WeddingControllerTest {
                         .with(csrf())
                         .param("nazwisko", "Nowak")
                         .param("imie", "Jan")
-                        .param("kategoria", GuestCategory.RODZINA_PANA_MLODEGO.name()))
+                        .param("kategoria", GuestCategory.GROOM_FAMILY.name()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error"));
 
