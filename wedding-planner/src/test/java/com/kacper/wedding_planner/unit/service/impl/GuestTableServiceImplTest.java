@@ -57,7 +57,7 @@ class GuestTableServiceImplTest {
         guest2.setId(2L);
         guest2.setTable(table);
 
-        table.setGoscie(Arrays.asList(guest1, guest2));
+        table.setGuests(Arrays.asList(guest1, guest2));
 
         when(guestTableRepository.findById(tableId)).thenReturn(Optional.of(table));
 
@@ -89,7 +89,7 @@ class GuestTableServiceImplTest {
         guest.setId(1L);
         GuestTable table = new GuestTable();
         table.setId(tableId);
-        table.setGoscie(List.of(guest));
+        table.setGuests(List.of(guest));
         guest.setTable(table);
 
         when(guestTableRepository.findById(tableId)).thenReturn(Optional.of(table));
