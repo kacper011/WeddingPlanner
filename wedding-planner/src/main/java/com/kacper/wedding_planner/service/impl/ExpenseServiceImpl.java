@@ -38,21 +38,21 @@ public class ExpenseServiceImpl implements ExpenseService {
         List<Expense> expenses = getExpensesForUser(userEmail);
 
         boolean hasNullFields = expenses.stream()
-                .anyMatch(expense -> expense.getKwota() == null || expense.getNazwa() == null);
+                .anyMatch(expense -> expense.getAmount() == null || expense.getName() == null);
 
         if (hasNullFields) {
             throw new IllegalArgumentException("All expense fields (amount and name) must be completed.");
         }
 
         return expenses.stream()
-                .map(Expense::getKwota)
+                .map(Expense::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     @Override
     public void saveExpense(Expense expense, User user) {
 
-        if (expense.getKwota() == null || expense.getNazwa() == null) {
+        if (expense.getAmount() == null || expense.getName() == null) {
             throw new InvalidExpenseDataException();
         }
         expense.setUser(user);
