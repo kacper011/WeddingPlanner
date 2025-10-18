@@ -207,7 +207,7 @@
       </ul>
 
       <form class="d-flex me-3" method="get" th:action="@{/guests/search}">
-        <input class="form-control me-2" name="nazwisko" placeholder="Wyszukaj po nazwisku">
+        <input class="form-control me-2" name="lastName" placeholder="Wyszukaj po nazwisku">
         <button class="btn btn-search" type="submit">Szukaj</button>
       </form>
 
@@ -247,18 +247,18 @@
           </tr>
           </thead>
           <tbody>
-          <tr th:each="guest, iter : ${weddingReceptionsGuests}" th:class="${guest.potwierdzenieObecnosci == 'TAK'} ? 'row-present' : (${guest.potwierdzenieObecnosci == 'NIE'} ? 'row-absent' : 'row-neutral')">
+          <tr th:each="guest, iter : ${weddingReceptionsGuests}" th:class="${guest.attendanceConfirmation == 'TAK'} ? 'row-present' : (${guest.attendanceConfirmation == 'NIE'} ? 'row-absent' : 'row-neutral')">
             <td class="col-number" th:text="${iter.count}"></td>
-            <td th:text="${guest.nazwisko}"></td>
-            <td th:text="${guest.imie}"></td>
+            <td th:text="${guest.lastName}"></td>
+            <td th:text="${guest.firstName}"></td>
             <td>
-              <button th:if="${guest.poprawiny == 'TAK'}" class="btn btn-success btn-sm">TAK</button>
+              <button th:if="${guest.afterParty == 'TAK'}" class="btn btn-success btn-sm">TAK</button>
             </td>
-            <td th:text="${guest.kontakt}"></td>
+            <td th:text="${guest.contact}"></td>
             <td>
               <form th:action="@{/guests/receptions/toggle/{id}(id=${guest.id})}" method="post" style="display: inline;">
                 <button type="submit" class="btn btn-danger btn-sm">
-                  <span th:text="${guest.poprawiny == 'TAK' ? 'Odznacz' : 'Zaznacz'}"></span>
+                  <span th:text="${guest.afterParty == 'TAK' ? 'Odznacz' : 'Zaznacz'}"></span>
                 </button>
               </form>
             </td>
