@@ -197,7 +197,7 @@ textarea {
             </ul>
 
             <form class="d-flex me-3" method="get" th:action="@{/guests/search}">
-                <input class="form-control me-2" name="nazwisko" placeholder="Wyszukaj po nazwisku">
+                <input class="form-control me-2" name="lastName" placeholder="Wyszukaj po nazwisku">
                 <button class="btn btn-search" type="submit">Szukaj</button>
             </form>
 
@@ -242,14 +242,14 @@ textarea {
                     </thead>
                     <tbody>
                     <tr th:each="guest, iter : ${confirmedGuests}">
-                        <td class="col-number" th:text="${iter.index + 1}"></td> <!-- Numeracja zaczynająca się od 1 -->
-                        <td th:text="${guest.nazwisko}"></td>
-                        <td th:text="${guest.imie}"></td>
+                        <td class="col-number" th:text="${iter.index + 1}"></td>
+                        <td th:text="${guest.lastName}"></td>
+                        <td th:text="${guest.firstName}"></td>
                         <td>
-                            <button th:if="${guest.potwierdzenieObecnosci == 'TAK'}" class="btn btn-success btn-sm">
+                            <button th:if="${guest.attendanceConfirmation == 'TAK'}" class="btn btn-success btn-sm">
                                 TAK
                             </button>
-                            <button th:if="${guest.potwierdzenieObecnosci == 'NIE'}" class="btn btn-danger btn-sm">NIE
+                            <button th:if="${guest.attendanceConfirmation == 'NIE'}" class="btn btn-danger btn-sm">NIE
                             </button>
                         </td>
                         <td>
@@ -260,17 +260,17 @@ textarea {
                             </button>
                         </td>
                         <td>
-                            <button th:if="${guest.nocleg == 'TAK'}" class="btn btn-success btn-sm">TAK</button>
-                            <button th:if="${guest.nocleg == 'NIE'}" class="btn btn-danger btn-sm">NIE</button>
-                            <button th:if="${guest.nocleg == null or guest.nocleg == ''}"
+                            <button th:if="${guest.accommodation == 'TAK'}" class="btn btn-success btn-sm">TAK</button>
+                            <button th:if="${guest.accommodation == 'NIE'}" class="btn btn-danger btn-sm">NIE</button>
+                            <button th:if="${guest.accommodation == null or guest.accommodation == ''}"
                                     class="btn btn-secondary btn-sm">Brak
                             </button>
                         </td>
-                        <td th:text="${guest.kontakt}"></td>
+                        <td th:text="${guest.contact}"></td>
                         <td>
-                            <span th:if="${guest.dodatkoweInformacje != null and guest.dodatkoweInformacje != ''}"
+                            <span th:if="${guest.additionalInfo != null and guest.additionalInfo != ''}"
                                   class="info-icon" data-bs-toggle="tooltip" title="Dodatkowe informacje dostępne">&#8505;</span>
-                            <a th:if="${guest.dodatkoweInformacje}" href="#"
+                            <a th:if="${guest.additionalInfo}" href="#"
                                th:href="@{/guests/details/{id}(id=${guest.id})}"
                                class="btn btn-info btn-sm">Wyświetl</a>
                         </td>
