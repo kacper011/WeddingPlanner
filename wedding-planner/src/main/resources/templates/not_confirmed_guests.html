@@ -180,7 +180,7 @@
       </ul>
 
       <form class="d-flex me-3" method="get" th:action="@{/guests/search}">
-        <input class="form-control me-2" name="nazwisko" placeholder="Wyszukaj po nazwisku">
+        <input class="form-control me-2" name="lastName" placeholder="Wyszukaj po nazwisku">
         <button class="btn btn-search" type="submit">Szukaj</button>
       </form>
 
@@ -221,13 +221,13 @@
           <tbody>
           <tr th:each="guest, iter : ${notConfirmedGuests}">
             <td class="col-number" th:text="${iter.count}"></td>
-            <td th:text="${guest.nazwisko}"></td>
-            <td th:text="${guest.imie}"></td>
+            <td th:text="${guest.lastName}"></td>
+            <td th:text="${guest.firstName}"></td>
             <td>
-              <button th:if="${guest.potwierdzenieObecnosci == 'TAK'}" class="btn btn-success btn-sm">TAK</button>
-              <button th:if="${guest.potwierdzenieObecnosci == 'NIE'}" class="btn btn-danger btn-sm">NIE</button>
+              <button th:if="${guest.attendanceConfirmation == 'TAK'}" class="btn btn-success btn-sm">TAK</button>
+              <button th:if="${guest.attendanceConfirmation == 'NIE'}" class="btn btn-danger btn-sm">NIE</button>
             </td>
-            <td th:text="${guest.kontakt}"></td>
+            <td th:text="${guest.contact}"></td>
           </tr>
           </tbody>
         </table>

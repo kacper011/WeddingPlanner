@@ -215,13 +215,13 @@ public class WeddingController {
     }
 
     @GetMapping("/search")
-    public String searchGuests(@RequestParam("nazwisko") String nazwisko, Model model,
+    public String searchGuests(@RequestParam("lastName") String lastName, Model model,
                                @AuthenticationPrincipal CustomUserDetails principal) {
         User currentUser = userService.findByEmail(principal.getUsername());
         List<Guest> guests = guestRepository.findByUser(currentUser);
 
         List<Guest> filteredGuests = guests.stream()
-                .filter(guest -> guest.getLastName().toLowerCase().contains(nazwisko.toLowerCase()))
+                .filter(guest -> guest.getLastName().toLowerCase().contains(lastName.toLowerCase()))
                 .collect(Collectors.toList());
 
         model.addAttribute("guests", filteredGuests);
