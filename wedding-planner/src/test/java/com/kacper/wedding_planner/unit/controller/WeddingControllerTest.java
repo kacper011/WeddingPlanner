@@ -115,7 +115,7 @@ class WeddingControllerTest {
                         .with(csrf())
                         .param("firstName", "Jan")
                         .param("lastName", "Kowalski")
-                        .param("category", "RODZINA_PANA_MLODEGO")
+                        .param("category", "GROOM_FAMILY")
                         .param("contact", "123 123 123"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/guests"));
@@ -171,7 +171,7 @@ class WeddingControllerTest {
                 .with(csrf())
                 .param("firstName", "Jan")
                 .param("lastName", "Kowalski")
-                .param("category", "RODZINA_PANA_MLODEGO")
+                .param("category", "GROOM_FAMILY")
                 .param("attendanceConfirmation", "TAK")
                 .param("afterParty", "TAK"))
                 .andExpect(status().is3xxRedirection())
