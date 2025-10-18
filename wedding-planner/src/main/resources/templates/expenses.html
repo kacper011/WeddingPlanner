@@ -254,15 +254,15 @@
 
     <form th:action="@{/expenses}" th:object="${expense}" method="post" class="p-3 mb-4 shadow-sm" style="background: #fff0f0; border-radius: 12px;">
         <div class="mb-2">
-            <label for="nazwa" class="form-label" style="font-size: 0.9rem;">Nazwa</label>
-            <input type="text" class="form-control form-control-sm" id="nazwa" th:field="*{nazwa}" placeholder="np. Kwiaty" />
-            <div th:if="${#fields.hasErrors('nazwa')}" th:errors="*{nazwa}" class="form-text text-danger" style="font-size: 0.75rem;"></div>
+            <label for="name" class="form-label" style="font-size: 0.9rem;">Nazwa</label>
+            <input type="text" class="form-control form-control-sm" id="nazwa" th:field="*{name}" placeholder="np. Kwiaty" />
+            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="form-text text-danger" style="font-size: 0.75rem;"></div>
         </div>
 
         <div class="mb-2">
-            <label for="kwota" class="form-label" style="font-size: 0.9rem;">Kwota (zł)</label>
-            <input type="number" step="0.01" class="form-control form-control-sm" id="kwota" th:field="*{kwota}" placeholder="np. 150.00" />
-            <div th:if="${#fields.hasErrors('kwota')}" th:errors="*{kwota}" class="form-text text-danger" style="font-size: 0.75rem;"></div>
+            <label for="amount" class="form-label" style="font-size: 0.9rem;">Kwota (zł)</label>
+            <input type="number" step="0.01" class="form-control form-control-sm" id="amount" th:field="*{amount}" placeholder="np. 150.00" />
+            <div th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}" class="form-text text-danger" style="font-size: 0.75rem;"></div>
         </div>
         <div class="text-end">
             <button type="submit" class="btn-filter" style="font-size: 0.85rem; padding: 6px 14px;">➕ Dodaj</button>
@@ -282,8 +282,8 @@
             </thead>
             <tbody>
             <tr th:each="expense : ${expenses}" style="font-size: 0.78rem;">
-                <td th:text="${expense.nazwa}"></td>
-                <td th:text="${expense.kwota}"></td>
+                <td th:text="${expense.name}"></td>
+                <td th:text="${expense.amount}"></td>
                 <td>
                     <a class="btn btn-sm btn-outline-danger" th:href="@{/expenses/delete/{id}(id=${expense.id})}"
                        onclick="return confirm('Na pewno chcesz usunąć ten wydatek?');">Usuń</a>

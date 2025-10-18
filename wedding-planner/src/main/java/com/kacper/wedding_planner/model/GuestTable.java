@@ -26,7 +26,7 @@ public class GuestTable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToMany(mappedBy = "tables")
+    @OneToMany(mappedBy = "table")
     private List<Guest> guests;
 
 }
