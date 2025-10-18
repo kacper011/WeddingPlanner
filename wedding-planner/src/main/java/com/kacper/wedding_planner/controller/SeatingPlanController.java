@@ -60,20 +60,20 @@ public class SeatingPlanController {
     }
 
     @PostMapping("/add")
-    public String addTable(@RequestParam String nazwa,
-                           @RequestParam(defaultValue = "100") int pozycjaX,
-                           @RequestParam(defaultValue = "100") int pozycjaY,
-                           @RequestParam String ksztalt,
+    public String addTable(@RequestParam String name,
+                           @RequestParam(defaultValue = "100") int positionX,
+                           @RequestParam(defaultValue = "100") int positionY,
+                           @RequestParam String shape,
                            @AuthenticationPrincipal CustomUserDetails principal) {
 
         User user = userRepository.findByEmail(principal.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         GuestTable newTable = new GuestTable();
-        newTable.setNazwa(nazwa);
-        newTable.setPozycjaX(pozycjaX);
-        newTable.setPozycjaY(pozycjaY);
-        newTable.setKsztalt(ksztalt);
+        newTable.setName(name);
+        newTable.setPositionX(positionX);
+        newTable.setPositionY(positionY);
+        newTable.setShape(shape);
         newTable.setUser(user);
 
         guestTableRepository.save(newTable);
@@ -97,8 +97,8 @@ public class SeatingPlanController {
                         .body(Map.of("status", "error", "message", "Table not found"));
             }
 
-            table.setPozycjaX(posX);
-            table.setPozycjaY(posY);
+            table.setPositionX(posX);
+            table.setPositionY(posY);
             guestTableRepository.save(table);
 
             return ResponseEntity.ok(Map.of("status", "success"));
