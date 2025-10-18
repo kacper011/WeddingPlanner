@@ -46,7 +46,7 @@ public class WeddingController {
     }
 
     @GetMapping
-    public String listGuests(Model model, @AuthenticationPrincipal CustomUserDetails principal, @RequestParam(required = false) String kategoria) {
+    public String listGuests(Model model, @AuthenticationPrincipal CustomUserDetails principal, @RequestParam(required = false) String category) {
         if (principal == null) {
             return "redirect:/login";
         }
@@ -54,14 +54,14 @@ public class WeddingController {
         User currentUser = userService.findByEmail(principal.getUsername());
         List<Guest> guests = guestRepository.findByUser(currentUser);
 
-        if (kategoria != null && !kategoria.isEmpty()) {
+        if (category != null && !category.isEmpty()) {
             try {
-                GuestCategory selectedCategory = GuestCategory.valueOf(kategoria);
+                GuestCategory selectedCategory = GuestCategory.valueOf(category);
                 guests = guests.stream()
                         .filter(guest -> guest.getCategory() == selectedCategory)
                         .collect(Collectors.toList());
             } catch (IllegalArgumentException e) {
-                System.out.println("Nieprawidłowa kategoria: " + kategoria);
+                System.out.println("Nieprawidłowa kategoria: " + category);
             }
         }
 
@@ -73,8 +73,8 @@ public class WeddingController {
         long receptionGuests = guests.stream().filter(g -> "TAK".equalsIgnoreCase(g.getAfterParty())).count();
 
         model.addAttribute("guests", guests);
-        model.addAttribute("kategorie", GuestCategory.values());
-        model.addAttribute("selectedCategory", kategoria);
+        model.addAttribute("categories", GuestCategory.values());
+        model.addAttribute("selectedCategory", category);
         model.addAttribute("totalGuests", totalGuests);
         model.addAttribute("confirmedGuests", confirmedGuests);
         model.addAttribute("notConfirmedGuests", notConfirmedGuests);
