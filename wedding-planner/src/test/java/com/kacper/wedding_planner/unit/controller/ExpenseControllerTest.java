@@ -62,8 +62,8 @@ class ExpenseControllerTest {
     void shouldShowExpensesViewWithModelAttributes() throws Exception {
         Expense expense = new Expense();
         expense.setId(1L);
-        expense.setNazwa("Test Expense");
-        expense.setKwota(BigDecimal.valueOf(50));
+        expense.setName("Test Expense");
+        expense.setAmount(BigDecimal.valueOf(50));
 
         when(expenseService.getExpensesForUser("testuser@example.com"))
                 .thenReturn(List.of(expense));
@@ -82,8 +82,8 @@ class ExpenseControllerTest {
     @WithMockUser(username = "testuser@example.com")
     void shouldSaveExpenseAndRedirectWhenNoValidationErrors() throws Exception {
         Expense expense = new Expense();
-        expense.setNazwa("New Expense");
-        expense.setKwota(BigDecimal.valueOf(100));
+        expense.setName("New Expense");
+        expense.setAmount(BigDecimal.valueOf(100));
 
         when(userService.findByEmail("testuser@example.com")).thenReturn(testUser);
 

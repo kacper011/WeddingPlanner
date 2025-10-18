@@ -32,7 +32,7 @@ public class GuestTableServiceImpl implements GuestTableService {
         GuestTable table = guestTableRepository.findById(tableId)
                 .orElseThrow(() -> new GuestTableNotFoundException(tableId));
 
-        List<Guest> guests = table.getGoscie();
+        List<Guest> guests = table.getGuests();
         if (guests != null && !guests.isEmpty()) {
             guests.forEach(guest -> {
                 guest.setTable(null);
