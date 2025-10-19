@@ -89,8 +89,8 @@ class ExpenseControllerTest {
 
         mockMvc.perform(post("/expenses")
                         .with(csrf())
-                        .param("nazwa", "New Expense")
-                        .param("kwota", "100"))
+                        .param("name", "New Expense")
+                        .param("amount", "100"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/expenses"));
 
