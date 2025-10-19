@@ -261,7 +261,7 @@
                         <option value="" th:selected="${guest.category == null}">Wybierz kategorię</option>
                         <option th:each="category : ${categories}"
                                 th:value="${category}"
-                                th:text="${#strings.replace(category.name(), '_', ' ')}">
+                                th:text="${category.displayName}">
                         </option>
                     </select>
                 </div>
