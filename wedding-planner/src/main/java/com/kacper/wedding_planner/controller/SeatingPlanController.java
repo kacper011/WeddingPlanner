@@ -8,6 +8,7 @@ import com.kacper.wedding_planner.repository.GuestRepository;
 import com.kacper.wedding_planner.repository.GuestTableRepository;
 import com.kacper.wedding_planner.repository.UserRepository;
 import com.kacper.wedding_planner.service.GuestTableService;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -42,7 +43,7 @@ public class SeatingPlanController {
         List<GuestTable> tables = guestTableService.getTablesForUser(user);
         List<Guest> guests = guestRepository.findByUser(user);
 
-        model.addAttribute("stoly", tables);
+        model.addAttribute("tables", tables);
         model.addAttribute("allGuests", guests);
 
         return "tables";
@@ -58,7 +59,7 @@ public class SeatingPlanController {
 
         return "redirect:/tables";
     }
-
+    @Transactional
     @PostMapping("/add")
     public String addTable(@RequestParam String name,
                            @RequestParam(defaultValue = "100") int positionX,

@@ -175,11 +175,11 @@
     <form th:action="@{/tables/add}" method="post" class="row g-3 align-items-end">
         <div class="col-md-8">
             <label for="tableName" class="form-label" style="font-weight: 600; color: #a65c5c;">Nazwa nowego stołu</label>
-            <input id="tableName" name="nazwa" class="form-control rounded-3 border-pink" placeholder="np. Stół Młodych" required>
+            <input id="tableName" name="name" class="form-control rounded-3 border-pink" placeholder="np. Stół Młodych" required>
         </div>
         <div class="col-md-4">
             <label for="tableShape" class="form-label" style="font-weight: 600; color: #a65c5c;">Kształt stołu</label>
-            <select id="tableShape" name="ksztalt" class="form-select border-pink" required>
+            <select id="tableShape" name="shape" class="form-select border-pink" required>
                 <option value="prostokatny">Prostokątny</option>
                 <option value="okragly">Okrągły</option>
             </select>
@@ -191,8 +191,8 @@
         </div>
 
         <!-- Ukryte pola pozycja X i Y -->
-        <input id="posX" name="pozycjaX" type="hidden" value="100" required>
-        <input id="posY" name="pozycjaY" type="hidden" value="100" required>
+        <input id="posX" name="positionX" type="hidden" value="100" required>
+        <input id="posY" name="positionY" type="hidden" value="100" required>
     </form>
 </div>
 
@@ -211,7 +211,7 @@
             <div class="col-md-4">
                 <label for="tableId" class="form-label">Wybierz stół</label>
                 <select id="tableId" name="tableId" class="form-select" required>
-                    <option th:each="t : ${stoly}" th:value="${t.id}" th:text="${t.nazwa}"></option>
+                    <option th:each="t : ${tables}" th:value="${t.id}" th:text="${t.name}"></option>
                 </select>
             </div>
             <div class="col-md-2">
@@ -222,19 +222,19 @@
 
     <!-- PLAN SALI -->
     <div id="room-plan" class="room-plan">
-        <div th:each="stol : ${stoly}"
-             th:style="'left:' + ${stol.pozycjaX} + 'px; top:' + ${stol.pozycjaY} + 'px;'"
-             th:class="'table-box draggable ' + ${stol.ksztalt}"
-             th:attr="data-id=${stol.id}">
+        <div th:each="table : ${tables}"
+             th:style="'left:' + ${table.positionX} + 'px; top:' + ${table.positionY} + 'px;'"
+             th:class="'table-box draggable ' + ${table.shape}"
+             th:attr="data-id=${table.id}">
             <div class="d-flex justify-content-between align-items-center">
-                <h4 th:text="${stol.nazwa}" class="mb-0">Stół 1</h4>
-                <form th:action="@{/tables/delete}" method="post" th:object="${stol}" onsubmit="return confirm('Czy na pewno chcesz usunąć ten stół?')" style="margin: 0;">
-                    <input type="hidden" name="id" th:value="${stol.id}" />
+                <h4 th:text="${table.name}" class="mb-0">Stół 1</h4>
+                <form th:action="@{/tables/delete}" method="post" th:object="${table}" onsubmit="return confirm('Czy na pewno chcesz usunąć ten stół?')" style="margin: 0;">
+                    <input type="hidden" name="id" th:value="${table.id}" />
                     <button type="submit" class="btn btn-sm btn-danger ms-2 py-0 px-2" title="Usuń stół">✖</button>
                 </form>
             </div>
             <ul>
-                <li th:each="gosc : ${stol.goscie}" th:text="${gosc.firstName} + ' ' + ${gosc.lastName}">Jan Kowalski</li>
+                <li th:each="guest : ${table.guests}" th:text="${guest.firstName} + ' ' + ${guest.lastName}">Jan Kowalski</li>
             </ul>
         </div>
     </div>
