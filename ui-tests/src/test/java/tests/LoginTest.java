@@ -34,5 +34,9 @@ public class LoginTest extends BaseTest {
         wait.until(ExpectedConditions.visibilityOfElementLocated(header));
         Assertions.assertTrue(driver.findElement(header).isDisplayed(), "The “Wedding Guest List” heading is not visible after logging in.");
 
+        loginPage.clickLogout();
+
+        wait.until(ExpectedConditions.urlToBe("http://localhost:8080/login?logout"));
+        Assertions.assertEquals("http://localhost:8080/login?logout", driver.getCurrentUrl(), "You were not redirected to the login page after logging out.");
     }
 }

@@ -15,11 +15,13 @@ public class LoginPage {
     private By passwordInput = By.id("password");
     private By loginButton = By.cssSelector("button[type='submit']");
     private By registerLink = By.cssSelector("a[href*='/register']");
+    private By logoutButton = By.id("logoutButton");
 
     public WebElement getEmailInput() { return driver.findElement(emailInput); }
     public WebElement getPasswordInput() { return driver.findElement(passwordInput); }
     public WebElement getLoginButton() { return driver.findElement(loginButton); }
     public WebElement getRegisterLink() { return driver.findElement(registerLink); }
+    public WebElement getLogoutButton() { return driver.findElement(logoutButton); }
 
     public boolean areAllElementsVisible() {
         return getEmailInput().isDisplayed() &&
@@ -38,5 +40,9 @@ public class LoginPage {
 
     public void clickLogin() {
         getLoginButton().click();
+    }
+
+    public void clickLogout() {
+        getLogoutButton().click();
     }
 }
