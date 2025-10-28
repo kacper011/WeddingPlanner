@@ -27,4 +27,16 @@ public class LoginPage {
                 getLoginButton().isDisplayed() &&
                 getRegisterLink().isDisplayed();
     }
+
+    public void enterEmail(String email) {
+        getEmailInput().sendKeys(email);
+    }
+
+    public void enterPassword(String password) {
+        getPasswordInput().sendKeys(password);
+    }
+
+    public void clickLogin() {
+        getLoginButton().click();
+    }
 }

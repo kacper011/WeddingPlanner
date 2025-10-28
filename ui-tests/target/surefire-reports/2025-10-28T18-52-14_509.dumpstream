@@ -1,0 +1,5 @@
+# Created at 2025-10-28T18:52:14.737
+Boot Manifest-JAR contains absolute paths in classpath 'D:\Materiał z kursu\Java\Wedding Planner\ui-tests\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+

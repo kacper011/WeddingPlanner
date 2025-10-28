@@ -18,7 +18,7 @@ public class BaseTest {
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.manage().window().maximize();
-        driver.get("http://localhost:8080");
+        driver.get("http://localhost:8080/login");
     }
 
     @AfterEach

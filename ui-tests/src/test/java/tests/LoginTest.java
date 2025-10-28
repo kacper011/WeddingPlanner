@@ -13,4 +13,18 @@ public class LoginTest extends BaseTest {
 
         Assertions.assertTrue(loginPage.areAllElementsVisible(), "Not all login elements are visible!");
     }
+
+    @Test
+    public void testSuccessfulLogin() {
+        LoginPage loginPage = new LoginPage(driver);
+
+        loginPage.enterEmail("test@test.com");
+        loginPage.enterPassword("test123");
+        loginPage.clickLogin();
+
+        String expectedUrl = "http://localhost:8080/guests";
+        String actualUrl = driver.getCurrentUrl();
+        Assertions.assertEquals(expectedUrl, actualUrl, "After logging in, I was not redirected to /guests.");
+
+    }
 }
