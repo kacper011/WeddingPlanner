@@ -105,7 +105,9 @@
 
   <form action="/login" method="post">
     <label for="email">Email:</label>
-    <input type="email" id="email" name="username" required>
+    <input type="email" id="email" name="username" required
+           oninvalid="this.setCustomValidity('Please enter a valid email address with an @ symbol.')"
+           oninput="setCustomValidity('')">
 
     <label for="password">Hasło:</label>
     <input type="password" id="password" name="password" required>

@@ -1,8 +1,10 @@
 package tests;
 
+import org.apache.commons.logging.Log;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.LoginPage;
@@ -60,5 +62,30 @@ public class LoginTest extends BaseTest {
         Assertions.assertTrue(driver.findElement(errorMsg).isDisplayed(),
                 "The error message is not visible after an incorrect login.");
 
+    }
+
+    @Test
+    public void testEmailValidationError() {
+        LoginPage loginPage = new LoginPage(driver);
+
+        loginPage.enterEmail("testtest.com");
+        loginPage.enterPassword("test123");
+        loginPage.clickLogin();
+
+        try {
+            Thread.sleep(3000); 
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        WebElement emailInput = driver.findElement(By.id("email"));
+
+        String validationMessage = emailInput.getAttribute("validationMessage");
+
+        Assertions.assertFalse(validationMessage.isEmpty(),
+                "HTML5 validation did not trigger for incorrect email!");
+
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/login"),
+                "The form was sent despite an incorrect email address!");
     }
 }
