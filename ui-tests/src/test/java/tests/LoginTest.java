@@ -39,4 +39,26 @@ public class LoginTest extends BaseTest {
         wait.until(ExpectedConditions.urlToBe("http://localhost:8080/login?logout"));
         Assertions.assertEquals("http://localhost:8080/login?logout", driver.getCurrentUrl(), "You were not redirected to the login page after logging out.");
     }
+
+    @Test
+    public void testFailedLoginShowsErrorMessage() {
+        LoginPage loginPage = new LoginPage(driver);
+
+        loginPage.enterEmail("incorrect@test.com");
+        loginPage.enterPassword("incorrect");
+        loginPage.clickLogin();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.urlContains("error"));
+
+        String currentUrl = driver.getCurrentUrl();
+        Assertions.assertTrue(currentUrl.contains("/login?error"),
+                "The user did not remain on the login page after an incorrect login.");
+
+        By errorMsg = By.cssSelector(".alert.alert-danger");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(errorMsg));
+        Assertions.assertTrue(driver.findElement(errorMsg).isDisplayed(),
+                "The error message is not visible after an incorrect login.");
+
+    }
 }
