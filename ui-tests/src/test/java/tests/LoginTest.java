@@ -73,7 +73,7 @@ public class LoginTest extends BaseTest {
         loginPage.clickLogin();
 
         try {
-            Thread.sleep(3000); 
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -87,5 +87,32 @@ public class LoginTest extends BaseTest {
 
         Assertions.assertTrue(driver.getCurrentUrl().contains("/login"),
                 "The form was sent despite an incorrect email address!");
+    }
+
+    @Test
+    public void testEmptyPasswordValidation() {
+        LoginPage loginPage = new LoginPage(driver);
+
+        loginPage.enterEmail("test@test.com");
+        loginPage.enterPassword("");
+        loginPage.clickLogin();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        WebElement passwordInput = driver.findElement(By.id("password"));
+
+        String validationMessage = passwordInput.getAttribute("validationMessage");
+
+        Assertions.assertFalse(validationMessage.isEmpty(),
+                "HTML5 validation did not trigger for empty password!");
+
+        System.out.println("Password validation message: " + validationMessage);
+
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/login"),
+                "The form was sent despite an empty password field!");
     }
 }
