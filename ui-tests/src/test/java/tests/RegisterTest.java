@@ -3,6 +3,7 @@ package tests;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.LoginPage;
@@ -58,5 +59,29 @@ public class RegisterTest extends BaseTest {
         Assertions.assertTrue(registerPage.isErrorVisible(), "Error message is not visible");
         Assertions.assertTrue(registerPage.getErrorMessage().toLowerCase().contains("email"),
                 "Unexpected error message text: " + registerPage.getErrorMessage());
+    }
+
+    @Test
+    public void testEmptyPasswordValidation() {
+        RegisterPage registerPage = new RegisterPage(driver);
+
+        registerPage.enterFirstName("Jan");
+        registerPage.enterEmail("test" + System.currentTimeMillis() + "@example.com");
+        registerPage.enterPassword("");
+        registerPage.clickRegister();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace(); }
+
+        WebElement passwordInput = driver.findElement(By.id("password"));
+        String validationMessage = passwordInput.getAttribute("validationMessage");
+
+        Assertions.assertFalse(validationMessage.isEmpty(),
+                "HTML5 validation did not trigger for empty password!");
+
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/register"),
+                "The form was sent despite an empty password field!");
     }
 }

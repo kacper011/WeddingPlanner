@@ -8,7 +8,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/tests/RegisterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/tests/RegisterTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/test-classes/tests/RegisterTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/tests/RegisterTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../wedding-planner/src/main/java/com/kacper/wedding_planner/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../wedding-planner/src/main/java/com/kacper/wedding_planner/service/impl/UserServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../wedding-planner/src/main/resources/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/../wedding-planner/src/main/resources/templates/register.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -50,23 +49,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
   }
 }</component>
-  <component name="RunManager" selected="JUnit.RegisterTest.testRegistrationWithExistingEmailShowsError">
-    <configuration name="LoginTest.testEmailValidationError" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ui-tests" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="tests.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="tests" />
-      <option name="MAIN_CLASS_NAME" value="tests.LoginTest" />
-      <option name="METHOD_NAME" value="testEmailValidationError" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.RegisterTest.testEmptyPasswordValidation">
     <configuration name="LoginTest.testEmptyPasswordValidation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ui-tests" />
       <extension name="coverage">
@@ -94,6 +77,22 @@
       <option name="PACKAGE_NAME" value="tests" />
       <option name="MAIN_CLASS_NAME" value="tests.RegisterTest" />
       <option name="METHOD_NAME" value="testAllRegisterElementsAreVisible" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RegisterTest.testEmptyPasswordValidation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ui-tests" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="tests" />
+      <option name="MAIN_CLASS_NAME" value="tests.RegisterTest" />
+      <option name="METHOD_NAME" value="testEmptyPasswordValidation" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -133,11 +132,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.RegisterTest.testEmptyPasswordValidation" />
         <item itemvalue="JUnit.RegisterTest.testRegistrationWithExistingEmailShowsError" />
         <item itemvalue="JUnit.RegisterTest.testSuccessfulRegistration" />
         <item itemvalue="JUnit.RegisterTest.testAllRegisterElementsAreVisible" />
         <item itemvalue="JUnit.LoginTest.testEmptyPasswordValidation" />
-        <item itemvalue="JUnit.LoginTest.testEmailValidationError" />
       </list>
     </recent_temporary>
   </component>

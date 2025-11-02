@@ -146,7 +146,9 @@
 
         <div class="form-group">
             <label for="password">Hasło:</label>
-            <input type="password" id="password" th:field="*{password}" required>
+            <input type="password" id="password" name="password" required
+                   oninvalid="this.setCustomValidity('Please enter your password.')"
+                   oninput="this.setCustomValidity('')">
         </div>
 
         <button type="submit">Zarejestruj</button>
