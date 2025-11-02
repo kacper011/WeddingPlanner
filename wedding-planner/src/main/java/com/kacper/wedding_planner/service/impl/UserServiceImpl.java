@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void registerUser(String email, String password, String firstName) {
         if (userRepository.findByEmail(email).isPresent()) {
-            throw new UserAlreadyExistsException(email);
+            throw new IllegalArgumentException("A user with this email address already exists.");
         }
 
         User user = new User();
@@ -36,8 +36,6 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(firstName);
 
         userRepository.save(user);
-
-        emailService.sendWelcomeEmail(email, firstName);
     }
 
     @Override
