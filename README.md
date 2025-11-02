@@ -56,6 +56,7 @@ Wedding Planner is a comprehensive web application designed to help engaged coup
 - JUnit 5
 - Mockito
 - Spring Security Test
+- Selenium
 
 ---
 
