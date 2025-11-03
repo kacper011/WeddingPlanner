@@ -37,8 +37,8 @@ public class GuestsPage {
     }
 
     public boolean arePresenceButtonsClickable() {
-        List<WebElement> yesButtons = driver.findElements(By.xpath("//button[contains(text(),'YES')]"));
-        List<WebElement> noButtons = driver.findElements(By.xpath("//button[contains(text(),'NO')]"));
+        List<WebElement> yesButtons = driver.findElements(By.xpath("//button[contains(text(),'TAK')]"));
+        List<WebElement> noButtons = driver.findElements(By.xpath("//button[contains(text(),'NIE')]"));
         return !yesButtons.isEmpty() && yesButtons.get(0).isEnabled() && !noButtons.isEmpty() && noButtons.get(0).isEnabled();
     }
 }
