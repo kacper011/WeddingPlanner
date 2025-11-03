@@ -28,4 +28,22 @@ public class GuestsPageTest extends BaseTest {
         Assertions.assertTrue(guestsPage.isGuestsTableVisible(), "Guest table is not visible!");
         Assertions.assertTrue(guestsPage.isStatsVisible(), "Stats section not visible!");
     }
+
+    @Test
+    public void testLogoutButtonWorks() {
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.enterEmail("test@gmail.com");
+        loginPage.enterPassword("test1234");
+        loginPage.clickLogin();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.urlContains("/guests"));
+
+        GuestsPage guestsPage = new GuestsPage(driver);
+        guestsPage.clickLogout();
+        
+        wait.until(ExpectedConditions.urlContains("/login"));
+
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/login"), "Logout did not redirect to login page!");
+    }
 }
