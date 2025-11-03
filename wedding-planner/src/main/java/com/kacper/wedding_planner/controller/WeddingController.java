@@ -68,9 +68,9 @@ public class WeddingController {
         guests.sort(Comparator.comparing(Guest::getLastName));
 
         long totalGuests = guests.size();
-        long confirmedGuests = guests.stream().filter(g -> "TAK".equalsIgnoreCase(g.getAttendanceConfirmation())).count();
-        long notConfirmedGuests = guests.stream().filter(g -> "NIE".equalsIgnoreCase(g.getAttendanceConfirmation())).count();
-        long receptionGuests = guests.stream().filter(g -> "TAK".equalsIgnoreCase(g.getAfterParty())).count();
+        long confirmedGuests = guests.stream().filter(g -> "YES".equalsIgnoreCase(g.getAttendanceConfirmation())).count();
+        long notConfirmedGuests = guests.stream().filter(g -> "NO".equalsIgnoreCase(g.getAttendanceConfirmation())).count();
+        long receptionGuests = guests.stream().filter(g -> "YES".equalsIgnoreCase(g.getAfterParty())).count();
 
         model.addAttribute("guests", guests);
         model.addAttribute("categories", GuestCategory.values());
@@ -166,7 +166,7 @@ public class WeddingController {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid guest Id:" + id));
         guest.setAttendanceConfirmation(presence);
 
-        if ("NIE".equals(presence)) {
+        if ("NO".equals(presence)) {
             guest.setTransport(null);
             guest.setAccommodation(null);
         }
@@ -196,7 +196,7 @@ public class WeddingController {
     public String getConfirmedGuests(Model model,
                                      @AuthenticationPrincipal CustomUserDetails principal) {
         User currentUser = userService.findByEmail(principal.getUsername());
-        List<Guest> confirmedGuests = guestRepository.findByUserAndAttendanceConfirmation(currentUser, "TAK");
+        List<Guest> confirmedGuests = guestRepository.findByUserAndAttendanceConfirmation(currentUser, "YES");
 
         confirmedGuests.sort(Comparator.comparing(Guest::getLastName));
         model.addAttribute("confirmedGuests", confirmedGuests);
@@ -207,7 +207,7 @@ public class WeddingController {
     public String getNotConfirmedGuests(Model model,
                                         @AuthenticationPrincipal CustomUserDetails principal) {
         User currentUser = userService.findByEmail(principal.getUsername());
-        List<Guest> notConfirmedGuests = guestRepository.findByUserAndAttendanceConfirmation(currentUser, "NIE");
+        List<Guest> notConfirmedGuests = guestRepository.findByUserAndAttendanceConfirmation(currentUser, "NO");
 
         notConfirmedGuests.sort(Comparator.comparing(Guest::getLastName));
         model.addAttribute("notConfirmedGuests", notConfirmedGuests);
@@ -232,7 +232,7 @@ public class WeddingController {
     public String getWeddingReceptionsGuests(Model model,
                                              @AuthenticationPrincipal CustomUserDetails principal) {
         User currentUser = userService.findByEmail(principal.getUsername());
-        List<Guest> weddingReceptionsGuests = guestRepository.findByUserAndAfterParty(currentUser, "TAK");
+        List<Guest> weddingReceptionsGuests = guestRepository.findByUserAndAfterParty(currentUser, "YES");
 
         model.addAttribute("weddingReceptionsGuests", weddingReceptionsGuests);
         return "wedding_receptions";
@@ -243,10 +243,10 @@ public class WeddingController {
         Optional<Guest> optionalGuest = guestRepository.findById(id);
 
         optionalGuest.ifPresent(guest -> {
-            if ("TAK".equals(guest.getAfterParty())) {
-                guest.setAfterParty("NIE");
+            if ("YES".equals(guest.getAfterParty())) {
+                guest.setAfterParty("NO");
             } else {
-                guest.setAfterParty("TAK");
+                guest.setAfterParty("YES");
             }
             guestRepository.save(guest);
         });

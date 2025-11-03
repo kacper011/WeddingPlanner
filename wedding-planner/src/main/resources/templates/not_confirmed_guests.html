@@ -224,8 +224,8 @@
             <td th:text="${guest.lastName}"></td>
             <td th:text="${guest.firstName}"></td>
             <td>
-              <button th:if="${guest.attendanceConfirmation == 'TAK'}" class="btn btn-success btn-sm">TAK</button>
-              <button th:if="${guest.attendanceConfirmation == 'NIE'}" class="btn btn-danger btn-sm">NIE</button>
+              <button th:if="${guest.attendanceConfirmation == 'YES'}" class="btn btn-success btn-sm">TAK</button>
+              <button th:if="${guest.attendanceConfirmation == 'NO'}" class="btn btn-danger btn-sm">NIE</button>
             </td>
             <td th:text="${guest.contact}"></td>
           </tr>

@@ -5,10 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a86a0876-701e-4e35-88a7-eb2cda54cdda" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/test/java/pages/GuestsPage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/tests/RegisterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/tests/RegisterTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/tests/RegisterTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/tests/RegisterTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../wedding-planner/src/main/resources/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/../wedding-planner/src/main/resources/templates/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../wedding-planner/src/main/java/com/kacper/wedding_planner/controller/WeddingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../wedding-planner/src/main/java/com/kacper/wedding_planner/controller/WeddingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../wedding-planner/src/main/resources/templates/confirmed_guests.html" beforeDir="false" afterPath="$PROJECT_DIR$/../wedding-planner/src/main/resources/templates/confirmed_guests.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../wedding-planner/src/main/resources/templates/guests.html" beforeDir="false" afterPath="$PROJECT_DIR$/../wedding-planner/src/main/resources/templates/guests.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../wedding-planner/src/main/resources/templates/not_confirmed_guests.html" beforeDir="false" afterPath="$PROJECT_DIR$/../wedding-planner/src/main/resources/templates/not_confirmed_guests.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

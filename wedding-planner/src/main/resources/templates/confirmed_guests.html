@@ -246,22 +246,22 @@ textarea {
                         <td th:text="${guest.lastName}"></td>
                         <td th:text="${guest.firstName}"></td>
                         <td>
-                            <button th:if="${guest.attendanceConfirmation == 'TAK'}" class="btn btn-success btn-sm">
+                            <button th:if="${guest.attendanceConfirmation == 'YES'}" class="btn btn-success btn-sm">
                                 TAK
                             </button>
-                            <button th:if="${guest.attendanceConfirmation == 'NIE'}" class="btn btn-danger btn-sm">NIE
+                            <button th:if="${guest.attendanceConfirmation == 'NO'}" class="btn btn-danger btn-sm">NIE
                             </button>
                         </td>
                         <td>
-                            <button th:if="${guest.transport == 'TAK'}" class="btn btn-success btn-sm">TAK</button>
-                            <button th:if="${guest.transport == 'NIE'}" class="btn btn-danger btn-sm">NIE</button>
+                            <button th:if="${guest.transport == 'YES'}" class="btn btn-success btn-sm">TAK</button>
+                            <button th:if="${guest.transport == 'NO'}" class="btn btn-danger btn-sm">NIE</button>
                             <button th:if="${guest.transport == null or guest.transport == ''}"
                                     class="btn btn-secondary btn-sm">Brak
                             </button>
                         </td>
                         <td>
-                            <button th:if="${guest.accommodation == 'TAK'}" class="btn btn-success btn-sm">TAK</button>
-                            <button th:if="${guest.accommodation == 'NIE'}" class="btn btn-danger btn-sm">NIE</button>
+                            <button th:if="${guest.accommodation == 'YES'}" class="btn btn-success btn-sm">TAK</button>
+                            <button th:if="${guest.accommodation == 'NO'}" class="btn btn-danger btn-sm">NIE</button>
                             <button th:if="${guest.accommodation == null or guest.accommodation == ''}"
                                     class="btn btn-secondary btn-sm">Brak
                             </button>

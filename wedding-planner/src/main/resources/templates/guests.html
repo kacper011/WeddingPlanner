@@ -298,18 +298,20 @@ textarea.form-control {
             </tr>
             </thead>
             <tbody>
-            <tr th:each="guest, iter : ${guests}" th:class="${guest.attendanceConfirmation == 'TAK'} ? 'table-success' : (${guest.attendanceConfirmation == 'NIE'} ? 'table-danger' : '')">
+            <tr th:each="guest, iter : ${guests}"
+                th:class="${guest.attendanceConfirmation == 'YES'} ? 'table-success' :
+              (${guest.attendanceConfirmation == 'NO'} ? 'table-danger' : '')">
                 <td th:text="${iter.count}"></td>
                 <td th:text="${guest.lastName}"></td>
                 <td th:text="${guest.firstName}"></td>
                 <td>
                     <div class="d-flex flex-column flex-md-row gap-1 justify-content-center">
                         <form th:action="@{/guests/updatePresence/{id}(id=${guest.id})}" method="post">
-                            <input type="hidden" name="presence" value="TAK"/>
+                            <input type="hidden" name="presence" value="YES"/>
                             <button type="submit" class="btn btn-success btn-sm">TAK</button>
                         </form>
                         <form th:action="@{/guests/updatePresence/{id}(id=${guest.id})}" method="post">
-                            <input type="hidden" name="presence" value="NIE"/>
+                            <input type="hidden" name="presence" value="NO"/>
                             <button type="submit" class="btn btn-danger btn-sm">NIE</button>
                         </form>
                     </div>
