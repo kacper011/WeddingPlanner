@@ -47,7 +47,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
   }
 }</component>
-  <component name="RunManager" selected="JUnit.GuestsPageTest.testPresenceButtonsClickable">
+  <component name="RunManager" selected="JUnit.GuestsPageTest">
     <configuration name="GuestsPageTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ui-tests" />
       <extension name="coverage">
@@ -129,9 +129,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.GuestsPageTest" />
         <item itemvalue="JUnit.GuestsPageTest.testPresenceButtonsClickable" />
         <item itemvalue="JUnit.GuestsPageTest.testLogoutButtonWorks" />
-        <item itemvalue="JUnit.GuestsPageTest" />
         <item itemvalue="JUnit.RegisterTest.testEmptyPasswordValidation" />
         <item itemvalue="JUnit.RegisterTest.testRegistrationWithExistingEmailShowsError" />
       </list>

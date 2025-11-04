@@ -1,6 +1,8 @@
 package tests;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -12,17 +14,27 @@ import java.time.Duration;
 
 public class GuestsPageTest extends BaseTest {
 
-    @Test
-    public void testGuestsPageElementsVisible() {
+    private GuestsPage guestsPage;
+    private WebDriverWait wait;
+
+    @BeforeEach
+    public void loginBeforeEachTest() {
         LoginPage loginPage = new LoginPage(driver);
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
         loginPage.enterEmail("test@gmail.com");
         loginPage.enterPassword("test1234");
         loginPage.clickLogin();
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.urlContains("/guests"));
+        guestsPage = new GuestsPage(driver);
 
-        GuestsPage guestsPage = new GuestsPage(driver);
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/guests"),
+                "Login failed — user was not redirected to guests page!");
+    }
+
+    @Test
+    public void testGuestsPageElementsVisible() {
 
         Assertions.assertTrue(guestsPage.isNavbarVisible(), "Navbar is not visible!");
         Assertions.assertTrue(guestsPage.isGuestsTableVisible(), "Guest table is not visible!");
@@ -31,15 +43,7 @@ public class GuestsPageTest extends BaseTest {
 
     @Test
     public void testLogoutButtonWorks() {
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.enterEmail("test@gmail.com");
-        loginPage.enterPassword("test1234");
-        loginPage.clickLogin();
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.urlContains("/guests"));
-
-        GuestsPage guestsPage = new GuestsPage(driver);
         guestsPage.clickLogout();
 
         wait.until(ExpectedConditions.urlContains("/login"));
@@ -49,16 +53,20 @@ public class GuestsPageTest extends BaseTest {
 
     @Test
     public void testPresenceButtonsClickable() {
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.enterEmail("test@gmail.com");
-        loginPage.enterPassword("test1234");
-        loginPage.clickLogin();
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.urlContains("/guests"));
-
-        GuestsPage guestsPage = new GuestsPage(driver);
 
         Assertions.assertTrue(guestsPage.arePresenceButtonsClickable(), "Presence buttons are not clickable!");
+    }
+    
+
+    @AfterEach
+    public void cleanup() {
+        try {
+            if (!driver.getCurrentUrl().contains("/login")) {
+                guestsPage.clickLogout();
+                wait.until(ExpectedConditions.urlContains("/login"));
+            }
+        } catch (Exception e) {
+            System.out.println("⚠️ Logout not performed — maybe already logged out.");
+        }
     }
 }
