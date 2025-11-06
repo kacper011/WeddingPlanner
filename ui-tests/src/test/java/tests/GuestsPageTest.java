@@ -4,6 +4,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.GuestsPage;
@@ -56,7 +58,23 @@ public class GuestsPageTest extends BaseTest {
 
         Assertions.assertTrue(guestsPage.arePresenceButtonsClickable(), "Presence buttons are not clickable!");
     }
-    
+
+    @Test
+    public void testConfirmedGuestCountIncreasesAfterClickYes() {
+
+        WebElement confirmedCountElement = driver.findElement(By.xpath("//h5[contains(text(), 'Potwierdzeni')]/following-sibling::h3"));
+        int initialCount = Integer.parseInt(confirmedCountElement.getText());
+
+        WebElement firstYesButton = driver.findElement(By.xpath("//button[contains(text(),'TAK')]"));
+        firstYesButton.click();
+
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h5[contains(text(), 'Potwierdzeni')]/following-sibling::h3"),
+                String.valueOf(initialCount + 1)));
+
+        int updatedCount = Integer.parseInt(driver.findElement(By.xpath("//h5[contains(text(), 'Potwierdzeni')]/following-sibling::h3")).getText());
+
+        Assertions.assertEquals(initialCount + 1, updatedCount, "Confirmed guests count did not increase after clicking YES!");
+    }
 
     @AfterEach
     public void cleanup() {
