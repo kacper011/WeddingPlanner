@@ -15,6 +15,7 @@ public class GuestsPage {
     private By guestsTable = By.id("guestsTable");
     private By logoutButton = By.id("logoutButton");
     private By statsBoxes = By.xpath("//h5[contains(text(),'goście') or contains(text(),'Potwierdzeni') or contains(text(),'Niepotwierdzeni') or contains(text(),'Na poprawinach')]");
+    private By addGuestButton = By.linkText("Dodaj gościa");
 
     public GuestsPage(WebDriver driver) {
         this.driver = driver;
@@ -36,9 +37,14 @@ public class GuestsPage {
         driver.findElement(logoutButton).click();
     }
 
+    public void clickAddGuestButton() {
+        driver.findElement(addGuestButton).click();
+    }
     public boolean arePresenceButtonsClickable() {
         List<WebElement> yesButtons = driver.findElements(By.xpath("//button[contains(text(),'TAK')]"));
         List<WebElement> noButtons = driver.findElements(By.xpath("//button[contains(text(),'NIE')]"));
         return !yesButtons.isEmpty() && yesButtons.get(0).isEnabled() && !noButtons.isEmpty() && noButtons.get(0).isEnabled();
     }
+
+
 }

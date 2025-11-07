@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.GuestsPage;
 import pages.LoginPage;
@@ -75,6 +76,33 @@ public class GuestsPageTest extends BaseTest {
 
         Assertions.assertEquals(initialCount + 1, updatedCount, "Confirmed guests count did not increase after clicking YES!");
     }
+
+    @Test
+    public void testAddNewGuest() {
+        guestsPage.clickAddGuestButton();
+
+        wait.until(ExpectedConditions.urlContains("/guests/new"));
+
+        driver.findElement(By.id("firstName")).sendKeys("Jan");
+        driver.findElement(By.id("lastName")).sendKeys("Kowalski" + System.currentTimeMillis());
+
+        Select categorySelect = new Select(driver.findElement(By.id("category")));
+        categorySelect.selectByValue("FRIENDS");
+
+        driver.findElement(By.id("contact")).sendKeys("123 412 123");
+        driver.findElement(By.id("additionalInfo")).sendKeys("Testowy gość");
+
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+
+        wait.until(ExpectedConditions.urlContains("/guests"));
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/guests"),
+                "Not redirected back to the guest list after adding!");
+
+        String pageSource = driver.getPageSource();
+        Assertions.assertTrue(pageSource.contains("Jan"),
+                "The newly added guest did not appear on the list!");
+    }
+
 
     @AfterEach
     public void cleanup() {
