@@ -244,7 +244,9 @@
                     <label class="form-label" for="firstName">Imię</label>
                     <input class="form-control" id="firstName" name="firstName"
                            placeholder="Wprowadź imię gościa" type="text"
-                           th:field="*{firstName}" required>
+                           th:field="*{firstName}" required
+                           oninvalid="this.setCustomValidity('Please enter the guest's first name!')"
+                           oninput="this.setCustomValidity('')">
                 </div>
 
                 <div class="form-group mb-3">

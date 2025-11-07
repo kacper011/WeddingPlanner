@@ -103,6 +103,26 @@ public class GuestsPageTest extends BaseTest {
                 "The newly added guest did not appear on the list!");
     }
 
+    @Test
+    public void testEmptyFirstNameValidation() throws  InterruptedException {
+
+        guestsPage.clickAddGuestButton();
+        wait.until(ExpectedConditions.urlContains("/guests/new"));
+
+        driver.findElement(By.id("firstName")).clear();
+        driver.findElement(By.id("lastName")).sendKeys("Kowalski");
+        new Select(driver.findElement(By.id("category"))).selectByValue("FRIENDS");
+        driver.findElement(By.id("contact")).sendKeys("123 542 125");
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+        Thread.sleep(1000);
+
+        WebElement firstNameInput = driver.findElement(By.id("firstName"));
+        String validationMessage = firstNameInput.getAttribute("validationMessage");
+
+        Assertions.assertFalse(validationMessage.isEmpty(), "No validation for empty name!");
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/guests/new"), "The form was sent despite the name field being empty!");
+    }
+
 
     @AfterEach
     public void cleanup() {

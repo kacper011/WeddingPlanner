@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="a86a0876-701e-4e35-88a7-eb2cda54cdda" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/pages/GuestsPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/pages/GuestsPage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/tests/GuestsPageTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/tests/GuestsPageTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/tests/GuestsPageTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/tests/GuestsPageTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +48,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
   }
 }</component>
-  <component name="RunManager" selected="JUnit.GuestsPageTest.testAddNewGuest">
+  <component name="RunManager" selected="JUnit.GuestsPageTest.testEmptyFirstNameValidation">
     <configuration name="GuestsPageTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ui-tests" />
       <extension name="coverage">
@@ -96,7 +96,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GuestsPageTest.testLogoutButtonWorks" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="GuestsPageTest.testEmptyFirstNameValidation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ui-tests" />
       <extension name="coverage">
         <pattern>
@@ -106,7 +106,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="tests" />
       <option name="MAIN_CLASS_NAME" value="tests.GuestsPageTest" />
-      <option name="METHOD_NAME" value="testLogoutButtonWorks" />
+      <option name="METHOD_NAME" value="testEmptyFirstNameValidation" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -130,11 +130,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.GuestsPageTest.testEmptyFirstNameValidation" />
         <item itemvalue="JUnit.GuestsPageTest.testAddNewGuest" />
         <item itemvalue="JUnit.GuestsPageTest.testConfirmedGuestCountIncreasesAfterClickYes" />
         <item itemvalue="JUnit.GuestsPageTest" />
         <item itemvalue="JUnit.GuestsPageTest.testPresenceButtonsClickable" />
-        <item itemvalue="JUnit.GuestsPageTest.testLogoutButtonWorks" />
       </list>
     </recent_temporary>
   </component>
