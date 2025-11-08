@@ -123,6 +123,26 @@ public class GuestsPageTest extends BaseTest {
         Assertions.assertTrue(driver.getCurrentUrl().contains("/guests/new"), "The form was sent despite the name field being empty!");
     }
 
+    @Test
+    public void testEmptyLastNameValidation() throws InterruptedException {
+
+        guestsPage.clickAddGuestButton();
+        wait.until(ExpectedConditions.urlContains("/guests/new"));
+
+        driver.findElement(By.id("firstName")).sendKeys("Jan");
+        driver.findElement(By.id("lastName")).clear();
+        new Select(driver.findElement(By.id("category"))).selectByValue("FRIENDS");
+        driver.findElement(By.id("contact")).sendKeys("123 542 125");
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+        Thread.sleep(1000);
+
+        WebElement lastNameInput = driver.findElement(By.id("lastName"));
+        String validationMessage = lastNameInput.getAttribute("validationMessage");
+
+        Assertions.assertFalse(validationMessage.isEmpty(), "No validation for empty last name!");
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/guests/new"), "The form was sent despite the last name field being empty!");
+    }
+
 
     @AfterEach
     public void cleanup() {
