@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a86a0876-701e-4e35-88a7-eb2cda54cdda" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/tests/GuestsPageTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/tests/GuestsPageTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -47,22 +46,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
   }
 }</component>
-  <component name="RunManager" selected="JUnit.GuestsPageTest.testEmptyFirstNameValidation">
-    <configuration name="GuestsPageTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ui-tests" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="tests.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="tests" />
-      <option name="MAIN_CLASS_NAME" value="tests.GuestsPageTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.GuestsPageTest.testEmptyCategoryValidation">
     <configuration name="GuestsPageTest.testAddNewGuest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ui-tests" />
       <extension name="coverage">
@@ -90,6 +74,22 @@
       <option name="PACKAGE_NAME" value="tests" />
       <option name="MAIN_CLASS_NAME" value="tests.GuestsPageTest" />
       <option name="METHOD_NAME" value="testConfirmedGuestCountIncreasesAfterClickYes" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GuestsPageTest.testEmptyCategoryValidation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ui-tests" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="tests" />
+      <option name="MAIN_CLASS_NAME" value="tests.GuestsPageTest" />
+      <option name="METHOD_NAME" value="testEmptyCategoryValidation" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -129,11 +129,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.GuestsPageTest.testEmptyCategoryValidation" />
         <item itemvalue="JUnit.GuestsPageTest.testEmptyFirstNameValidation" />
         <item itemvalue="JUnit.GuestsPageTest.testEmptyLastNameValidation" />
         <item itemvalue="JUnit.GuestsPageTest.testAddNewGuest" />
         <item itemvalue="JUnit.GuestsPageTest.testConfirmedGuestCountIncreasesAfterClickYes" />
-        <item itemvalue="JUnit.GuestsPageTest" />
       </list>
     </recent_temporary>
   </component>

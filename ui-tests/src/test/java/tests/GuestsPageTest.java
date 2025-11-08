@@ -143,6 +143,24 @@ public class GuestsPageTest extends BaseTest {
         Assertions.assertTrue(driver.getCurrentUrl().contains("/guests/new"), "The form was sent despite the last name field being empty!");
     }
 
+    @Test
+    public void testEmptyCategoryValidation() throws InterruptedException {
+
+        guestsPage.clickAddGuestButton();
+        wait.until(ExpectedConditions.urlContains("/guests/new"));
+
+        driver.findElement(By.id("firstName")).sendKeys("Jan");
+        driver.findElement(By.id("lastName")).sendKeys("Kowalski");
+        driver.findElement(By.id("contact")).sendKeys("123 123 123");
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+        Thread.sleep(1000);
+
+        WebElement categorySelect = driver.findElement(By.id("category"));
+        String validationMessage = categorySelect.getAttribute("validationMessage");
+
+        Assertions.assertFalse(validationMessage.isEmpty(), "No validation for empty category!");
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/guests/new"), "The form was sent despite the category field being empty!");
+    }
 
     @AfterEach
     public void cleanup() {
