@@ -162,6 +162,26 @@ public class GuestsPageTest extends BaseTest {
         Assertions.assertTrue(driver.getCurrentUrl().contains("/guests/new"), "The form was sent despite the category field being empty!");
     }
 
+    @Test
+    public void testEmptyPhoneValidation() throws InterruptedException {
+
+        guestsPage.clickAddGuestButton();
+        wait.until(ExpectedConditions.urlContains("/guests/new"));
+
+        driver.findElement(By.id("firstName")).sendKeys("Jan");
+        driver.findElement(By.id("lastName")).sendKeys("Kowalski");
+        new Select(driver.findElement(By.id("category"))).selectByValue("FRIENDS");
+        driver.findElement(By.id("contact")).clear();
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+        Thread.sleep(1000);
+
+        WebElement phoneInput = driver.findElement(By.id("contact"));
+        String validationMessage = phoneInput.getAttribute("validationMessage");
+
+        Assertions.assertFalse(validationMessage.isEmpty(), "No validation for empty phone number!");
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/guests/new"), "The form was sent despite the phone number field being empty!");
+    }
+
     @AfterEach
     public void cleanup() {
         try {
