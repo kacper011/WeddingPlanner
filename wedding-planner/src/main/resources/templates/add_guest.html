@@ -269,10 +269,13 @@
                 </div>
 
                 <div class="form-group mb-3">
-                    <label class="form-label" for="contact">Numer Telefonu</label>
+                    <label class="form-label" for="contact">Numer telefonu</label>
                     <input class="form-control" id="contact" name="contact"
-                           placeholder="Numer telefonu musi mieć format xxx xxx xxx"
-                           type="text" th:field="*{contact}" required>
+                           placeholder="Numer telefonu: 123 456 789"
+                           type="text" th:field="*{contact}" required
+                           pattern="\d{3} \d{3} \d{3}"
+                           oninvalid="this.setCustomValidity('Wprowadź prawidłowy numer telefonu w formacie: 123 456 789.')"
+                           oninput="this.setCustomValidity('')">
                 </div>
 
                 <div class="form-group mb-3">
