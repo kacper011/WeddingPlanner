@@ -292,6 +292,7 @@ textarea.form-control {
                 <th>#</th>
                 <th>Nazwisko</th>
                 <th>Imię</th>
+                <th>Kategoria</th>
                 <th>Obecność</th>
                 <th>Kontakt</th>
                 <th>Akcje</th>
@@ -300,10 +301,11 @@ textarea.form-control {
             <tbody>
             <tr th:each="guest, iter : ${guests}"
                 th:class="${guest.attendanceConfirmation == 'YES'} ? 'table-success' :
-              (${guest.attendanceConfirmation == 'NO'} ? 'table-danger' : '')">
+                  (${guest.attendanceConfirmation == 'NO'} ? 'table-danger' : '')">
                 <td th:text="${iter.count}"></td>
                 <td th:text="${guest.lastName}"></td>
                 <td th:text="${guest.firstName}"></td>
+                <td th:text="${guest.category.displayName}"></td>
                 <td>
                     <div class="d-flex flex-column flex-md-row gap-1 justify-content-center">
                         <form th:action="@{/guests/updatePresence/{id}(id=${guest.id})}" method="post">
