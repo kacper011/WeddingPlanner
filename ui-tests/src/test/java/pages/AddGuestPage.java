@@ -2,7 +2,6 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
 public class AddGuestPage {
@@ -42,8 +41,7 @@ public class AddGuestPage {
         driver.findElement(By.cssSelector("button[type='submit']")).click();
     }
 
-    public String getValidationMessageForField(String fieldId) {
-        WebElement input = driver.findElement(By.id(fieldId));
-        return input.getAttribute("validationMessage");
+    public String getValidationMessage(String fieldId) {
+        return driver.findElement(By.id(fieldId)).getAttribute("validationMessage");
     }
 }
