@@ -14,6 +14,7 @@ import pages.LoginPage;
 import utils.BaseTest;
 
 import java.time.Duration;
+import java.util.List;
 
 public class GuestsPageTest extends BaseTest {
 
@@ -75,6 +76,27 @@ public class GuestsPageTest extends BaseTest {
         int updatedCount = Integer.parseInt(driver.findElement(By.xpath("//h5[contains(text(), 'Potwierdzeni')]/following-sibling::h3")).getText());
 
         Assertions.assertEquals(initialCount + 1, updatedCount, "Confirmed guests count did not increase after clicking YES!");
+    }
+
+    @Test
+    public void testFilterGuestsByFriendsCategory() {
+
+        WebElement categorySelect = driver.findElement(By.name("category"));
+        Select select = new Select(categorySelect);
+        select.selectByValue("FRIENDS");
+
+        driver.findElement(By.cssSelector("button.btn.btn-primary")).click();
+
+        wait.until(ExpectedConditions.urlContains("category=FRIENDS"));
+
+        List<WebElement> rows = driver.findElements(By.cssSelector("table tbody tr"));
+
+        Assertions.assertFalse(rows.isEmpty(), "No guests found after filtering!");
+
+        for (WebElement row : rows) {
+            String categoryText = row.findElement(By.cssSelector("td:nth-child(4)")).getText().trim();
+            Assertions.assertEquals("Znajomi", categoryText, "Guest category does not match 'Znajomi'!");
+        }
     }
 
     @Test
