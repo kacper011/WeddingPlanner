@@ -7,6 +7,7 @@
     <list default="true" id="a86a0876-701e-4e35-88a7-eb2cda54cdda" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/tests/RegisterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/tests/RegisterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/tests/RegisterTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/tests/RegisterTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +48,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
   }
 }</component>
-  <component name="RunManager" selected="JUnit.RegisterTest.testInvalidEmailValidation">
+  <component name="RunManager" selected="JUnit.RegisterTest.testEmailWithoutDomainValidation">
     <configuration name="GuestsPageTest.testEmptyCategoryValidation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ui-tests" />
       <extension name="coverage">
@@ -59,22 +60,6 @@
       <option name="PACKAGE_NAME" value="tests" />
       <option name="MAIN_CLASS_NAME" value="tests.GuestsPageTest" />
       <option name="METHOD_NAME" value="testEmptyCategoryValidation" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="GuestsPageTest.testEmptyFirstNameValidation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ui-tests" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="tests.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="tests" />
-      <option name="MAIN_CLASS_NAME" value="tests.GuestsPageTest" />
-      <option name="METHOD_NAME" value="testEmptyFirstNameValidation" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -112,6 +97,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="RegisterTest.testEmailWithoutDomainValidation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ui-tests" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="tests" />
+      <option name="MAIN_CLASS_NAME" value="tests.RegisterTest" />
+      <option name="METHOD_NAME" value="testEmailWithoutDomainValidation" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="RegisterTest.testInvalidEmailValidation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ui-tests" />
       <extension name="coverage">
@@ -130,11 +131,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.RegisterTest.testEmailWithoutDomainValidation" />
         <item itemvalue="JUnit.RegisterTest.testInvalidEmailValidation" />
         <item itemvalue="JUnit.GuestsPageTest.testInvalidPhoneFormatValidation" />
         <item itemvalue="JUnit.GuestsPageTest.testEmptyPhoneValidation" />
         <item itemvalue="JUnit.GuestsPageTest.testEmptyCategoryValidation" />
-        <item itemvalue="JUnit.GuestsPageTest.testEmptyFirstNameValidation" />
       </list>
     </recent_temporary>
   </component>

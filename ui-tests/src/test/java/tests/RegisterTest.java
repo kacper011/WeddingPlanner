@@ -66,7 +66,7 @@ public class RegisterTest extends BaseTest {
         RegisterPage registerPage = new RegisterPage(driver);
 
         registerPage.enterFirstName("Jan");
-        registerPage.enterEmail("invallidEmailWithoutAt");
+        registerPage.enterEmail("invalidEmailWithoutAt");
         registerPage.enterPassword("Test1234");
         registerPage.clickRegister();
 
@@ -86,6 +86,37 @@ public class RegisterTest extends BaseTest {
                 "Validation message does not mention email format! Got: " + validationMessage);
 
         Assertions.assertTrue(driver.getCurrentUrl().contains("/register") ,
+                "The form was sent despite invalid email format!");
+    }
+
+    @Test
+    public void testEmailWithoutDomainValidation() {
+        RegisterPage registerPage = new RegisterPage(driver);
+
+        registerPage.enterFirstName("Jan");
+        registerPage.enterEmail("testemail@");
+        registerPage.enterPassword("Test1234");
+        registerPage.clickRegister();
+
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        WebElement emailInput = driver.findElement(By.id("email"));
+        String validationMessage = emailInput.getAttribute("validationMessage");
+
+        Assertions.assertFalse(validationMessage.isEmpty(),
+                "HTML5 validation did not trigger for email missing domain!");
+
+        Assertions.assertTrue(
+                validationMessage.toLowerCase().contains("email") ||
+                        validationMessage.toLowerCase().contains("@"),
+                "Validation message does not mention email format! Got: " + validationMessage
+        );
+
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/register"),
                 "The form was sent despite invalid email format!");
     }
 
