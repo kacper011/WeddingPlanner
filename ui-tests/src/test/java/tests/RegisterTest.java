@@ -62,6 +62,34 @@ public class RegisterTest extends BaseTest {
     }
 
     @Test
+    public void testInvalidEmailValidation() {
+        RegisterPage registerPage = new RegisterPage(driver);
+
+        registerPage.enterFirstName("Jan");
+        registerPage.enterEmail("invallidEmailWithoutAt");
+        registerPage.enterPassword("Test1234");
+        registerPage.clickRegister();
+
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        WebElement emailInput = driver.findElement(By.id("email"));
+        String validationMessage = emailInput.getAttribute("validationMessage");
+
+        Assertions.assertFalse(validationMessage.isEmpty(), "HTML5 validation did not trigger for invalid email format!");
+
+        Assertions.assertTrue(validationMessage.toLowerCase().contains("email") ||
+                validationMessage.toLowerCase().contains("@"),
+                "Validation message does not mention email format! Got: " + validationMessage);
+
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/register") ,
+                "The form was sent despite invalid email format!");
+    }
+
+    @Test
     public void testEmptyPasswordValidation() {
         RegisterPage registerPage = new RegisterPage(driver);
 
