@@ -123,6 +123,22 @@ public class GuestsPageTest extends BaseTest {
         }
     }
 
+    @Test
+    public void testSearchGuestNoResults() {
+
+        String searchLastName = "NonExistentSurname123";
+
+        WebElement searchInput = driver.findElement(By.name("lastName"));
+        searchInput.click();
+        searchInput.sendKeys(searchLastName);
+        driver.findElement(By.cssSelector("button.btn.btn-search")).click();
+
+        wait.until(ExpectedConditions.urlContains("/guests/search"));
+
+        List<WebElement> rows = driver.findElements(By.cssSelector("table tbody tr"));
+        Assertions.assertTrue(rows.isEmpty(), "Expected no results, but some guests were found!");
+    }
+
     @AfterEach
     public void cleanup() {
         try {
