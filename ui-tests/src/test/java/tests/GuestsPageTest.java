@@ -99,6 +99,30 @@ public class GuestsPageTest extends BaseTest {
         }
     }
 
+    @Test
+    public void testSearchGuestByLastName() {
+
+        String searchLastName = "Szabat";
+
+        WebElement searchInput = driver.findElement(By.name("lastName"));
+        searchInput.click();
+        searchInput.sendKeys(searchLastName);
+
+        driver.findElement(By.cssSelector("button.btn.btn-search")).click();
+
+        wait.until(ExpectedConditions.urlContains("/guests/search"));
+
+        List<WebElement> rows = driver.findElements(By.cssSelector("table tbody tr"));
+
+        Assertions.assertFalse(rows.isEmpty(), "No guests found after search!");
+
+        for (WebElement row : rows) {
+            String lastName = row.findElement(By.cssSelector("td:nth-child(2)")).getText().trim();
+            Assertions.assertTrue(lastName.toLowerCase().contains(searchLastName.toLowerCase()),
+                    "Found guest with unexpected last name: " + lastName);
+        }
+    }
+
     @AfterEach
     public void cleanup() {
         try {
