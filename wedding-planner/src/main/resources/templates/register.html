@@ -35,6 +35,46 @@
             transform: translateY(-3px);
         }
 
+        .password-row {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .password-row input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 15px;
+            background-color: #fef8f8;
+            transition: all 0.25s ease;
+        }
+
+        .toggle-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background-color: #f4c2c2;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .toggle-btn:hover {
+            background-color: #e8a1a1;
+        }
+
+        .toggle-btn:active {
+            transform: scale(0.95);
+        }
+
         h1 {
             text-align: center;
             margin-bottom: 24px;
@@ -146,12 +186,18 @@
 
         <div class="form-group">
             <label for="password">Hasło:</label>
-            <input type="password" id="password" th:field="*{password}" required>
+            <div class="password-row">
+                <input type="password" id="password" th:field="*{password}" required>
+                <button type="button" class="toggle-btn" onclick="togglePassword('password', this)">👁️</button>
+            </div>
         </div>
 
         <div class="form-group">
             <label for="confirmPassword">Powtórz hasło:</label>
-            <input type="password" id="confirmPassword" th:field="*{confirmPassword}" required>
+            <div class="password-row">
+                <input type="password" id="confirmPassword" th:field="*{confirmPassword}" required>
+                <button type="button" class="toggle-btn" onclick="togglePassword('confirmPassword', this)">👁️</button>
+            </div>
         </div>
 
         <button type="submit">Zarejestruj</button>
@@ -163,5 +209,19 @@
 
     <div class="error-box" id="error" th:if="${error}" th:text="${error}"></div>
 </div>
+
+<script>
+    function togglePassword(inputId, button) {
+        const input = document.getElementById(inputId);
+        if (input.type === "password") {
+            input.type = "text";
+            button.textContent = "🙈";
+        } else {
+            input.type = "password";
+            button.textContent = "👁️";
+        }
+    }
+</script>
+
 </body>
 </html>
