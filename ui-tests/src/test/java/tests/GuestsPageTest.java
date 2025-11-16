@@ -139,6 +139,43 @@ public class GuestsPageTest extends BaseTest {
         Assertions.assertTrue(rows.isEmpty(), "Expected no results, but some guests were found!");
     }
 
+    @Test
+    public void testDeleteGuest() {
+
+        guestsPage.clickAddGuestButton();
+        wait.until(ExpectedConditions.urlContains("/guests/new"));
+
+        String uniqueLastName = "DeleteTest" + System.currentTimeMillis();
+
+        driver.findElement(By.id("firstName")).sendKeys("Testname");
+        driver.findElement(By.id("lastName")).sendKeys(uniqueLastName);
+        new Select(driver.findElement(By.id("category"))).selectByValue("FRIENDS");
+        driver.findElement(By.id("contact")).sendKeys("123 123 123");
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+
+        wait.until(ExpectedConditions.urlContains("/guests"));
+
+        Assertions.assertTrue(driver.getPageSource().contains(uniqueLastName),
+                "Added guest not found before deletion!");
+
+        List<WebElement> rows = driver.findElements(By.cssSelector("#guestsTable tbody tr"));
+        WebElement rowToDelete = rows.stream()
+                .filter(r -> r.getText().contains(uniqueLastName))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Guest row not found!"));
+
+        rowToDelete.findElement(By.xpath(".//form[contains(@action,'delete')]//button")).click();
+
+        wait.until(ExpectedConditions.invisibilityOf(rowToDelete));
+
+        wait.until(ExpectedConditions.urlContains("/guests"));
+
+        String pageAfterDelete = driver.getPageSource();
+        Assertions.assertFalse(pageAfterDelete.contains(uniqueLastName),
+                "Guest still visible after deletion!");
+    }
+
+
     @AfterEach
     public void cleanup() {
         try {
