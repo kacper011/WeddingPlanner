@@ -133,7 +133,7 @@
 <body>
 <div class="login-container">
     <h1>Rejestracja</h1>
-    <form th:action="@{/register}" method="post" th:object="${userDto}">
+    <form th:action="@{/register}" method="post" th:object="${registrationDto}">
         <div class="form-group">
             <label for="firstName">Imię:</label>
             <input type="text" id="firstName" th:field="*{firstName}" required>
@@ -146,9 +146,12 @@
 
         <div class="form-group">
             <label for="password">Hasło:</label>
-            <input type="password" id="password" name="password" required
-                   oninvalid="this.setCustomValidity('Please enter your password.')"
-                   oninput="this.setCustomValidity('')">
+            <input type="password" id="password" th:field="*{password}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="confirmPassword">Powtórz hasło:</label>
+            <input type="password" id="confirmPassword" th:field="*{confirmPassword}" required>
         </div>
 
         <button type="submit">Zarejestruj</button>
