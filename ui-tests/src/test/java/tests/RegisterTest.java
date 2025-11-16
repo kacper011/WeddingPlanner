@@ -148,4 +148,24 @@ public class RegisterTest extends BaseTest {
         Assertions.assertTrue(driver.getCurrentUrl().contains("/register"),
                 "The form was sent despite an empty password field!");
     }
+
+    @Test
+    public void testPasswordMismatchShowsError() {
+
+        RegisterPage registerPage = new RegisterPage(driver);
+
+        registerPage.enterFirstName("Jan");
+        registerPage.enterEmail("jan" + System.currentTimeMillis() + "@example.com");
+        registerPage.enterPassword("Test1234");
+        registerPage.enterConfirmPassword("Wrong1234");
+        registerPage.clickRegister();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("error")));
+
+        Assertions.assertTrue(registerPage.isErrorVisible(),
+                "Error message for password mismatch not visible");
+        Assertions.assertTrue(registerPage.getErrorMessage().toLowerCase().contains("password"),
+                "Unexpected error message text: " + registerPage.getErrorMessage());
+    }
 }
