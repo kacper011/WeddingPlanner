@@ -175,6 +175,26 @@ public class GuestsPageTest extends BaseTest {
                 "Guest still visible after deletion!");
     }
 
+    @Test
+    public void testExportPDFDoesNotReturnErrorPage() throws InterruptedException{
+
+        WebElement pdfLink = driver.findElement(By.cssSelector("a[href='/guests/export/pdf']"));
+        pdfLink.click();
+
+        Thread.sleep(1000);
+
+        String pageSource = driver.getPageSource();
+
+        Assertions.assertFalse(pageSource.contains("Whitelabel Error Page"),
+                "PDF export returned an error page!");
+
+        Assertions.assertFalse(pageSource.contains("Error 404"),
+                "PDF endpoint returned 404!");
+
+        Assertions.assertFalse(pageSource.contains("Error 500"),
+                "PDF export returned 500!");
+    }
+
 
     @AfterEach
     public void cleanup() {
