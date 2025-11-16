@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="a86a0876-701e-4e35-88a7-eb2cda54cdda" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/pages/RegisterPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/pages/RegisterPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/tests/RegisterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/tests/RegisterTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,26 +44,11 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "D:/Materiał z kursu/Java/Wedding Planner/wedding-planner",
+    "last_opened_file_path": "D:/Materiał z kursu/Java/Wedding Planner/ui-tests",
     "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.GuestsPageTest.testExportPDFDoesNotReturnErrorPage">
-    <configuration name="AddGuestTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ui-tests" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="tests.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="tests" />
-      <option name="MAIN_CLASS_NAME" value="tests.AddGuestTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.RegisterTest">
     <configuration name="GuestsPageTest.testDeleteGuest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ui-tests" />
       <extension name="coverage">
@@ -94,22 +81,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GuestsPageTest.testSearchGuestByLastName" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ui-tests" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="tests.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="tests" />
-      <option name="MAIN_CLASS_NAME" value="tests.GuestsPageTest" />
-      <option name="METHOD_NAME" value="testSearchGuestByLastName" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="GuestsPageTest.testSearchGuestNoResults" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ui-tests" />
       <extension name="coverage">
@@ -126,13 +97,44 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="RegisterTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ui-tests" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="tests" />
+      <option name="MAIN_CLASS_NAME" value="tests.RegisterTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RegisterTest.testAllRegisterElementsAreVisible" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ui-tests" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="tests" />
+      <option name="MAIN_CLASS_NAME" value="tests.RegisterTest" />
+      <option name="METHOD_NAME" value="testAllRegisterElementsAreVisible" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.RegisterTest" />
+        <item itemvalue="JUnit.RegisterTest.testAllRegisterElementsAreVisible" />
         <item itemvalue="JUnit.GuestsPageTest.testExportPDFDoesNotReturnErrorPage" />
         <item itemvalue="JUnit.GuestsPageTest.testDeleteGuest" />
         <item itemvalue="JUnit.GuestsPageTest.testSearchGuestNoResults" />
-        <item itemvalue="JUnit.GuestsPageTest.testSearchGuestByLastName" />
-        <item itemvalue="JUnit.AddGuestTest" />
       </list>
     </recent_temporary>
   </component>

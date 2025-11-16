@@ -29,6 +29,7 @@ public class RegisterTest extends BaseTest {
         registerPage.enterFirstName("Jan");
         registerPage.enterEmail(email);
         registerPage.enterPassword("Test1234");
+        registerPage.enterConfirmPassword("Test1234");
         registerPage.clickRegister();
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
@@ -51,6 +52,7 @@ public class RegisterTest extends BaseTest {
         registerPage.enterFirstName("Jan");
         registerPage.enterEmail("test@test.com");
         registerPage.enterPassword("Test1234");
+        registerPage.enterConfirmPassword("Test1234");
         registerPage.clickRegister();
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
@@ -68,6 +70,7 @@ public class RegisterTest extends BaseTest {
         registerPage.enterFirstName("Jan");
         registerPage.enterEmail("invalidEmailWithoutAt");
         registerPage.enterPassword("Test1234");
+        registerPage.enterConfirmPassword("Test1234");
         registerPage.clickRegister();
 
         try {
@@ -96,6 +99,7 @@ public class RegisterTest extends BaseTest {
         registerPage.enterFirstName("Jan");
         registerPage.enterEmail("testemail@");
         registerPage.enterPassword("Test1234");
+        registerPage.enterConfirmPassword("Test1234");
         registerPage.clickRegister();
 
         try {
@@ -127,6 +131,7 @@ public class RegisterTest extends BaseTest {
         registerPage.enterFirstName("Jan");
         registerPage.enterEmail("test" + System.currentTimeMillis() + "@example.com");
         registerPage.enterPassword("");
+        registerPage.enterConfirmPassword("");
         registerPage.clickRegister();
 
         try {

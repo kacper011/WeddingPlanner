@@ -2,6 +2,10 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class RegisterPage {
     private WebDriver driver;
@@ -9,6 +13,7 @@ public class RegisterPage {
     private By firstNameInput = By.id("firstName");
     private By emailInput = By.id("email");
     private By passwordInput = By.id("password");
+    private By confirmPasswordInput = By.id("confirmPassword");
     private By registerButton = By.cssSelector("button[type='submit']");
     private By errorMsg = By.id("error");
 
@@ -29,6 +34,11 @@ public class RegisterPage {
         driver.findElement(passwordInput).sendKeys(password);
     }
 
+    public void enterConfirmPassword(String confirmPassword) {
+        driver.findElement(confirmPasswordInput).sendKeys(confirmPassword);
+    }
+
+
     public void clickRegister() {
         driver.findElement(registerButton).click();
     }
@@ -42,9 +52,16 @@ public class RegisterPage {
     }
 
     public boolean areAllElementsVisible() {
-        return driver.findElement(firstNameInput).isDisplayed()
-                && driver.findElement(emailInput).isDisplayed()
-                && driver.findElement(passwordInput).isDisplayed()
-                && driver.findElement(registerButton).isDisplayed();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(firstNameInput));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(emailInput));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(passwordInput));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(confirmPasswordInput));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(registerButton));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
