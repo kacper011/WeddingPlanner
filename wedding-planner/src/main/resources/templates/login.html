@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Logowanie</title>
-  <style>
+    <meta charset="UTF-8">
+    <title>Logowanie</title>
+    <style>
         @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap');
 
         body {
@@ -42,27 +42,67 @@
         }
 
         input[type="email"],
-        input[type="password"] {
-          width: 100%;
-          padding: 12px;
-          margin: 0 0 20px 0;
-          border: 1px solid #e3c5d8;
-          border-radius: 12px;
-          font-size: 15px;
-          background-color: #fef7fb;
-          transition: box-shadow 0.2s ease-in-out;
-          box-sizing: border-box;
+        input[type="password"],
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin: 0;
+            border: 1px solid #e3c5d8;
+            border-radius: 12px;
+            font-size: 15px;
+            background-color: #fef7fb;
+            transition: box-shadow 0.2s ease-in-out;
+            box-sizing: border-box;
         }
 
         input:focus {
             border-color: #d291bc;
             outline: none;
-            box-shadow: 0 0 0 3px rgba(210, 145, 188, 0.3);
+            box-shadow: 0 0 0 3px rgba(210, 145, 188, 0.18);
         }
 
-        button {
+        .password-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .password-row input {
+            flex: 1;
+            margin: 0;
+        }
+
+        .toggle-btn {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            border: none;
+            background-color: #f4c2c2;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            transition: background-color 0.15s ease, transform 0.08s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+
+        .toggle-btn:hover {
+            background-color: #e8a1a1;
+        }
+
+        .toggle-btn:active {
+            transform: scale(0.96);
+        }
+
+        .submit-btn {
             width: 100%;
             padding: 12px;
+            margin-top: 14px;
             background-color: #d291bc;
             border: none;
             border-radius: 12px;
@@ -73,7 +113,7 @@
             transition: background-color 0.3s ease;
         }
 
-        button:hover {
+        .submit-btn:hover {
             background-color: #c173a5;
         }
 
@@ -93,32 +133,60 @@
         .footer a:hover {
             text-decoration: underline;
         }
+
+        @media (max-width: 420px) {
+            .password-row { gap: 8px; }
+            .toggle-btn { width: 36px; height: 36px; min-width: 36px; font-size: 14px; border-radius: 8px; }
+        }
+
+
     </style>
 </head>
 <body>
 <div class="login-container">
-  <h1>Wedding Planner</h1>
+    <h1>Wedding Planner</h1>
 
-  <div th:if="${param.error}" class="alert alert-danger" style="color: red; text-align: center; margin-bottom: 15px;">
-    Incorrect login or password. Please try again.
-  </div>
+    <div th:if="${param.error}" class="alert alert-danger" style="color: red; text-align: center; margin-bottom: 15px;">
+        Incorrect login or password. Please try again.
+    </div>
 
-  <form action="/login" method="post">
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="username" required
-           oninvalid="this.setCustomValidity('Please enter a valid email address with an @ symbol.')"
-           oninput="setCustomValidity('')">
+    <form action="/login" method="post">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="username" required
+               oninvalid="this.setCustomValidity('Please enter a valid email address with an @ symbol.')"
+               oninput="setCustomValidity('')">
 
-    <label for="password">Hasło:</label>
-    <input type="password" id="password" name="password" required
-           oninvalid="this.setCustomValidity('Please enter your password.')"
-           oninput="this.setCustomValidity('')">
+        <label for="password">Hasło:</label>
+        <div class="password-row">
+            <input type="password" id="password" name="password" required
+                   oninvalid="this.setCustomValidity('Please enter your password.')"
+                   oninput="this.setCustomValidity('')">
+            <button type="button" class="toggle-btn" onclick="togglePassword('password', this)"
+                    aria-label="Pokaż/Ukryj hasło">👁️
+            </button>
+        </div>
 
-    <button type="submit">Zaloguj się</button>
-  </form>
-  <div class="footer">
-    Nie masz konta? <a th:href="@{/register}">Zarejestruj się</a>
-  </div>
+        <button type="submit" class="submit-btn">Zaloguj się</button>
+    </form>
+    <div class="footer">
+        Nie masz konta? <a th:href="@{/register}">Zarejestruj się</a>
+    </div>
 </div>
+
+<script>
+    function togglePassword(inputId, button) {
+        const input = document.getElementById(inputId);
+        if (!input) return;
+        if (input.type === "password") {
+            input.type = "text";
+            button.textContent = "🙈";
+        } else {
+            input.type = "password";
+            button.textContent = "👁️";
+        }
+    }
+
+
+</script>
 </body>
 </html>
