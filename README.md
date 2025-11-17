@@ -63,8 +63,8 @@ Wedding Planner is a comprehensive web application designed to help engaged coup
 ## 📸 Screenshots
 
 ### 🔐 Login & Registration
-![Login](screenshots/login.png)
-![Registration](screenshots/registration.png)
+![Login](screenshots/login2.png)
+![Registration](screenshots/registration2.png)
 
 ---
 
