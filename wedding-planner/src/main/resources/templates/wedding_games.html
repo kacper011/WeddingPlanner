@@ -123,20 +123,29 @@
         <li class="nav-item"><a class="nav-link active" th:href="@{/wedding_games}">Zabawy</a></li>
       </ul>
 
-      <form class="d-flex me-3" method="get" th:action="@{/guests/search}">
-        <input class="form-control me-2" name="nazwisko" placeholder="Wyszukaj po nazwisku">
-        <button class="btn btn-search" type="submit">Szukaj</button>
-      </form>
-
       <ul class="navbar-nav mb-2 mb-lg-0">
-        <li class="nav-item">
-          <span class="nav-link" sec:authorize="isAuthenticated()">Cześć, <span th:text="${#authentication.principal.firstName}"></span></span>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userMenu"
+             role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="me-2">👤</span>
+            <span sec:authorize="isAuthenticated()" th:text="${#authentication.principal.firstName}"></span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+            <li>
+              <a class="dropdown-item" th:href="@{/account}">
+                ⚙️ Ustawienia
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <form th:action="@{/logout}" method="post" class="d-inline">
+                <button class="dropdown-item text-danger">🚪 Wyloguj</button>
+              </form>
+            </li>
+          </ul>
         </li>
-        <li class="nav-item">
-          <form th:action="@{/logout}" method="post" class="d-inline">
-            <button class="btn btn-outline-danger">Wyloguj</button>
-          </form>
-        </li>
+
       </ul>
     </div>
   </div>
