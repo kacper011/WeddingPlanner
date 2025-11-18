@@ -7,4 +7,6 @@ public interface UserService {
     void registerUser(String email, String password, String firstName);
 
     User findByEmail(String email);
+
+    void changePassword(User user, String oldPassword, String newPassword, String confirmPassword);
 }

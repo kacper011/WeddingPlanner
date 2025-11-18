@@ -43,4 +43,19 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(email));
     }
+
+    @Override
+    public void changePassword(User user, String oldPassword, String newPassword, String confirmPassword) {
+
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new IllegalArgumentException("Stare hasło jest nieprawidłowe.");
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            throw new IllegalArgumentException("Nowe hasła nie są takie same.");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
 }
