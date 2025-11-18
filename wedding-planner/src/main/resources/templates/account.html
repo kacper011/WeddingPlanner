@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Moje konto</title>
+
+  <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap');
+
+        body {
+            background: linear-gradient(145deg, #fff0f6, #f0f9ff);
+            font-family: 'Open Sans', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 420px;
+            border: 2px solid #f7d9e3;
+        }
+
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 24px;
+            color: #d291bc;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #6a4e77;
+            font-weight: 600;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #e3c5d8;
+            border-radius: 12px;
+            font-size: 15px;
+            background-color: #fef7fb;
+            transition: box-shadow 0.2s ease-in-out;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            border-color: #d291bc;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(210, 145, 188, 0.3);
+        }
+
+        .toggle-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
+        }
+
+        .toggle-btn:hover {
+            opacity: 1;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #d291bc;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #c173a5;
+        }
+
+        .msg-box {
+            margin-top: 10px;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .msg-success {
+            background-color: #e5ffe8;
+            border: 1px solid #9ad3a2;
+            color: #3c7a49;
+        }
+
+        .msg-error {
+            background-color: #ffe5e5;
+            border: 1px solid #f5b5b5;
+            color: #b22222;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+  <h1>Moje konto</h1>
+
+  <!-- SUKCES -->
+  <div th:if="${success}" class="msg-box msg-success" th:text="${success}"></div>
+
+  <!-- BŁĘDY -->
+  <div th:if="${error}" class="msg-box msg-error" th:text="${error}"></div>
+
+  <form th:action="@{/account/change-password}" th:object="${passwordChangeDto}" method="post">
+
+    <label for="oldPassword">Stare hasło:</label>
+    <div class="input-wrapper">
+      <input type="password" id="oldPassword" th:field="*{oldPassword}" required>
+      <button type="button" class="toggle-btn" onclick="togglePassword('oldPassword', this)">👁️</button>
+    </div>
+
+    <label for="newPassword">Nowe hasło:</label>
+    <div class="input-wrapper">
+      <input type="password" id="newPassword" th:field="*{newPassword}" required>
+      <button type="button" class="toggle-btn" onclick="togglePassword('newPassword', this)">👁️</button>
+    </div>
+
+    <label for="confirmPassword">Powtórz nowe hasło:</label>
+    <div class="input-wrapper">
+      <input type="password" id="confirmPassword" th:field="*{confirmPassword}" required>
+      <button type="button" class="toggle-btn" onclick="togglePassword('confirmPassword', this)">👁️</button>
+    </div>
+
+    <button type="submit">Zmień hasło</button>
+
+  </form>
+
+</div>
+
+<script>
+    function togglePassword(id, btn) {
+        const input = document.getElementById(id);
+        if (input.type === "password") {
+            input.type = "text";
+            btn.textContent = "🙈";
+        } else {
+            input.type = "password";
+            btn.textContent = "👁️";
+        }
+    }
+</script>
+
+</body>
+</html>
