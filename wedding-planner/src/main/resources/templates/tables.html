@@ -153,17 +153,29 @@
                     <a class="nav-link" href="/guests">Powrót do listy</a>
                 </li>
             </ul>
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <span class="nav-link" sec:authorize="isAuthenticated()">
-                        Cześć, <span th:text="${#authentication.principal.firstName}"></span>
-                    </span>
+            <ul class="navbar-nav mb-2 mb-lg-0">
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userMenu"
+                       role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="me-2">👤</span>
+                        <span sec:authorize="isAuthenticated()" th:text="${#authentication.principal.firstName}"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                        <li>
+                            <a class="dropdown-item" th:href="@{/account}">
+                                ⚙️ Ustawienia
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form th:action="@{/logout}" method="post" class="d-inline">
+                                <button class="dropdown-item text-danger">🚪 Wyloguj</button>
+                            </form>
+                        </li>
+                    </ul>
                 </li>
-                <li class="nav-item">
-                    <form th:action="@{/logout}" method="post" style="margin: 0;">
-                        <button type="submit" class="btn btn-outline-danger ms-3">Wyloguj</button>
-                    </form>
-                </li>
+
             </ul>
         </div>
     </div>
@@ -171,7 +183,7 @@
 
 <div class="container">
 
-    <!-- FORMULARZ DODAWANIA STOŁU --><div class="mb-5 p-4 rounded-4 shadow-sm" style="background-color: #fff0f4; border: 1px solid #f3cfcf;">
+ <div class="mb-5 p-4 rounded-4 shadow-sm" style="background-color: #fff0f4; border: 1px solid #f3cfcf;">
     <form th:action="@{/tables/add}" method="post" class="row g-3 align-items-end">
         <div class="col-md-8">
             <label for="tableName" class="form-label" style="font-weight: 600; color: #a65c5c;">Nazwa nowego stołu</label>
@@ -190,14 +202,12 @@
             </button>
         </div>
 
-        <!-- Ukryte pola pozycja X i Y -->
         <input id="posX" name="positionX" type="hidden" value="100" required>
         <input id="posY" name="positionY" type="hidden" value="100" required>
     </form>
 </div>
 
 
-    <!-- FORMULARZ PRZYPISANIA GOŚCIA DO STOŁU -->
     <div class="mb-4">
         <form th:action="@{/tables/assign}" method="post" class="row g-3 align-items-end">
             <div class="col-md-6">
@@ -220,7 +230,6 @@
         </form>
     </div>
 
-    <!-- PLAN SALI -->
     <div id="room-plan" class="room-plan">
         <div th:each="table : ${tables}"
              th:style="'left:' + ${table.positionX} + 'px; top:' + ${table.positionY} + 'px;'"
