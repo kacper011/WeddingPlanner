@@ -9,4 +9,6 @@ public interface UserService {
     User findByEmail(String email);
 
     void changePassword(User user, String oldPassword, String newPassword, String confirmPassword);
+
+    void save(User user);
 }

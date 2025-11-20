@@ -1,6 +1,7 @@
 package com.kacper.wedding_planner.controller;
 
 import com.kacper.wedding_planner.config.CustomUserDetails;
+import com.kacper.wedding_planner.dto.NameChangeDTO;
 import com.kacper.wedding_planner.dto.PasswordChangeDTO;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.service.UserService;
@@ -62,5 +63,34 @@ public class AccountController {
         }
 
         return "account_change_password";
+    }
+
+    @GetMapping("/change-name")
+    public String showChangeNameForm(Model model) {
+        model.addAttribute("nameChangeDto", new NameChangeDTO());
+        return "account_change_name";
+    }
+
+    @PostMapping("/change-name")
+    public String changeName(@ModelAttribute("nameChangeDto") @Valid NameChangeDTO nameChangeDTO,
+                             BindingResult result,
+                             @AuthenticationPrincipal CustomUserDetails principal,
+                             Model model) {
+        if (result.hasErrors()) {
+            return "account_change_name";
+        }
+
+        User user = userService.findByEmail(principal.getUsername());
+
+        try {
+            user.setFirstName(nameChangeDTO.getFirstName());
+            userService.save(user);
+
+            model.addAttribute("success", "Imię zostało zmienione!");
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+        }
+
+        return "account_change_name";
     }
 }
