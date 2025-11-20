@@ -31,13 +31,19 @@ public class AccountController {
         return "account";
     }
 
+    @GetMapping("/change-password")
+    public String showChangePasswordForm(Model model) {
+        model.addAttribute("passwordChangeDto", new PasswordChangeDTO());
+        return "account_change_password";
+    }
+
     @PostMapping("/change-password")
     public String changePassword(@ModelAttribute("passwordChangeDto") @Valid PasswordChangeDTO passwordChangeDTO,
                                  BindingResult result,
                                  @AuthenticationPrincipal CustomUserDetails principal,
                                  Model model) {
         if (result.hasErrors()) {
-            return "account";
+            return "account_change_password";
         }
 
         User user = userService.findByEmail(principal.getUsername());
@@ -55,6 +61,6 @@ public class AccountController {
             model.addAttribute("error", e.getMessage());
         }
 
-        return "account";
+        return "account_change_password";
     }
 }
