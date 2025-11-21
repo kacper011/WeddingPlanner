@@ -8,13 +8,11 @@ import com.kacper.wedding_planner.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/account")
@@ -92,5 +90,34 @@ public class AccountController {
         }
 
         return "account_change_name";
+    }
+
+    @GetMapping("/delete")
+    public String showDeleteAccountPage() {
+        return "account_confirm_delete";
+    }
+
+    @PostMapping("/delete")
+    public String deleteAccount(@AuthenticationPrincipal CustomUserDetails principal,
+                                @RequestParam String password,
+                                @RequestParam String confirmation,
+                                Model model) {
+        User user = userService.findByEmail(principal.getUsername());
+
+        if (!confirmation.equals("USUWAM")) {
+            model.addAttribute("error", "Musisz wpisać dokładnie: USUWAM");
+            return "account_confirm_delete";
+        }
+
+        if (!userService.checkPassword(user, password)) {
+            model.addAttribute("error", "Nieprawidłowe hasło.");
+            return "account_confirm_delete";
+        }
+
+        userService.deleteUser(user);
+
+        SecurityContextHolder.clearContext();
+
+        return "redirect:/login?deleted";
     }
 }
