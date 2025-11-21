@@ -63,4 +63,14 @@ public class UserServiceImpl implements UserService {
     public void save(User user) {
         userRepository.save(user);
     }
+
+    @Override
+    public boolean checkPassword(User user, String rawPassowrd) {
+        return passwordEncoder.matches(rawPassowrd, user.getPassword());
+    }
+
+    @Override
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
 }

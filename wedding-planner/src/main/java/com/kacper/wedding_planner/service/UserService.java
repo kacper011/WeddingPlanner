@@ -11,4 +11,8 @@ public interface UserService {
     void changePassword(User user, String oldPassword, String newPassword, String confirmPassword);
 
     void save(User user);
+
+    boolean checkPassword(User user, String rawPassowrd);
+
+    void deleteUser(User user);
 }
