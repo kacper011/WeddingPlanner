@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Usuń konto</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap');
+
+        body {
+            background: linear-gradient(145deg, #fff0f6, #f0f9ff);
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding-top: 90px;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: #f4d7d7;
+            box-shadow: 0 2px 8px rgba(166, 92, 92, 0.1);
+        }
+
+        .navbar-brand {
+            font-family: 'Great Vibes', cursive;
+            color: #a65c5c !important;
+        }
+
+        .nav-link {
+            font-weight: 600;
+            color: #7c5c5c !important;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #a65c5c !important;
+            background-color: #fce8e8;
+        }
+
+        .account-box {
+            background-color: #fff;
+            padding: 35px 30px;
+            border-radius: 18px;
+            max-width: 500px;
+            margin: 0 auto;
+            border: 2px solid #f7d9e3;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        h1 {
+            font-family: "Great Vibes", cursive;
+            font-size: 40px;
+            margin-bottom: 25px;
+            color: #d291bc;
+        }
+
+        label {
+            font-weight: 600;
+            color: #6a4e77;
+        }
+
+        input {
+            border-radius: 12px !important;
+            background-color: #fef7fb !important;
+            border: 1px solid #e3c5d8 !important;
+        }
+
+        input:focus {
+            border-color: #d291bc !important;
+            box-shadow: 0 0 0 3px rgba(210,145,188,0.3) !important;
+        }
+
+        .btn-danger {
+            background-color: #d55a67 !important;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        .btn-danger:hover {
+            background-color: #c14653 !important;
+        }
+
+        .alert {
+            border-radius: 12px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/guests">Wedding Guest Management</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarContent" aria-controls="navbarContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" th:href="@{/guests/new}">Dodaj gościa</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/guests/countdown}">Odliczanie</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/expenses}">Wydatki</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/events}">Kalendarz</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/wedding_games}">Zabawy</a></li>
+      </ul>
+
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userMenu"
+             role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="me-2">👤</span>
+            <span sec:authorize="isAuthenticated()" th:text="${#authentication.principal.firstName}"></span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+            <li><a class="dropdown-item" th:href="@{/account}">⚙️ Ustawienia</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <form th:action="@{/logout}" method="post" class="d-inline">
+                <button class="dropdown-item text-danger">🚪 Wyloguj</button>
+              </form>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="account-box mt-4">
+  <h1>Usuń konto</h1>
+
+  <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+  <p class="mb-4 fw-bold text-danger">Ta operacja jest nieodwracalna!</p>
+
+  <form th:action="@{/account/delete}" method="post">
+
+    <div class="mb-3 text-start">
+      <label class="form-label">Potwierdź swoje hasło:</label>
+      <input type="password" name="password" class="form-control" required>
+    </div>
+
+    <div class="mb-3 text-start">
+      <label class="form-label">Aby potwierdzić, wpisz dokładnie: <strong>USUWAM</strong></label>
+      <input type="text" name="confirmation" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-danger w-100 mb-3">
+      🗑️ Usuń moje konto na zawsze
+    </button>
+
+    <a class="d-block mt-2" th:href="@{/account}">⏪ Powrót</a>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
