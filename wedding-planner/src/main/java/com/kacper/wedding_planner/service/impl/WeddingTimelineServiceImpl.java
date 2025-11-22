@@ -4,9 +4,10 @@ import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.model.WeddingTimeline;
 import com.kacper.wedding_planner.repository.WeddingTimelineRepository;
 import com.kacper.wedding_planner.service.WeddingTimelineService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class WeddingTimelineServiceImpl implements WeddingTimelineService {
 
     private final WeddingTimelineRepository weddingTimelineRepository;
