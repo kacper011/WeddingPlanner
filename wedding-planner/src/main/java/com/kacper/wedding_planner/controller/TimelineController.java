@@ -10,6 +10,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -32,5 +34,16 @@ public class TimelineController {
         model.addAttribute("timeline", new WeddingTimeline());
 
         return "timeline";
+    }
+
+    @PostMapping
+    public String addTimeline(@ModelAttribute("timeline") WeddingTimeline timeline, @AuthenticationPrincipal CustomUserDetails principal) {
+
+        User user = userService.findByEmail(principal.getUsername());
+        timeline.setUser(user);
+
+        weddingTimelineService.save(timeline);
+
+        return "redirect:/timeline";
     }
 }
