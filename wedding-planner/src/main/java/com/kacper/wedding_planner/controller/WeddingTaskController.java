@@ -5,6 +5,7 @@ import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.model.WeddingTask;
 import com.kacper.wedding_planner.repository.WeddingTaskRepository;
 import com.kacper.wedding_planner.service.UserService;
+import com.kacper.wedding_planner.service.WeddingTaskService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,12 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/checklist")
 public class WeddingTaskController {
 
-    private final WeddingTaskRepository weddingTaskRepository;
+    private final WeddingTaskService weddingTaskService;
     private final UserService userService;
 
 
-    public WeddingTaskController(WeddingTaskRepository weddingTaskRepository, UserService userService) {
-        this.weddingTaskRepository = weddingTaskRepository;
+    public WeddingTaskController(WeddingTaskService weddingTaskService, UserService userService) {
+        this.weddingTaskService = weddingTaskService;
         this.userService = userService;
     }
 
@@ -31,12 +32,9 @@ public class WeddingTaskController {
 
         User user = userService.findByEmail(principal.getUsername());
 
-        model.addAttribute("tasks", taskService.getForUser(user));
-        model.addAttribute("newTask", new WeddingTask()); // new object for input
+        model.addAttribute("tasks", weddingTaskService.getForUser(user));
+        model.addAttribute("newTask", new WeddingTask());
 
         return "checklist";
     }
-
-    @PostMapping("/add")
-    public String addTask(@ModelAttribute WeddingTask task)
 }

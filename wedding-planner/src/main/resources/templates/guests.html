@@ -9,7 +9,6 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap');
 
- /* ============ PODSTAWOWE USTAWIENIA ============ */
 html, body {
     height: 100%;
     margin: 0;
@@ -24,7 +23,6 @@ body {
     flex-direction: column;
 }
 
-/* ============ NAWIGACJA ============ */
 .navbar {
     position: fixed;
     top: 0;
@@ -42,7 +40,7 @@ body {
 .navbar-toggler {
     position: relative;
     z-index: 1100;
-    border: 1px solid red; /* usuń jeśli niepotrzebne */
+    border: 1px solid red;
 }
 
 .navbar-toggler-icon {
@@ -65,7 +63,6 @@ body {
     color: white;
 }
 
-/* ============ KONTEJNER GŁÓWNY ============ */
 .container {
     background: #fff7f7;
     padding: 20px;
@@ -76,13 +73,11 @@ body {
     width: 100%;
 }
 
-/* ============ NAGŁÓWKI ============ */
 h1 {
     color: #a65c5c;
     font-family: 'Great Vibes', cursive;
 }
 
-/* ============ TABELA ============ */
 .table {
     width: 100%;
     table-layout: auto;
@@ -100,7 +95,6 @@ h1 {
     word-break: break-word;
 }
 
-/* ============ PRZYCISKI ============ */
 .btn-success,
 .btn-danger {
     font-size: 0.75rem;
@@ -117,7 +111,6 @@ h1 {
     box-shadow: 0 3px 6px rgba(166, 92, 92, 0.4);
 }
 
-/* ============ FORMULARZE ============ */
 .filter-form {
     background: #fff0f0;
     padding: 10px;
@@ -159,7 +152,6 @@ textarea.form-control {
     min-height: 90px;
 }
 
-/* ============ RESPONSYWNOŚĆ ============ */
 @media (max-width: 576px) {
     .table td,
     .table th {
@@ -213,6 +205,7 @@ textarea.form-control {
                 <li class="nav-item"><a class="nav-link" th:href="@{/expenses}">Wydatki</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/events}">Kalendarz</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/timeline}">Harmonogram</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/checklist}">Checklista</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/wedding_games}">Zabawy</a></li>
             </ul>
 

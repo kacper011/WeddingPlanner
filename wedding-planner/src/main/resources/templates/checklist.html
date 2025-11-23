@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Checklista</title>
+    <meta charset="UTF-8" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap');
+
+      html, body {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+          overflow-x: hidden;
+          font-family: 'Open Sans', sans-serif;
+      }
+
+      body {
+          background-color: #f0f4f8;
+          color: #5a5a5a;
+          display: flex;
+          flex-direction: column;
+      }
+
+      /* === NAVBAR === */
+      .navbar {
+          position: fixed;
+          top: 0;
+          width: 100%;
+          z-index: 1000;
+          background-color: #f4d7d7;
+          box-shadow: 0 2px 8px rgba(166, 92, 92, 0.1);
+      }
+
+      .navbar-brand {
+          font-family: 'Great Vibes', cursive;
+          color: #a65c5c !important;
+      }
+
+      .nav-link {
+          font-weight: 600;
+          color: #7c5c5c !important;
+      }
+
+      .nav-link:hover,
+      .nav-link.active {
+          color: #a65c5c !important;
+          background-color: #fce8e8;
+      }
+
+      /* === CONTAINER === */
+      .container {
+          background: #fff7f7;
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+          color: #333;
+          width: 100%;
+          max-width: 700px;
+          margin-top: 120px;
+          box-sizing: border-box;
+      }
+
+      h1, h2 {
+          font-family: 'Great Vibes', cursive;
+          color: #a65c5c;
+          text-align: center;
+      }
+
+      /* === BUTTONS === */
+      .btn-filter {
+          background-color: #a65c5c;
+          border: none;
+          padding: 8px 18px;
+          font-size: 0.9rem;
+          border-radius: 12px;
+          color: #fff;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+          box-shadow: 0 3px 6px rgba(166, 92, 92, 0.4);
+      }
+
+      .btn-filter:hover {
+          background-color: #8c4b4b;
+      }
+
+      /* === TASK CARD === */
+      .task-card {
+          background: #fff0f0;
+          padding: 12px;
+          border-radius: 12px;
+          margin-bottom: 15px;
+          box-shadow: 0 3px 8px rgba(166, 92, 92, 0.15);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+      }
+
+      .task-text {
+          font-size: 0.95rem;
+          color: #5a5a5a;
+      }
+
+      .task-text.completed {
+          text-decoration: line-through;
+          color: #999;
+      }
+  </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/guests">Wedding Guest Management</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarContent" aria-controls="navbarContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" th:href="@{/guests/new}">Dodaj gościa</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/guests/countdown}">Odliczanie</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/expenses}">Wydatki</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/events}">Kalendarz</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/timeline}">Harmonogram</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/checklist}">Checklista</a></li>
+            </ul>
+
+            <ul class="navbar-nav mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userMenu"
+                       role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="me-2">👤</span>
+                        <span sec:authorize="isAuthenticated()" th:text="${#authentication.principal.firstName}"></span>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                        <li>
+                            <a class="dropdown-item" th:href="@{/account}">⚙️ Ustawienia</a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form th:action="@{/logout}" method="post">
+                                <button class="dropdown-item text-danger">🚪 Wyloguj</button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+    <h1 style="font-size: 2rem;">Dodaj element checklisty</h1>
+
+    <form th:action="@{/checklist}" th:object="${newTask}" method="post"
+          class="p-3 mb-4 shadow-sm" style="background: #fff0f0; border-radius: 12px;">
+
+        <div class="mb-2">
+            <label class="form-label" style="font-size: 0.9rem;">Nazwa zadania</label>
+            <input type="text" class="form-control form-control-sm" th:field="*{name}" placeholder="np. Obrączki, suknia, garnitur..." required />
+        </div>
+
+        <div class="text-end">
+            <button type="submit" class="btn-filter">➕ Dodaj</button>
+        </div>
+    </form>
+
+    <h2 style="font-size: 1.8rem;">Twoja checklista</h2>
+
+    <div th:each="task : ${tasks}">
+
+        <div class="task-card">
+
+            <form th:action="@{/checklist/toggle/{id}(id=${task.id})}" method="post" class="d-flex align-items-center">
+                <input type="checkbox" th:checked="${task.completed}" onchange="this.form.submit()">
+                <span class="ms-3 task-text" th:text="${task.name}"
+                      th:classappend="${task.completed} ? ' completed'"></span>
+            </form>
+
+            <a th:href="@{/checklist/delete/{id}(id=${task.id})}"
+               onclick="return confirm('Usunąć ten element?')"
+               class="btn btn-sm btn-outline-danger">
+                Usuń
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
