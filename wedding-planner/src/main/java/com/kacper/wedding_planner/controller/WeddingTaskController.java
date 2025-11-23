@@ -53,4 +53,13 @@ public class WeddingTaskController {
         weddingTaskService.delete(id);
         return "redirect:/checklist";
     }
+
+    @PostMapping("/toggle/{id}")
+    public String toggle(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails principal) {
+
+        User user = userService.findByEmail(principal.getUsername());
+        weddingTaskService.toggleForUser(id, user);
+
+        return "redirect:/checklist";
+    }
 }

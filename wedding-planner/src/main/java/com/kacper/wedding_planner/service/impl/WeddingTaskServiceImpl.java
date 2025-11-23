@@ -33,9 +33,12 @@ public class WeddingTaskServiceImpl implements WeddingTaskService {
     }
 
     @Override
-    public void toggle(Long id) {
-        WeddingTask weddingTask = weddingTaskRepository.findById(id).orElseThrow();
-        weddingTask.setCompleted(!weddingTask.isCompleted());
-        weddingTaskRepository.save(weddingTask);
+    public void toggleForUser(Long id, User user) {
+        WeddingTask task = weddingTaskRepository.findById(id)
+                .filter(t -> t.getUser().equals(user))
+                .orElseThrow();
+
+        task.setCompleted(!task.isCompleted());
+        weddingTaskRepository.save(task);
     }
 }
