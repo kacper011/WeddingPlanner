@@ -222,8 +222,7 @@ background-color: #fce8e8;
                   type="radio"
                   id="transportYes"
                   th:field="*{transport}"
-                  value="TAK"
-                  th:checked="${guest.transport} == 'TAK'"
+                  value="YES"
           />
           <label class="form-check-label" for="transportYes">TAK</label>
         </div>
@@ -233,8 +232,7 @@ background-color: #fce8e8;
                   type="radio"
                   id="transportNo"
                   th:field="*{transport}"
-                  value="NIE"
-                  th:checked="${guest.transport} == 'NIE'"
+                  value="NO"
           />
           <label class="form-check-label" for="transportNo">NIE</label>
         </div>
@@ -248,8 +246,7 @@ background-color: #fce8e8;
                   type="radio"
                   id="accommodationYes"
                   th:field="*{accommodation}"
-                  value="TAK"
-                  th:checked="${guest.accommodation} == 'TAK'"
+                  value="YES"
           />
           <label class="form-check-label" for="accommodationYes">TAK</label>
         </div>
@@ -259,8 +256,7 @@ background-color: #fce8e8;
                   type="radio"
                   id="accommodationNo"
                   th:field="*{accommodation}"
-                  value="NIE"
-                  th:checked="${guest.accommodation} == 'NIE'"
+                  value="NO"
           />
           <label class="form-check-label" for="accommodationNo">NIE</label>
         </div>
@@ -274,8 +270,7 @@ background-color: #fce8e8;
                   type="radio"
                   id="afterPartyYes"
                   th:field="*{afterParty}"
-                  value="TAK"
-                  th:checked="${guest.afterParty} == 'TAK'"
+                  value="YES"
           />
           <label class="form-check-label" for="afterPartyYes">TAK</label>
         </div>
@@ -285,13 +280,13 @@ background-color: #fce8e8;
                   type="radio"
                   id="afterPartyNo"
                   th:field="*{afterParty}"
-                  value="NIE"
-                  th:checked="${guest.afterParty} == 'NIE'"
+                  value="NO"
           />
           <label class="form-check-label" for="afterPartyNo">NIE</label>
         </div>
       </div>
     </div>
+
 
     <div class="text-center">
       <button type="submit" class="btn btn-primary">Zapisz</button>
