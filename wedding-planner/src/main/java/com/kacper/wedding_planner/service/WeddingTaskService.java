@@ -12,4 +12,6 @@ public interface WeddingTaskService {
     void save(WeddingTask task);
 
     void delete(Long id);
+
+    void toggle(Long id);
 }
