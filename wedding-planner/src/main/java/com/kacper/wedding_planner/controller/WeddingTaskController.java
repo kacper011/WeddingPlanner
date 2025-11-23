@@ -37,4 +37,18 @@ public class WeddingTaskController {
 
         return "checklist";
     }
+
+    @PostMapping
+    public String addTask(@ModelAttribute("newTask") WeddingTask task,
+                          @AuthenticationPrincipal CustomUserDetails principal) {
+
+        User user = userService.findByEmail(principal.getUsername());
+        task.setUser(user);
+
+        weddingTaskService.save(task);
+
+        return "redirect:/checklist";
+    }
+
+    
 }
