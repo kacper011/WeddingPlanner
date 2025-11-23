@@ -1,10 +1,16 @@
 package com.kacper.wedding_planner.controller;
 
+import com.kacper.wedding_planner.config.CustomUserDetails;
+import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.model.WeddingTask;
 import com.kacper.wedding_planner.repository.WeddingTaskRepository;
+import com.kacper.wedding_planner.service.UserService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -12,15 +18,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class WeddingTaskController {
 
     private final WeddingTaskRepository weddingTaskRepository;
+    private final UserService userService;
 
-    public WeddingTaskController(WeddingTaskRepository weddingTaskRepository) {
+
+    public WeddingTaskController(WeddingTaskRepository weddingTaskRepository, UserService userService) {
         this.weddingTaskRepository = weddingTaskRepository;
+        this.userService = userService;
     }
 
     @GetMapping
-    public String checklist(Model model) {
-        model.addAttribute("tasks", weddingTaskRepository.findAll());
-        model.addAttribute("newTask", new WeddingTask());
+    public String showChecklist(@AuthenticationPrincipal CustomUserDetails principal, Model model) {
+
+        User user = userService.findByEmail(principal.getUsername());
+
+        model.addAttribute("tasks", taskService.getForUser(user));
+        model.addAttribute("newTask", new WeddingTask()); // new object for input
+
         return "checklist";
     }
+
+    @PostMapping("/add")
+    public String addTask(@ModelAttribute WeddingTask task)
 }
