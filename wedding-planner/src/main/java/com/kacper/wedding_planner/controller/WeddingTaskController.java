@@ -9,10 +9,7 @@ import com.kacper.wedding_planner.service.WeddingTaskService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/checklist")
@@ -50,5 +47,10 @@ public class WeddingTaskController {
         return "redirect:/checklist";
     }
 
-    
+    @GetMapping("/delete/{id}")
+    public String deleteTask(@PathVariable Long id) {
+
+        weddingTaskService.delete(id);
+        return "redirect:/checklist";
+    }
 }
