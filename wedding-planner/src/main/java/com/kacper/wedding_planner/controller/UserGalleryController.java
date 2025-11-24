@@ -33,8 +33,8 @@ public class UserGalleryController {
     }
 
     @GetMapping
-    public String gallery(@AuthenticationPrincipal UserDetails ud, Model model) {
-        User user = userRepository.findByEmail(ud.getUsername()).orElseThrow();
+    public String gallery(@AuthenticationPrincipal UserDetails principal, Model model) {
+        User user = userRepository.findByEmail(principal.getUsername()).orElseThrow();
 
         List<Photo> photos = photoRepository.findByOwnerId(user.getId());
         photos.sort((a, b) -> b.getUploadedAt().compareTo(a.getUploadedAt()));
@@ -45,8 +45,8 @@ public class UserGalleryController {
 
     @GetMapping("/image/{id}")
     @ResponseBody
-    public Resource serveImage(@PathVariable Long id, @AuthenticationPrincipal UserDetails ud) throws Exception {
-        User user = userRepository.findByEmail(ud.getUsername()).orElseThrow();
+    public Resource serveImage(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal) throws Exception {
+        User user = userRepository.findByEmail(principal.getUsername()).orElseThrow();
         Photo photo = photoRepository.findById(id).orElseThrow();
 
         if (!photo.getOwner().getId().equals(user.getId())) {
