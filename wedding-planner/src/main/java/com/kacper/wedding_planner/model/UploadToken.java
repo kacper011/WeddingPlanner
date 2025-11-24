@@ -31,4 +31,9 @@ public class UploadToken {
     private LocalDateTime expiresAt;
     private Integer maxUses;
     private Integer uses = 0;
+    public boolean isValid() {
+        boolean notExpired = expiresAt == null || LocalDateTime.now().isBefore(expiresAt);
+        boolean underMaxUses = maxUses == null || uses < maxUses;
+        return notExpired && underMaxUses;
+    }
 }
