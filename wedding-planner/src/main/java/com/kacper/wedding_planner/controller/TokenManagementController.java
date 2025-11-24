@@ -45,7 +45,6 @@ public class TokenManagementController {
         return "redirect:/tokens";
     }
 
-    // Unieważnianie tokena
     @PostMapping("/revoke/{id}")
     public String revoke(@AuthenticationPrincipal UserDetails principal, @PathVariable Long id) {
         User user = userRepository.findByEmail(principal.getUsername()).orElseThrow();
