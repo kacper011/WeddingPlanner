@@ -3,15 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Galeria zdjęć</title>
+  <title>Tokeny do galerii</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap');
         body { background-color: #f0f4f8; color: #5a5a5a; font-family: 'Open Sans', sans-serif; }
         h1 { font-family: 'Great Vibes', cursive; color: #a65c5c; margin-top: 100px; text-align: center; }
         .container { max-width: 1000px; margin-top: 20px; }
-        .img-card { border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.2); margin-bottom: 20px; }
-        .img-card img { width: 100%; height: auto; display: block; }
+        .table thead { background-color: #f4d7d7; }
+        .btn-primary { background-color: #a65c5c; border: none; }
     </style>
 </head>
 <body>
@@ -54,16 +53,31 @@
   </div>
 </nav>
 
-<h1>Galeria zdjęć</h1>
+<h1>Tokeny do galerii</h1>
 
 <div class="container">
-  <div class="row">
-    <div class="col-md-4" th:each="photo : ${photos}">
-      <div class="img-card">
-        <img th:src="@{${photo.url}}" th:alt="${photo.filename}">
-      </div>
-    </div>
-  </div>
+  <table class="table table-striped table-bordered">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Token</th>
+      <th>Utworzono</th>
+      <th>Wygaśnie</th>
+      <th>Maks. użyć</th>
+      <th>Aktualne użycia</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="token, iter : ${tokens}">
+      <td th:text="${iter.count}"></td>
+      <td th:text="${token.token}"></td>
+      <td th:text="${#dates.format(token.createdAt,'yyyy-MM-dd HH:mm')}"></td>
+      <td th:text="${#dates.format(token.expiresAt,'yyyy-MM-dd HH:mm')}"></td>
+      <td th:text="${token.maxUses}"></td>
+      <td th:text="${token.uses}"></td>
+    </tr>
+    </tbody>
+  </table>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
