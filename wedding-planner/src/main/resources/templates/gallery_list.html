@@ -56,6 +56,23 @@
 
 <h1>Galeria zdjęć</h1>
 
+<div class="container mb-3 d-flex justify-content-between align-items-center">
+  <form th:action="@{/tokens/create}" method="post">
+    <button type="submit" class="btn btn-success">Utwórz nowy token</button>
+  </form>
+  <a href="/gallery" class="btn btn-outline-primary">Odśwież galerię</a>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-4" th:each="photo : ${photos}">
+      <div class="img-card">
+        <img th:src="@{${photo.url}}" th:alt="${photo.filename}">
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container">
   <div class="row">
     <div class="col-md-4" th:each="photo : ${photos}">

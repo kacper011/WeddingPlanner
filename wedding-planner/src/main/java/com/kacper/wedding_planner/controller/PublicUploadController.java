@@ -27,11 +27,11 @@ public class PublicUploadController {
         Optional<UploadToken> ot = tokenRepository.findByToken(token);
 
         if (ot.isEmpty() || !ot.get().isValid()) {
-            return "public/invalid_token";
+            return "public_invalid_token";
         }
 
         model.addAttribute("token", token);
-        return "public/upload_form";
+        return "public_upload_form";
     }
 
     @PostMapping("/upload/{token}")
@@ -43,7 +43,7 @@ public class PublicUploadController {
         Optional<UploadToken> ot = tokenRepository.findByToken(token);
 
         if (ot.isEmpty() || !ot.get().isValid()) {
-            return "public/invalid_token";
+            return "public_invalid_token";
         }
 
         try {
@@ -53,7 +53,7 @@ public class PublicUploadController {
         } catch (Exception ex) {
             model.addAttribute("error", ex.getMessage());
             model.addAttribute("token", token);
-            return "public/upload_form";
+            return "public_upload_form";
         }
     }
 }

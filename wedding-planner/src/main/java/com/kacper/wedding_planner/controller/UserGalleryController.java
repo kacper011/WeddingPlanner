@@ -40,7 +40,7 @@ public class UserGalleryController {
         photos.sort((a, b) -> b.getUploadedAt().compareTo(a.getUploadedAt()));
         model.addAttribute("photos", photos);
 
-        return "gallery/list";
+        return "gallery_list";
     }
 
     @GetMapping("/image/{id}")

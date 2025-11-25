@@ -32,17 +32,39 @@ public class TokenManagementController {
 
         model.addAttribute("tokens", tokens);
 
-        return "tokens/list";
+        return "tokens_list";
+    }
+
+    @GetMapping("/{id}/show")
+    public String showToken(@AuthenticationPrincipal UserDetails principal,
+                            @PathVariable Long id,
+                            Model model) {
+
+        User user = userRepository.findByEmail(principal.getUsername()).orElseThrow();
+        UploadToken t = tokenRepository.findById(id).orElseThrow();
+
+        if (!t.getOwner().getId().equals(user.getId()))
+            throw new SecurityException("Access denied");
+
+        String publicLink = "http://localhost:8080/public/upload/" + t.getToken();
+
+        model.addAttribute("token", t);
+        model.addAttribute("publicLink", publicLink);
+
+        return "tokens_show";
     }
 
     @PostMapping("/create")
-    public String create(@AuthenticationPrincipal UserDetails principal, @RequestParam(defaultValue = "48") int hours) {
+    public String create(
+            @AuthenticationPrincipal UserDetails principal,
+            @RequestParam(defaultValue = "48") int hours) {
+
         User user = userRepository.findByEmail(principal.getUsername()).orElseThrow();
 
         UploadToken t = UploadToken.createForUser(user, hours);
         tokenRepository.save(t);
 
-        return "redirect:/tokens";
+        return "redirect:/tokens/" + t.getId() + "/show";
     }
 
     @PostMapping("/revoke/{id}")
