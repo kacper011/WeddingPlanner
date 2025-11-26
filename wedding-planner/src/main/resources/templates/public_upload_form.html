@@ -49,8 +49,9 @@
     Prześlij swoje zdjęcie z wesela. Zostanie ono automatycznie dodane do galerii 🥰
   </p>
 
-  <form th:action="@{/public/upload}" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="token" th:value="${token}"/>
+  <form th:action="@{/public/upload/{token}(token=${token})}"
+        method="post"
+        enctype="multipart/form-data">
 
     <div class="mb-3 text-start">
       <label class="form-label">Wybierz zdjęcie:</label>

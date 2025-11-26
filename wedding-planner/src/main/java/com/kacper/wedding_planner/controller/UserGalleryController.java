@@ -7,6 +7,8 @@ import com.kacper.wedding_planner.repository.UserRepository;
 import com.kacper.wedding_planner.service.FileStorageService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -45,7 +47,8 @@ public class UserGalleryController {
 
     @GetMapping("/image/{id}")
     @ResponseBody
-    public Resource serveImage(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal) throws Exception {
+    public ResponseEntity<Resource> serveImage(@PathVariable Long id,
+                                               @AuthenticationPrincipal UserDetails principal) throws Exception {
         User user = userRepository.findByEmail(principal.getUsername()).orElseThrow();
         Photo photo = photoRepository.findById(id).orElseThrow();
 
@@ -53,7 +56,12 @@ public class UserGalleryController {
             throw new SecurityException("Access denied");
         }
 
-        Path path = fileStorage.loadAsPath(photo.getFilename());
-        return new UrlResource(path.toUri());
+        Path path = Path.of(photo.getStoragePath());
+        Resource resource = new UrlResource(path.toUri());
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, photo.getContentType())
+                .body(resource);
     }
+
 }

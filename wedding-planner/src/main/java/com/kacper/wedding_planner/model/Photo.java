@@ -30,4 +30,9 @@ public class Photo {
     private Long size;
     private boolean uploadedByPublic;
     private LocalDateTime uploadedAt = LocalDateTime.now();
+
+    @Transient
+    public String getUrl() {
+        return "/gallery/image/" + this.id;
+    }
 }

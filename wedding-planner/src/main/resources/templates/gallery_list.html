@@ -1,84 +1,80 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Galeria zdjęć</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <style>
-        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap');
 
-body {
-    background-color: #f0f4f8;
-    color: #5a5a5a;
-    font-family: 'Open Sans', sans-serif;
-}
+      body {
+          background-color: #f0f4f8;
+          color: #5a5a5a;
+          font-family: 'Open Sans', sans-serif;
+          padding-top: 80px;
+      }
 
-h1 {
-    font-family: 'Great Vibes', cursive;
-    color: #a65c5c;
-    margin-top: 100px;
-    text-align: center;
-}
+      h1 {
+          font-family: 'Great Vibes', cursive;
+          color: #a65c5c;
+          text-align: center;
+          margin-bottom: 40px;
+      }
 
-.container {
-    max-width: 1000px;
-    margin-top: 20px;
-}
+      .container {
+          max-width: 1000px;
+      }
 
-.img-card {
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    margin-bottom: 20px;
-}
+      .img-card {
+          border-radius: 10px;
+          overflow: hidden;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+          margin-bottom: 20px;
+      }
 
-.img-card img {
-    width: 100%;
-    height: auto;
-    display: block;
-}
+      .img-card img {
+          width: 100%;
+          height: auto;
+          display: block;
+      }
 
-.navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    background-color: #f4d7d7;
-    box-shadow: 0 2px 8px rgba(166, 92, 92, 0.1);
-}
+      .navbar {
+          position: fixed;
+          top: 0;
+          width: 100%;
+          z-index: 1000;
+          background-color: #f4d7d7;
+          box-shadow: 0 2px 8px rgba(166, 92, 92, 0.1);
+      }
 
-.navbar-brand {
-    font-family: 'Great Vibes', cursive;
-    color: #a65c5c !important;
-}
+      .navbar-brand {
+          font-family: 'Great Vibes', cursive;
+          color: #a65c5c !important;
+      }
 
-.navbar-toggler {
-    position: relative;
-    z-index: 1100;
-    border: none;
-}
+      .nav-link {
+          font-weight: 600;
+          color: #7c5c5c !important;
+      }
 
-.navbar-toggler-icon {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(166, 92, 92, 1)' stroke-width='2' stroke-linecap='round' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-}
+      .nav-link:hover,
+      .nav-link.active {
+          color: #a65c5c !important;
+          background-color: #fce8e8;
+      }
 
-.nav-link {
-    font-weight: 600;
-    color: #7c5c5c !important;
-}
-
-.nav-link:hover,
-.nav-link.active {
-    color: #a65c5c !important;
-    background-color: #fce8e8;
-}
-
-    </style>
+      .btn-main {
+          background-color: #a65c5c;
+          color: #fff;
+          border: none;
+      }
+  </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #f4d7d7; position: fixed; width: 100%; top: 0; z-index: 1000;">
+<nav class="navbar navbar-expand-lg navbar-light">
   <div class="container-fluid">
     <a class="navbar-brand" href="/guests">Wedding Guest Management</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
@@ -129,17 +125,7 @@ h1 {
   <div class="row">
     <div class="col-md-4" th:each="photo : ${photos}">
       <div class="img-card">
-        <img th:src="@{${photo.url}}" th:alt="${photo.filename}">
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="container">
-  <div class="row">
-    <div class="col-md-4" th:each="photo : ${photos}">
-      <div class="img-card">
-        <img th:src="@{${photo.url}}" th:alt="${photo.filename}">
+        <img th:src="@{/gallery/image/{id}(id=${photo.id})}" th:alt="${photo.filename}" class="img-fluid">
       </div>
     </div>
   </div>

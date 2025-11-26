@@ -48,7 +48,7 @@ public class PublicUploadController {
 
         try {
             photoService.savePhotoFromUpload(file, ot.get());
-            return "public/upload_success";
+            return "public_upload_success";
 
         } catch (Exception ex) {
             model.addAttribute("error", ex.getMessage());
