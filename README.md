@@ -30,6 +30,16 @@ Wedding Planner is a comprehensive web application designed to help engaged coup
 - 🎉 **Wedding Games**
   - Fun quiz about the bride & groom
   - Choose questions and export quiz to PDF
+- 🕒 Schedule Planner
+  - Add time-based entries such as “Hairdresser – 10:00”.
+  - Events are automatically sorted chronologically to create a clear, ordered wedding schedule.
+- ☑️ Checklist
+  - Create custom tasks like “Buy rings”.
+  - Each item can be marked as completed once done — perfect for tracking wedding preparations.
+- 🖼️ Photo Gallery with Shareable Upload Token
+  - Generate a unique token you can share with friends or family.
+  - Anyone with the link can upload photos through a simple form.
+  - All uploaded images appear directly in the user’s personal gallery.
 
 ---
 
