@@ -40,6 +40,10 @@ Wedding Planner is a comprehensive web application designed to help engaged coup
   - Generate a unique token you can share with friends or family.
   - Anyone with the link can upload photos through a simple form.
   - All uploaded images appear directly in the user’s personal gallery.
+- ⚙️ Settings
+  - Change Password: The user can securely update their password by entering the current password and a new password.
+  - Change Name: The user can update their display name, which appears throughout the app, e.g., in the guest list and notifications.
+  - Delete Account: The user can permanently delete their account along with all associated data. A confirmation step is required to prevent accidental deletion.
 
 ---
 
