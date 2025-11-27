@@ -1,3 +1,7 @@
+app:
+  upload:
+    dir: /app/uploads
+
 spring:
   application:
     name: wedding-planner

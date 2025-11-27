@@ -39,12 +39,13 @@ public class PhotoServiceImpl implements PhotoService {
         String storedRelative = fileStorage.storeFile(file, user.getId());
 
         Photo p = new Photo();
-        p.setFilename(storedRelative);
         p.setFilename(file.getOriginalFilename());
+        p.setStoragePath(storedRelative);
         p.setContentType(contentType);
         p.setSize(file.getSize());
         p.setUploadedAt(LocalDateTime.now());
         p.setOwner(user);
+        p.setUploadedByPublic(true);
 
         return photoRepository.save(p);
     }

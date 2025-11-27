@@ -47,8 +47,7 @@ public class UserGalleryController {
 
     @GetMapping("/image/{id}")
     @ResponseBody
-    public ResponseEntity<Resource> serveImage(@PathVariable Long id,
-                                               @AuthenticationPrincipal UserDetails principal) throws Exception {
+    public Resource serveImage(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal) throws Exception {
         User user = userRepository.findByEmail(principal.getUsername()).orElseThrow();
         Photo photo = photoRepository.findById(id).orElseThrow();
 
@@ -56,12 +55,15 @@ public class UserGalleryController {
             throw new SecurityException("Access denied");
         }
 
-        Path path = Path.of(photo.getStoragePath());
+        Path path = fileStorage.loadAsPath(photo.getStoragePath());
         Resource resource = new UrlResource(path.toUri());
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_TYPE, photo.getContentType())
-                .body(resource);
+        if (!resource.exists() || !resource.isReadable()) {
+            throw new RuntimeException("Nie można odczytać pliku: " + path);
+        }
+
+        return resource;
     }
+
 
 }
