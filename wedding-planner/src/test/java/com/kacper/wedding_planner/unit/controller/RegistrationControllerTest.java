@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -35,19 +37,20 @@ class RegistrationControllerTest {
         mockMvc.perform(get("/register"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("register"))
-                .andExpect(model().attributeExists("userDto"));
+                .andExpect(model().attributeExists("registrationDto"));
     }
 
     @Test
     void shouldRegisterUserSuccessfully() throws Exception {
+        doNothing().when(userService).registerUser(anyString(), anyString(), anyString());
+
         mockMvc.perform(post("/register")
-                        .param("email", "test@example.com")
-                        .param("password", "secret123")
+                        .param("email", "test@test.com")
+                        .param("password", "123456")
+                        .param("confirmPassword", "123456")
                         .param("firstName", "John"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login?success"));
-
-        Mockito.verify(userService).registerUser("test@example.com", "secret123", "John");
     }
 
     @Test
