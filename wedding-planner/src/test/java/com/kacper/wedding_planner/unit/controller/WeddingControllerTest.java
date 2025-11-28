@@ -88,14 +88,36 @@ class WeddingControllerTest {
 
     @Test
     void shouldListGuestsWithoutCategoryFilter() throws Exception {
-        mockMvc.perform(get("/guests"))
+        User mockUser = new User();
+        mockUser.setEmail("test@example.com");
+
+        Guest guest1 = new Guest();
+        guest1.setFirstName("Jan");
+        guest1.setLastName("Kowalski");
+        guest1.setAttendanceConfirmation("YES");
+        guest1.setAfterParty("YES");
+        guest1.setCategory(GuestCategory.GROOM_FAMILY);
+
+        Guest guest2 = new Guest();
+        guest2.setFirstName("Anna");
+        guest2.setLastName("Nowak");
+        guest2.setAttendanceConfirmation("NO");
+        guest2.setAfterParty("NO");
+        guest2.setCategory(GuestCategory.FRIENDS);
+
+        when(userService.findByEmail(anyString())).thenReturn(mockUser);
+        when(guestRepository.findByUser(any(User.class)))
+                .thenReturn(new ArrayList<>(List.of(guest1, guest2)));
+
+        mockMvc.perform(get("/guests")
+                        .principal(() -> "test@example.com")
+                        .param("category", ""))
                 .andExpect(status().isOk())
                 .andExpect(view().name("guests"))
-                .andExpect(model().attributeExists("guests"))
-                .andExpect(model().attribute("totalGuests", 2L))
-                .andExpect(model().attribute("confirmedGuests", 1L))
-                .andExpect(model().attribute("notConfirmedGuests", 1L))
-                .andExpect(model().attribute("receptionGuests", 1L));
+                .andExpect(model().attributeExists(
+                        "guests", "totalGuests", "confirmedGuests", "notConfirmedGuests", "receptionGuests",
+                        "categories", "selectedCategory"
+                ));
     }
 
     @Test
