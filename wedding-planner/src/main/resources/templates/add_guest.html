@@ -255,6 +255,8 @@
         </div>
         <div class="card-body">
             <form method="post" th:action="@{/guests/create}" th:object="${guest}">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                
                 <input type="hidden" th:field="*{id}" />
 
                 <div class="form-group mb-3">
