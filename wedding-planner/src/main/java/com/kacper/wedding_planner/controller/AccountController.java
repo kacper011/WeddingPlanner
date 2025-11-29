@@ -7,6 +7,7 @@ import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -14,15 +15,13 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @Controller
 @RequestMapping("/account")
+@RequiredArgsConstructor
 public class AccountController {
 
     private final UserService userService;
-
-    public AccountController(UserService userService) {
-        this.userService = userService;
-    }
 
     @GetMapping
     public String showAccountPage(Model model) {
@@ -54,10 +53,12 @@ public class AccountController {
                     passwordChangeDTO.getNewPassword(),
                     passwordChangeDTO.getConfirmPassword()
             );
-
             model.addAttribute("success", "Hasło zostało zmienione!");
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
+        } catch (Exception e) {
+            log.error("Błąd zmiany hasła dla użytkownika {}", user.getEmail(), e);
+            model.addAttribute("error", "Wystąpił błąd podczas zmiany hasła. Spróbuj ponownie.");
         }
 
         return "account_change_password";
@@ -83,10 +84,10 @@ public class AccountController {
         try {
             user.setFirstName(nameChangeDTO.getFirstName());
             userService.save(user);
-
             model.addAttribute("success", "Imię zostało zmienione!");
         } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
+            log.error("Błąd zmiany imienia dla użytkownika {}", user.getEmail(), e);
+            model.addAttribute("error", "Wystąpił błąd podczas zmiany imienia. Spróbuj ponownie.");
         }
 
         return "account_change_name";
@@ -104,7 +105,7 @@ public class AccountController {
                                 Model model) {
         User user = userService.findByEmail(principal.getUsername());
 
-        if (!confirmation.equals("USUWAM")) {
+        if (!"USUWAM".equals(confirmation)) {
             model.addAttribute("error", "Musisz wpisać dokładnie: USUWAM");
             return "account_confirm_delete";
         }
@@ -114,9 +115,14 @@ public class AccountController {
             return "account_confirm_delete";
         }
 
-        userService.deleteUser(user);
-
-        SecurityContextHolder.clearContext();
+        try {
+            userService.deleteUser(user);
+            SecurityContextHolder.clearContext();
+        } catch (Exception e) {
+            log.error("Błąd usuwania konta użytkownika {}", user.getEmail(), e);
+            model.addAttribute("error", "Wystąpił błąd podczas usuwania konta. Spróbuj ponownie.");
+            return "account_confirm_delete";
+        }
 
         return "redirect:/login?deleted";
     }
