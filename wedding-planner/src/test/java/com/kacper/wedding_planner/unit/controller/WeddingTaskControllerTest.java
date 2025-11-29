@@ -103,4 +103,18 @@ class WeddingTaskControllerTest {
 
         verify(weddingTaskService).delete(5L);
     }
+
+    @Test
+    @WithMockUser(username = "test@example.com")
+    void shouldToggleTask() throws Exception {
+
+        when(userService.findByEmail("test@example.com")).thenReturn(testUser);
+
+        mockMvc.perform(post("/checklist/toggle/3").with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/checklist"));
+
+        verify(weddingTaskService).toggleForUser(3L, testUser);
+
+    }
 }
