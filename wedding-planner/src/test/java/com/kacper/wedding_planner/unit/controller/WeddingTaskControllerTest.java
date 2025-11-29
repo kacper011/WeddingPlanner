@@ -92,4 +92,15 @@ class WeddingTaskControllerTest {
 
         verify(weddingTaskService).save(any(WeddingTask.class));
     }
+
+    @Test
+    @WithMockUser(username = "test@example.com")
+    void shouldDeleteTask() throws Exception {
+
+        mockMvc.perform(get("/checklist/delete/5"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/checklist"));
+
+        verify(weddingTaskService).delete(5L);
+    }
 }
