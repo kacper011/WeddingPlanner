@@ -73,4 +73,23 @@ class WeddingTaskControllerTest {
                 .andExpect(model().attributeExists("newTask"))
                 .andExpect(view().name("checklist"));
     }
+
+    @Test
+    @WithMockUser(username = "test@example.com")
+    void shouldAddTask() throws Exception {
+
+        WeddingTask task = new WeddingTask();
+        task.setName("New Task");
+
+        when(userService.findByEmail("test@example.com")).thenReturn(testUser);
+
+        mockMvc.perform(post("/checklist")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("name", "New Task"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/checklist"));
+
+        verify(weddingTaskService).save(any(WeddingTask.class));
+    }
 }
