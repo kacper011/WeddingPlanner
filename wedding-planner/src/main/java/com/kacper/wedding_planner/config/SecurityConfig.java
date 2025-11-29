@@ -31,17 +31,20 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .permitAll()
                 )
-                .csrf().disable()
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                        .sessionFixation().none()
+                        .sessionFixation().migrateSession()
                 );
+//                .requiresChannel(channel -> channel
+//                        .anyRequest().requiresSecure() // 8443 https
+//                );
+
         return http.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(12);
     }
 
     @Bean
