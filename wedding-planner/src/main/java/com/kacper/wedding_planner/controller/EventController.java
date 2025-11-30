@@ -2,6 +2,7 @@ package com.kacper.wedding_planner.controller;
 
 import com.kacper.wedding_planner.config.CustomUserDetails;
 import com.kacper.wedding_planner.dto.EventDTO;
+import com.kacper.wedding_planner.dto.EventRequest;
 import com.kacper.wedding_planner.mapper.EventMapper;
 import com.kacper.wedding_planner.model.Event;
 import com.kacper.wedding_planner.model.User;
@@ -45,37 +46,51 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity<EventDTO> createEvent(@RequestBody Event event, @AuthenticationPrincipal CustomUserDetails principal) {
+    public ResponseEntity<EventDTO> createEvent(@RequestBody EventRequest request,
+                                                @AuthenticationPrincipal CustomUserDetails principal) {
+
         User user = userRepository.findByEmail(principal.getUsername())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-        event.setUser(user);
+        Event event = EventMapper.toEntity(request, user);
         Event saved = eventRepository.save(event);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(EventMapper.toDTO(saved));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EventDTO> updateEvent(@PathVariable Long id, @RequestBody Event updated, @AuthenticationPrincipal CustomUserDetails principal) {
-        return eventRepository.findById(id)
-                .filter(event -> event.getUser().getEmail().equals(principal.getUsername()))
-                .map(event -> {
-                    event.setTitle(updated.getTitle());
-                    event.setDate(updated.getDate());
-                    Event saved = eventRepository.save(event);
-                    return ResponseEntity.ok(EventMapper.toDTO(saved));
-                })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found or unauthorized"));
+    public ResponseEntity<EventDTO> updateEvent(
+            @PathVariable Long id,
+            @RequestBody EventRequest request,
+            @AuthenticationPrincipal CustomUserDetails principal) {
+
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+
+        if (!event.getUser().getEmail().equals(principal.getUsername())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+        }
+        
+        event.setTitle(request.getTitle());
+        event.setDate(request.getDate());
+
+        Event saved = eventRepository.save(event);
+        return ResponseEntity.ok(EventMapper.toDTO(saved));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<EventDTO> deleteEvent(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails principal) {
-        eventRepository.findById(id)
-                .filter(event -> event.getUser().getEmail().equals(principal.getUsername()))
-                .ifPresentOrElse(eventRepository::delete, () -> {
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found or unauthorized");
-                });
+    public ResponseEntity<Void> deleteEvent(
+            @PathVariable Long id,
+            @AuthenticationPrincipal CustomUserDetails principal) {
 
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+
+        if (!event.getUser().getEmail().equals(principal.getUsername())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+        }
+
+        eventRepository.delete(event);
         return ResponseEntity.noContent().build();
     }
-
 }
