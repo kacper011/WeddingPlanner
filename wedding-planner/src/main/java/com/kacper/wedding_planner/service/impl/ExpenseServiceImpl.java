@@ -50,12 +50,10 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public void saveExpense(Expense expense, User user) {
-
+    public void saveExpense(Expense expense) {
         if (expense.getAmount() == null || expense.getName() == null) {
             throw new InvalidExpenseDataException();
         }
-        expense.setUser(user);
         expenseRepository.save(expense);
     }
     @Transactional

@@ -1,6 +1,8 @@
 package com.kacper.wedding_planner.controller;
 
 import com.kacper.wedding_planner.config.CustomUserDetails;
+import com.kacper.wedding_planner.dto.ExpenseRequest;
+import com.kacper.wedding_planner.mapper.ExpenseMapper;
 import com.kacper.wedding_planner.model.Expense;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.service.ExpenseService;
@@ -40,7 +42,10 @@ public class ExpenseController {
     }
 
     @PostMapping
-    public String saveExpense(@ModelAttribute @Valid Expense expense, BindingResult result, @AuthenticationPrincipal CustomUserDetails principal, Model model) {
+    public String saveExpense(@ModelAttribute @Valid ExpenseRequest request,
+                              BindingResult result,
+                              @AuthenticationPrincipal CustomUserDetails principal,
+                              Model model) {
 
         if (result.hasErrors()) {
             List<Expense> expenses = expenseService.getExpensesForUser(principal.getUsername());
@@ -53,7 +58,9 @@ public class ExpenseController {
         }
 
         User user = userService.findByEmail(principal.getUsername());
-        expenseService.saveExpense(expense, user);
+        Expense expense = ExpenseMapper.toEntity(request, user);
+
+        expenseService.saveExpense(expense);
 
         return "redirect:/expenses";
     }
