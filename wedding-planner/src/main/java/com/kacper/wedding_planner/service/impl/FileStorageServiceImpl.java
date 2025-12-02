@@ -15,28 +15,40 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     private final Path root;
 
-    public FileStorageServiceImpl(@Value("${app.upload.dir:uploads}") String uploadDir) throws IOException {
+    public FileStorageServiceImpl(@Value("${app.upload.dir:/app/uploads}") String uploadDir) throws IOException {
+
         this.root = Paths.get(uploadDir).toAbsolutePath().normalize();
-        Files.createDirectories(this.root);
+
+        if (!Files.exists(this.root)) {
+            Files.createDirectories(this.root);
+        }
     }
 
     @Override
     public String storeFile(MultipartFile file, Long userId) throws IOException {
         String original = StringUtils.cleanPath(file.getOriginalFilename());
+
+        if (original.contains("..")) {
+            throw new IOException("Niepoprawna nazwa pliku: " + original);
+        }
+
         String ext = "";
         int idx = original.lastIndexOf('.');
         if (idx >= 0) ext = original.substring(idx);
 
         String storedName = UUID.randomUUID().toString() + ext;
         Path userDir = root.resolve(String.valueOf(userId));
-        Files.createDirectories(userDir);
+
+        if (!Files.exists(userDir)) {
+            Files.createDirectories(userDir);
+        }
 
         Path target = userDir.resolve(storedName);
 
         try {
             Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
-            throw new IOException("Could not store file " + original, ex);
+            throw new IOException("Nie można zapisać pliku " + original, ex);
         }
 
         return userId + "/" + storedName;
@@ -44,7 +56,14 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     @Override
     public Path loadAsPath(String relative) {
-        return root.resolve(relative).normalize();
+        
+        Path path = root.resolve(relative).normalize();
+
+        if (!path.startsWith(root)) {
+            throw new SecurityException("Nieautoryzowany dostęp do pliku: " + relative);
+        }
+
+        return path;
     }
 
     @Override
