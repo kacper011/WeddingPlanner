@@ -15,7 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.MalformedURLException;
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -36,34 +38,44 @@ public class UserGalleryController {
 
     @GetMapping
     public String gallery(@AuthenticationPrincipal UserDetails principal, Model model) {
-        User user = userRepository.findByEmail(principal.getUsername()).orElseThrow();
+        User user = userRepository.findByEmail(principal.getUsername())
+                .orElseThrow(() -> new SecurityException("Nie znaleziono użytkownika: " + principal.getUsername()));
 
         List<Photo> photos = photoRepository.findByOwnerId(user.getId());
-        photos.sort((a, b) -> b.getUploadedAt().compareTo(a.getUploadedAt()));
-        model.addAttribute("photos", photos);
+        photos.sort(Comparator.comparing(Photo::getUploadedAt).reversed());
 
+        model.addAttribute("photos", photos);
         return "gallery_list";
     }
 
     @GetMapping("/image/{id}")
     @ResponseBody
-    public Resource serveImage(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal) throws Exception {
-        User user = userRepository.findByEmail(principal.getUsername()).orElseThrow();
-        Photo photo = photoRepository.findById(id).orElseThrow();
+    public ResponseEntity<Resource> serveImage(@PathVariable Long id,
+                                               @AuthenticationPrincipal UserDetails principal) {
+        User user = userRepository.findByEmail(principal.getUsername())
+                .orElseThrow(() -> new SecurityException("Nie znaleziono użytkownika: " + principal.getUsername()));
+
+        Photo photo = photoRepository.findById(id)
+                .orElseThrow(() -> new SecurityException("Nie znaleziono zdjęcia o ID: " + id));
 
         if (!photo.getOwner().getId().equals(user.getId())) {
-            throw new SecurityException("Access denied");
+            throw new SecurityException("Brak dostępu do tego zdjęcia");
         }
 
         Path path = fileStorage.loadAsPath(photo.getStoragePath());
-        Resource resource = new UrlResource(path.toUri());
+        Resource resource;
+        try {
+            resource = new UrlResource(path.toUri());
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Nieprawidłowa ścieżka do pliku: " + path, e);
+        }
 
         if (!resource.exists() || !resource.isReadable()) {
             throw new RuntimeException("Nie można odczytać pliku: " + path);
         }
 
-        return resource;
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + photo.getFilename() + "\"")
+                .body(resource);
     }
-
-
 }

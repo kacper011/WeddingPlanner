@@ -56,7 +56,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     @Override
     public Path loadAsPath(String relative) {
-        
+
         Path path = root.resolve(relative).normalize();
 
         if (!path.startsWith(root)) {
