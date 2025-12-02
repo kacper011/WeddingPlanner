@@ -36,7 +36,7 @@ public class ExpenseController {
 
         model.addAttribute("expenses", expenses);
         model.addAttribute("total", total);
-        model.addAttribute("expense", new Expense());
+        model.addAttribute("expense", new ExpenseRequest());
 
         return "expenses";
     }

@@ -107,7 +107,7 @@ class ExpenseServiceImplTest {
         expense.setName("Test");
         expense.setAmount(BigDecimal.valueOf(50));
 
-        expenseService.saveExpense(expense, user);
+        expenseService.saveExpense(expense);
 
         ArgumentCaptor<Expense> captor = ArgumentCaptor.forClass(Expense.class);
         verify(expenseRepository).save(captor.capture());

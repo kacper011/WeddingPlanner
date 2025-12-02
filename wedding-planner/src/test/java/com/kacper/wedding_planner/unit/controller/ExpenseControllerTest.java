@@ -94,7 +94,7 @@ class ExpenseControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/expenses"));
 
-        Mockito.verify(expenseService).saveExpense(any(Expense.class), Mockito.eq(testUser));
+        Mockito.verify(expenseService).saveExpense(any(Expense.class));
     }
 
     @Test

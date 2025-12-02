@@ -51,11 +51,12 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public void saveExpense(Expense expense) {
-        if (expense.getAmount() == null || expense.getName() == null) {
+        if (expense.getAmount() == null || expense.getName() == null || expense.getName().trim().isEmpty()) {
             throw new InvalidExpenseDataException();
         }
         expenseRepository.save(expense);
     }
+
     @Transactional
     @Override
     public void deleteExpenseByIdAndUser(Long id, String username) {
