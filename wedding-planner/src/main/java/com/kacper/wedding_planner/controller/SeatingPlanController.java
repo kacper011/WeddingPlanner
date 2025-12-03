@@ -84,18 +84,28 @@ public class SeatingPlanController {
 
     @PostMapping("/update-position")
     @ResponseBody
-    public ResponseEntity<?> updateTablePosition(@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<?> updateTablePosition(@RequestBody Map<String, Object> payload,
+                                                 @AuthenticationPrincipal CustomUserDetails principal) {
         try {
             Long tableId = Long.valueOf(payload.get("id").toString());
             int posX = ((Number) payload.get("posX")).intValue();
             int posY = ((Number) payload.get("posY")).intValue();
 
+            User user = userRepository.findByEmail(principal.getUsername())
+                    .orElseThrow(() -> new RuntimeException("Nie znaleziono użytkownika"));
+
             GuestTable table = guestTableRepository.findById(tableId)
                     .orElse(null);
 
+
             if (table == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Map.of("status", "error", "message", "Table not found"));
+                        .body(Map.of("status", "error", "message", "Nie znaleziono stołu"));
+            }
+
+            if (!table.getUser().getId().equals(user.getId())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(Map.of("status", "error", "message", "Nie masz uprawnień do tej tabeli"));
             }
 
             table.setPositionX(posX);
