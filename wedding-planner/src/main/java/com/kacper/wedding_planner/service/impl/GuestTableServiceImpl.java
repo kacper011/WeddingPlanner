@@ -42,8 +42,15 @@ public class GuestTableServiceImpl implements GuestTableService {
     }
 
     @Transactional
-    public void deleteTableById(Long id) {
+    public void deleteTableById(Long id, User user) {
+        GuestTable table = guestTableRepository.findById(id)
+                .orElseThrow(() -> new GuestTableNotFoundException(id));
+
+        if (!table.getUser().getId().equals(user.getId())) {
+            throw new SecurityException("Nie masz uprawnień do usunięcia tej tabeli");
+        }
+
         detachGuestsFromTable(id);
-        guestTableRepository.deleteById(id);
+        guestTableRepository.delete(table);
     }
 }
