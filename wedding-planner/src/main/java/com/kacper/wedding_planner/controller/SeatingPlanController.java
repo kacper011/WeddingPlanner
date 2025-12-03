@@ -110,8 +110,12 @@ public class SeatingPlanController {
     }
 
     @PostMapping("/delete")
-    public String deleteTable(@RequestParam Long id) {
-        guestTableService.deleteTableById(id);
+    public String deleteTable(@RequestParam Long id, @AuthenticationPrincipal CustomUserDetails principal) {
+        User user = userRepository.findByEmail(principal.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        guestTableService.deleteTableById(id, user);
+
         return "redirect:/tables";
     }
 }

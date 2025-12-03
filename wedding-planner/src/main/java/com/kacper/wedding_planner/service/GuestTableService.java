@@ -8,5 +8,5 @@ import java.util.List;
 public interface GuestTableService {
 
     List<GuestTable> getTablesForUser(User user);
-    void deleteTableById(Long id);
+    void deleteTableById(Long id, User user);
 }
