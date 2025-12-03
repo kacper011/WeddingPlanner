@@ -67,15 +67,16 @@ public class UserGalleryController {
         try {
             resource = new UrlResource(path.toUri());
         } catch (MalformedURLException e) {
-            throw new RuntimeException("Nieprawidłowa ścieżka do pliku: " + path, e);
+            return ResponseEntity.badRequest().build();
         }
 
         if (!resource.exists() || !resource.isReadable()) {
-            throw new RuntimeException("Nie można odczytać pliku: " + path);
+            return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + photo.getFilename() + "\"")
                 .body(resource);
     }
+
 }
