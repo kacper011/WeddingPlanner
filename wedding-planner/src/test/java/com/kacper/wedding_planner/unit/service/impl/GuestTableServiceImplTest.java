@@ -85,21 +85,27 @@ class GuestTableServiceImplTest {
     void shouldDeleteTableAndDetachGuests() {
         Long tableId = 1L;
 
+        User user = new User();
+        user.setId(100L);
+
         Guest guest = new Guest();
         guest.setId(1L);
+
         GuestTable table = new GuestTable();
         table.setId(tableId);
         table.setGuests(List.of(guest));
+        table.setUser(user);
+
         guest.setTable(table);
 
         when(guestTableRepository.findById(tableId)).thenReturn(Optional.of(table));
 
-        guestTableService.deleteTableById(tableId);
+        guestTableService.deleteTableById(tableId, user);
 
         assertNull(guest.getTable(), "Guest should be detached from table");
 
         verify(guestRepository).save(guest);
-        verify(guestTableRepository).deleteById(tableId);
+        verify(guestTableRepository).delete(table);
     }
 
 
