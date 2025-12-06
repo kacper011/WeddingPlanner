@@ -29,4 +29,10 @@ public class WeddingTimelineServiceImpl implements WeddingTimelineService {
     public void delete(Long id) {
         weddingTimelineRepository.deleteById(id);
     }
+
+    @Override
+    public WeddingTimeline findById(Long id) {
+        return weddingTimelineRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Timeline not found"));
+    }
 }

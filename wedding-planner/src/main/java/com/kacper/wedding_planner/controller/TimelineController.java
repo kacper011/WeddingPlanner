@@ -59,8 +59,18 @@ public class TimelineController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteTimeline(@PathVariable Long id) {
+    public String deleteTimeline(@PathVariable Long id,
+                                 @AuthenticationPrincipal CustomUserDetails principal) {
+
+        User user = userService.findByEmail(principal.getUsername());
+        WeddingTimeline timeline = weddingTimelineService.findById(id);
+
+        if (timeline == null || !timeline.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Forbidden");
+        }
+
         weddingTimelineService.delete(id);
+        
         return "redirect:/timeline";
     }
 }
