@@ -1,14 +1,16 @@
 package com.kacper.wedding_planner.controller;
 
 import com.kacper.wedding_planner.config.CustomUserDetails;
+import com.kacper.wedding_planner.dto.WeddingTimelineRequest;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.model.WeddingTimeline;
 import com.kacper.wedding_planner.service.UserService;
-import com.kacper.wedding_planner.service.WeddingInfoService;
 import com.kacper.wedding_planner.service.WeddingTimelineService;
+import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -28,15 +30,27 @@ public class TimelineController {
         User user = userService.findByEmail(principal.getUsername());
 
         model.addAttribute("timelines", weddingTimelineService.getForUser(user));
-        model.addAttribute("timeline", new WeddingTimeline());
+        model.addAttribute("timelineRequest", new WeddingTimelineRequest());
 
         return "timeline";
     }
 
     @PostMapping
-    public String addTimeline(@ModelAttribute("timeline") WeddingTimeline timeline, @AuthenticationPrincipal CustomUserDetails principal) {
+    public String addTimeline(@Valid @ModelAttribute("timelineRequest") WeddingTimelineRequest request,
+                              BindingResult result,
+                              @AuthenticationPrincipal CustomUserDetails principal,
+                              Model model) {
 
         User user = userService.findByEmail(principal.getUsername());
+
+        if (result.hasErrors()) {
+            model.addAttribute("timelines", weddingTimelineService.getForUser(user));
+            return "timeline";
+        }
+
+        WeddingTimeline timeline = new WeddingTimeline();
+        timeline.setTitle(request.getTitle());
+        timeline.setTime(request.getTime());
         timeline.setUser(user);
 
         weddingTimelineService.save(timeline);
