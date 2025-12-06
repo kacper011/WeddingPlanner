@@ -50,10 +50,18 @@ public class SeatingPlanController {
     }
 
     @PostMapping("/assign")
-    public String assignGuestToTable(@RequestParam Long guestId, @RequestParam Long tableId) {
+    public String assignGuestToTable(@RequestParam Long guestId, @RequestParam Long tableId, @AuthenticationPrincipal CustomUserDetails principal) {
+
+        User user = userRepository.findByEmail(principal.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         Guest guest = guestRepository.findById(guestId).orElseThrow(() -> new RuntimeException("Guest not found"));
         GuestTable table = guestTableRepository.findById(tableId).orElseThrow(() -> new RuntimeException("Table not found"));
 
+        if (!guest.getUser().getId().equals(user.getId()) ||
+            !table.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Forbidden");
+        }
         guest.setTable(table);
         guestRepository.save(guest);
 
