@@ -1,6 +1,7 @@
 package com.kacper.wedding_planner.controller;
 
 import com.kacper.wedding_planner.config.CustomUserDetails;
+import com.kacper.wedding_planner.dto.GuestTableRequest;
 import com.kacper.wedding_planner.model.Guest;
 import com.kacper.wedding_planner.model.GuestTable;
 import com.kacper.wedding_planner.model.User;
@@ -9,11 +10,13 @@ import com.kacper.wedding_planner.repository.GuestTableRepository;
 import com.kacper.wedding_planner.repository.UserRepository;
 import com.kacper.wedding_planner.service.GuestTableService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,18 +48,24 @@ public class SeatingPlanController {
 
         model.addAttribute("tables", tables);
         model.addAttribute("allGuests", guests);
+        model.addAttribute("tableRequest", new GuestTableRequest());
 
         return "tables";
     }
 
     @PostMapping("/assign")
-    public String assignGuestToTable(@RequestParam Long guestId, @RequestParam Long tableId, @AuthenticationPrincipal CustomUserDetails principal) {
+    public String assignGuestToTable(@RequestParam Long guestId,
+                                     @RequestParam Long tableId,
+                                     @AuthenticationPrincipal CustomUserDetails principal) {
 
         User user = userRepository.findByEmail(principal.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Guest guest = guestRepository.findById(guestId).orElseThrow(() -> new RuntimeException("Guest not found"));
-        GuestTable table = guestTableRepository.findById(tableId).orElseThrow(() -> new RuntimeException("Table not found"));
+        Guest guest = guestRepository.findById(guestId)
+                .orElseThrow(() -> new RuntimeException("Guest not found"));
+
+        GuestTable table = guestTableRepository.findById(tableId)
+                .orElseThrow(() -> new RuntimeException("Table not found"));
 
         if (!guest.getUser().getId().equals(user.getId()) ||
             !table.getUser().getId().equals(user.getId())) {
@@ -69,20 +78,25 @@ public class SeatingPlanController {
     }
     @Transactional
     @PostMapping("/add")
-    public String addTable(@RequestParam String name,
-                           @RequestParam(defaultValue = "100") int positionX,
-                           @RequestParam(defaultValue = "100") int positionY,
-                           @RequestParam String shape,
-                           @AuthenticationPrincipal CustomUserDetails principal) {
+    public String addTable(@Valid @ModelAttribute("tableRequest") GuestTableRequest request,
+                           BindingResult result,
+                           @AuthenticationPrincipal CustomUserDetails principal,
+                           Model model) {
 
         User user = userRepository.findByEmail(principal.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        if (result.hasErrors()) {
+            model.addAttribute("tables", guestTableService.getTablesForUser(user));
+            model.addAttribute("allGuests", guestRepository.findByUser(user));
+            return "tables";
+        }
+
         GuestTable newTable = new GuestTable();
-        newTable.setName(name);
-        newTable.setPositionX(positionX);
-        newTable.setPositionY(positionY);
-        newTable.setShape(shape);
+        newTable.setName(request.getName());
+        newTable.setPositionX(request.getPositionX());
+        newTable.setPositionY(request.getPositionY());
+        newTable.setShape(request.getShape());
         newTable.setUser(user);
 
         guestTableRepository.save(newTable);
