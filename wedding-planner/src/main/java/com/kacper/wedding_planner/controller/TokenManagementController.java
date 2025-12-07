@@ -29,11 +29,10 @@ public class TokenManagementController {
 
     @GetMapping
     public String list(@AuthenticationPrincipal UserDetails principal, Model model) {
-        User user = userRepository.findByEmail(principal.getUsername()).orElseThrow();
+        User user = userRepository.findByEmail(principal.getUsername())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        var tokens = tokenRepository.findAll().stream()
-                .filter(t -> t.getOwner().getId().equals(user.getId()))
-                .toList();
+        var tokens = tokenRepository.findByOwner(user);
 
         model.addAttribute("tokens", tokens);
 
@@ -75,7 +74,8 @@ public class TokenManagementController {
             @AuthenticationPrincipal UserDetails principal,
             @RequestParam(defaultValue = "48") int hours) {
 
-        User user = userRepository.findByEmail(principal.getUsername()).orElseThrow();
+        User user = userRepository.findByEmail(principal.getUsername())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         UploadToken t = UploadToken.createForUser(user, hours);
         tokenRepository.save(t);
