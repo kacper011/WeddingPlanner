@@ -85,11 +85,14 @@ public class TokenManagementController {
 
     @PostMapping("/revoke/{id}")
     public String revoke(@AuthenticationPrincipal UserDetails principal, @PathVariable Long id) {
-        User user = userRepository.findByEmail(principal.getUsername()).orElseThrow();
-        UploadToken t = tokenRepository.findById(id).orElseThrow();
+        User user = userRepository.findByEmail(principal.getUsername())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        UploadToken t = tokenRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         if (!t.getOwner().getId().equals(user.getId()))
-            throw new SecurityException("Access denied");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied");
 
         t.setActive(false);
         tokenRepository.save(t);
