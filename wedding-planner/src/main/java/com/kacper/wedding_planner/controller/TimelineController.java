@@ -58,7 +58,7 @@ public class TimelineController {
         return "redirect:/timeline";
     }
 
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteTimeline(@PathVariable Long id,
                                  @AuthenticationPrincipal CustomUserDetails principal) {
 
@@ -70,7 +70,7 @@ public class TimelineController {
         }
 
         weddingTimelineService.delete(id);
-        
+
         return "redirect:/timeline";
     }
 }

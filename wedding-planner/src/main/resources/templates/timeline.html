@@ -164,7 +164,7 @@
 
   <h1 style="font-size: 2rem;">Dodaj element harmonogramu</h1>
 
-  <form th:action="@{/timeline}" th:object="${timeline}" method="post"
+  <form th:action="@{/timeline}" th:object="${timelineRequest}" method="post"
         class="p-3 mb-4 shadow-sm" style="background: #fff0f0; border-radius: 12px;">
 
     <div class="mb-2">
@@ -191,11 +191,14 @@
         <div class="timeline-title" th:text="${e.title}"></div>
       </div>
 
-      <a th:href="@{/timeline/delete/{id}(id=${e.id})}"
-         onclick="return confirm('Usunąć ten punkt?')"
-         class="btn btn-sm btn-outline-danger">
-        Usuń
-      </a>
+      <form th:action="@{/timeline/delete/{id}(id=${e.id})}" method="post"
+            onsubmit="return confirm('Usunąć ten punkt?')"
+            style="display: inline;">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <button type="submit" class="btn btn-sm btn-outline-danger">
+          Usuń
+        </button>
+      </form>
     </div>
   </div>
 
