@@ -4,11 +4,16 @@ import com.kacper.wedding_planner.model.UploadToken;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.UploadTokenRepository;
 import com.kacper.wedding_planner.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/tokens")
@@ -44,9 +49,20 @@ public class TokenManagementController {
         UploadToken t = tokenRepository.findById(id).orElseThrow();
 
         if (!t.getOwner().getId().equals(user.getId()))
-            throw new SecurityException("Access denied");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied");
 
-        String publicLink = "http://localhost:8080/public/upload/" + t.getToken();
+        if (!t.isActive()) {
+            throw new ResponseStatusException(HttpStatus.GONE, "Token revoked");
+        }
+
+        if (t.getExpiresAt() != null && t.getExpiresAt().isBefore(LocalDateTime.now())) {
+            throw new ResponseStatusException(HttpStatus.GONE, "Token expired");
+        }
+
+        String publicLink = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/public/upload/")
+                .path(t.getToken())
+                .toUriString();
 
         model.addAttribute("token", t);
         model.addAttribute("publicLink", publicLink);
