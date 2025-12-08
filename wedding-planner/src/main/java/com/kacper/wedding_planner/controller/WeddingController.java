@@ -12,7 +12,10 @@ import com.kacper.wedding_planner.service.GuestService;
 import com.kacper.wedding_planner.service.UserService;
 import com.kacper.wedding_planner.service.WeddingInfoService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
@@ -29,7 +32,10 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/guests")
+@PreAuthorize("isAuthenticated()")
 public class WeddingController {
+
+    private static final Logger logger = LoggerFactory.getLogger(WeddingController.class);
 
     private final GuestService guestService;
     private final GuestRepository guestRepository;
@@ -99,21 +105,33 @@ public class WeddingController {
                            BindingResult bindingResult,
                            @AuthenticationPrincipal CustomUserDetails principal,
                            Model model) {
+
+        User currentUser = userService.findByEmail(principal.getUsername());
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("categories", GuestCategory.values());
             return "add_guest";
         }
 
-        User currentUser = userService.findByEmail(principal.getUsername());
         guest.setUser(currentUser);
         guestService.saveGuest(guest);
+
         return "redirect:/guests";
     }
 
     @GetMapping("/details/{id}")
-    public String viewGuestDetails(@PathVariable("id") Long id, Model model) {
+    public String viewGuestDetails(@PathVariable("id") Long id,
+                                   @AuthenticationPrincipal CustomUserDetails principal,
+                                   Model model) {
+
+        User currentUser = userService.findByEmail(principal.getUsername());
+
         Guest guest = guestRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Guest not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Nie znaleziono gościa"));
+
+        if (!guest.getUser().getId().equals(currentUser.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Odmowa dostępu");
+        }
 
         model.addAttribute("guest", guest);
         return "guest_details";
