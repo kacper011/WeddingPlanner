@@ -15,4 +15,5 @@ public interface GuestRepository extends JpaRepository<Guest, Long> {
     List<Guest> findByUserAndAttendanceConfirmation(User user, String status);
     List<Guest> findByUserAndAfterParty(User user, String afterParty);
     List<Guest> findAllByCategory(GuestCategory category);
+    List<Guest> findByUserAndCategory(User user, GuestCategory category);
 }

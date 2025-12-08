@@ -46,23 +46,25 @@ public class WeddingController {
     }
 
     @GetMapping
-    public String listGuests(Model model, @AuthenticationPrincipal CustomUserDetails principal, @RequestParam(required = false) String category) {
+    public String listGuests(Model model, @AuthenticationPrincipal CustomUserDetails principal,
+                             @RequestParam(required = false) String category) {
+
         if (principal == null) {
             return "redirect:/login";
         }
 
         User currentUser = userService.findByEmail(principal.getUsername());
-        List<Guest> guests = guestRepository.findByUser(currentUser);
+        List<Guest> guests;
 
         if (category != null && !category.isEmpty()) {
             try {
                 GuestCategory selectedCategory = GuestCategory.valueOf(category);
-                guests = guests.stream()
-                        .filter(guest -> guest.getCategory() == selectedCategory)
-                        .collect(Collectors.toList());
+                guests = guestRepository.findByUserAndCategory(currentUser, selectedCategory);
             } catch (IllegalArgumentException e) {
-                System.out.println("Nieprawidłowa kategoria: " + category);
+                guests = guestRepository.findByUser(currentUser);
             }
+        } else {
+            guests = guestRepository.findByUser(currentUser);
         }
 
         guests.sort(Comparator.comparing(Guest::getLastName));
