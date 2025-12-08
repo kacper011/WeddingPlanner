@@ -137,21 +137,6 @@ public class WeddingController {
         return "guest_details";
     }
 
-    @PostMapping("/create")
-    public String createGuest(@ModelAttribute @Valid Guest guest,
-                              BindingResult result,
-                              Model model,
-                              @AuthenticationPrincipal CustomUserDetails principal) {
-        if (result.hasErrors()) {
-            model.addAttribute("categories", GuestCategory.values());
-            return "add_guest";
-        }
-
-        guest.setUser(userService.findByEmail(principal.getUsername()));
-        guestRepository.save(guest);
-        return "redirect:/guests";
-    }
-
     @PostMapping("/edit/{id}")
     public String editGuest(@PathVariable Long id,
                             @ModelAttribute Guest guest,
