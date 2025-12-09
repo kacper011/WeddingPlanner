@@ -167,7 +167,18 @@ public class WeddingController {
 
 
     @PostMapping("/delete/{id}")
-    public String deleteGuest(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+    public String deleteGuest(@PathVariable("id") Long id,
+                              RedirectAttributes redirectAttributes,
+                              @AuthenticationPrincipal CustomUserDetails principal) {
+
+        User currentUser = userService.findByEmail(principal.getUsername());
+        Guest guest = guestRepository.findById(id)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono gościa"));
+
+        if (!guest.getUser().getId().equals(currentUser.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Odmowa dostępu");
+        }
+
         guestService.deleteGuest(id);
         redirectAttributes.addFlashAttribute("message", "Gość został pomyślnie usunięty.");
         return "redirect:/guests";
