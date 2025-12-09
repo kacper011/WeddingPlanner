@@ -185,9 +185,19 @@ public class WeddingController {
     }
 
     @PostMapping("/updatePresence/{id}")
-    public String updatePresence(@PathVariable("id") Long id, @RequestParam("presence") String presence) {
+    public String updatePresence(@PathVariable("id") Long id,
+                                 @RequestParam("presence") String presence,
+                                 @AuthenticationPrincipal CustomUserDetails principal) {
+
+        User currentUser = userService.findByEmail(principal.getUsername());
+
         Guest guest = guestRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid guest Id:" + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono gościa"));
+
+        if (!guest.getUser().getId().equals(currentUser.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Odmowa dostępu");
+        }
+
         guest.setAttendanceConfirmation(presence);
 
         if ("NO".equals(presence)) {
