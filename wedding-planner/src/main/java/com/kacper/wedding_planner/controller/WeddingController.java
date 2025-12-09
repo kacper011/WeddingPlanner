@@ -210,11 +210,22 @@ public class WeddingController {
     }
 
     @PostMapping("/updateTransport/{id}")
-    public String updateTransport(@PathVariable Long id, @RequestParam String transport) {
+    public String updateTransport(@PathVariable Long id,
+                                  @RequestParam String transport,
+                                  @AuthenticationPrincipal CustomUserDetails principal) {
+
+        User currentUser = userService.findByEmail(principal.getUsername());
+
         Guest guest = guestRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Guest not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono gościa"));
+
+        if (!guest.getUser().getId().equals(currentUser.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Odmowa dostępu");
+        }
+
         guest.setTransport(transport);
         guestRepository.save(guest);
+
         return "redirect:/guests";
     }
 
