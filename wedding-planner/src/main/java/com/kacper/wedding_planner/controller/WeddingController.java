@@ -139,22 +139,30 @@ public class WeddingController {
 
     @PostMapping("/edit/{id}")
     public String editGuest(@PathVariable Long id,
-                            @ModelAttribute Guest guest,
-                            @AuthenticationPrincipal CustomUserDetails principal) {
-        try {
-            Guest existingGuest = guestRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Guest not found with id: " + id));
+                            @Valid @ModelAttribute("guest") Guest guest,
+                            BindingResult bindingResult,
+                            @AuthenticationPrincipal CustomUserDetails principal,
+                            Model model) {
 
-            guest.setId(id);
-            guest.setUser(userService.findByEmail(principal.getUsername()));
-            guest.setCategory(existingGuest.getCategory());
-            guestRepository.save(guest);
+        User currentUser = userService.findByEmail(principal.getUsername());
 
-            return "redirect:/guests/confirmed";
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "error";
+        Guest existingGuest = guestRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono gościa"));
+
+        if (!existingGuest.getUser().getId().equals(currentUser.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Odmowa dostępu");
         }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", GuestCategory.values());
+            return "add_guest";
+        }
+
+        guest.setId(id);
+        guest.setUser(currentUser);
+        guestRepository.save(guest);
+
+        return "redirect:/guests";
     }
 
 
