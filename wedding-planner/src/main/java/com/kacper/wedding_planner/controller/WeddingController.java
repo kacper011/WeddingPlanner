@@ -230,10 +230,22 @@ public class WeddingController {
     }
 
     @PostMapping("/updateLodging/{id}")
-    public String updateLodging(@PathVariable Long id, @RequestParam String lodging) {
-        Guest guest = guestRepository.findById(id).orElseThrow();
+    public String updateLodging(@PathVariable Long id,
+                                @RequestParam String lodging,
+                                @AuthenticationPrincipal CustomUserDetails principal) {
+
+        User currentUser = userService.findByEmail(principal.getUsername());
+
+        Guest guest = guestRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono gościa"));
+
+        if (!guest.getUser().getId().equals(currentUser.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Odmowa dostępu");
+        }
+
         guest.setAccommodation(lodging);
         guestRepository.save(guest);
+        
         return "redirect:/guests";
     }
 
