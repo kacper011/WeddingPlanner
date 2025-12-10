@@ -41,4 +41,9 @@ public class WeddingTaskServiceImpl implements WeddingTaskService {
         task.setCompleted(!task.isCompleted());
         weddingTaskRepository.save(task);
     }
+
+    @Override
+    public WeddingTask getById(Long id) {
+        return weddingTaskRepository.findById(id).orElse(null);
+    }
 }

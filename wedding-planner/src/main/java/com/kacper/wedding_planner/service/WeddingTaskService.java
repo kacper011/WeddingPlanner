@@ -14,4 +14,6 @@ public interface WeddingTaskService {
     void delete(Long id);
 
     void toggleForUser(Long id, User user);
+
+    WeddingTask getById(Long id);
 }

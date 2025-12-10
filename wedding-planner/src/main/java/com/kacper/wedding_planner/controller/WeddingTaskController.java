@@ -27,6 +27,10 @@ public class WeddingTaskController {
     @GetMapping
     public String showChecklist(@AuthenticationPrincipal CustomUserDetails principal, Model model) {
 
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
         User user = userService.findByEmail(principal.getUsername());
 
         model.addAttribute("tasks", weddingTaskService.getForUser(user));
@@ -48,7 +52,15 @@ public class WeddingTaskController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteTask(@PathVariable Long id) {
+    public String deleteTask(@PathVariable Long id,
+                             @AuthenticationPrincipal CustomUserDetails principal) {
+
+        User currentUser = userService.findByEmail(principal.getUsername());
+
+        WeddingTask task = weddingTaskService.getById(id);
+        if (task == null || !task.getUser().getId().equals(currentUser.getId())) {
+            return "redirect:/checklist?error=forbidden";
+        }
 
         weddingTaskService.delete(id);
         return "redirect:/checklist";
