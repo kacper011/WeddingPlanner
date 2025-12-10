@@ -70,8 +70,13 @@ public class WeddingTaskController {
     public String toggle(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails principal) {
 
         User user = userService.findByEmail(principal.getUsername());
-        weddingTaskService.toggleForUser(id, user);
 
+        WeddingTask task = weddingTaskService.getById(id);
+        if (task == null || !task.getUser().getId().equals(user.getId())) {
+            return "redirect:/checklist?error=forbidden";
+        }
+
+        weddingTaskService.toggleForUser(id, user);
         return "redirect:/checklist";
     }
 }
