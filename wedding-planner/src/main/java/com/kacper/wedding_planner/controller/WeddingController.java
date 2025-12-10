@@ -295,6 +295,7 @@ public class WeddingController {
     @GetMapping("/receptions")
     public String getWeddingReceptionsGuests(Model model,
                                              @AuthenticationPrincipal CustomUserDetails principal) {
+
         User currentUser = userService.findByEmail(principal.getUsername());
         List<Guest> weddingReceptionsGuests = guestRepository.findByUserAndAfterParty(currentUser, "YES");
 
@@ -303,17 +304,19 @@ public class WeddingController {
     }
 
     @PostMapping("/receptions/toggle/{id}")
-    public String toggleReceptionStatus(@PathVariable Long id) {
-        Optional<Guest> optionalGuest = guestRepository.findById(id);
+    public String toggleReceptionStatus(@PathVariable Long id,
+                                        @AuthenticationPrincipal CustomUserDetails principal) {
+        User currentUser = userService.findByEmail(principal.getUsername());
 
-        optionalGuest.ifPresent(guest -> {
-            if ("YES".equals(guest.getAfterParty())) {
-                guest.setAfterParty("NO");
-            } else {
-                guest.setAfterParty("YES");
-            }
-            guestRepository.save(guest);
-        });
+        Guest guest = guestRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono gościa"));
+
+        if (!guest.getUser().getId().equals(currentUser.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Odmowa dostępu");
+        }
+
+        guest.setAfterParty("YES".equalsIgnoreCase(guest.getAfterParty()) ? "NO" : "YES");
+        guestRepository.save(guest);
 
         return "redirect:/guests/receptions";
     }
