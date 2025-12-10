@@ -245,7 +245,7 @@ public class WeddingController {
 
         guest.setAccommodation(lodging);
         guestRepository.save(guest);
-        
+
         return "redirect:/guests";
     }
 
@@ -272,16 +272,23 @@ public class WeddingController {
     }
 
     @GetMapping("/search")
-    public String searchGuests(@RequestParam("lastName") String lastName, Model model,
+    public String searchGuests(@RequestParam("lastName") String lastName,
+                               Model model,
                                @AuthenticationPrincipal CustomUserDetails principal) {
         User currentUser = userService.findByEmail(principal.getUsername());
-        List<Guest> guests = guestRepository.findByUser(currentUser);
 
-        List<Guest> filteredGuests = guests.stream()
-                .filter(guest -> guest.getLastName().toLowerCase().contains(lastName.toLowerCase()))
-                .collect(Collectors.toList());
+        if (lastName == null || lastName.isBlank()) {
+            return "redirect:/guests";
+        }
+
+        List<Guest> filteredGuests = guestRepository.findByUserAndLastNameContainingIgnoreCase(currentUser, lastName);
+
+        filteredGuests.sort(Comparator.comparing(Guest::getLastName));
 
         model.addAttribute("guests", filteredGuests);
+        model.addAttribute("categories", GuestCategory.values());
+        model.addAttribute("selectedCategory", null);
+
         return "guests";
     }
 

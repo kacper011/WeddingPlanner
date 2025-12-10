@@ -16,4 +16,6 @@ public interface GuestRepository extends JpaRepository<Guest, Long> {
     List<Guest> findByUserAndAfterParty(User user, String afterParty);
     List<Guest> findAllByCategory(GuestCategory category);
     List<Guest> findByUserAndCategory(User user, GuestCategory category);
+    List<Guest> findByUserAndLastNameContainingIgnoreCase(User user, String lastName);
+
 }
