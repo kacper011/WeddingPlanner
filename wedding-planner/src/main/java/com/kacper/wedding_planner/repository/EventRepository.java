@@ -17,5 +17,5 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     List<Event> findByDateAndReminderSentFalse(LocalDate targetDate);
 
-    Optional<Object> findByIdAndUser(Long id, User user);
+    Optional<Event> findByIdAndUser(Long id, User user);
 }

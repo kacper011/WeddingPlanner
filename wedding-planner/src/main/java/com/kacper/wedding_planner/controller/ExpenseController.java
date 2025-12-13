@@ -30,9 +30,13 @@ public class ExpenseController {
     }
 
     @GetMapping
-    public String showExpenses(Model model, @AuthenticationPrincipal CustomUserDetails principal) {
-        List<Expense> expenses = expenseService.getExpensesForUser(principal.getUsername());
-        BigDecimal total = expenseService.getTotalForUser(principal.getUsername());
+    public String showExpenses(Model model,
+                               @AuthenticationPrincipal CustomUserDetails principal) {
+
+        User user = userService.findByEmail(principal.getUsername());
+
+        List<Expense> expenses = expenseService.getExpensesForUser(user);
+        BigDecimal total = expenseService.getTotalForUser(user);
 
         model.addAttribute("expenses", expenses);
         model.addAttribute("total", total);
@@ -47,27 +51,27 @@ public class ExpenseController {
                               @AuthenticationPrincipal CustomUserDetails principal,
                               Model model) {
 
+        User user = userService.findByEmail(principal.getUsername());
+
         if (result.hasErrors()) {
-            List<Expense> expenses = expenseService.getExpensesForUser(principal.getUsername());
-            BigDecimal total = expenseService.getTotalForUser(principal.getUsername());
-
-            model.addAttribute("expenses", expenses);
-            model.addAttribute("total", total);
-
+            model.addAttribute("expenses", expenseService.getExpensesForUser(user));
+            model.addAttribute("total", expenseService.getTotalForUser(user));
             return "expenses";
         }
 
-        User user = userService.findByEmail(principal.getUsername());
         Expense expense = ExpenseMapper.toEntity(request, user);
-
         expenseService.saveExpense(expense);
 
         return "redirect:/expenses";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteExpense(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails principal) {
-        expenseService.deleteExpenseByIdAndUser(id, principal.getUsername());
+    @PostMapping("/delete/{id}")
+    public String deleteExpense(@PathVariable Long id,
+                                @AuthenticationPrincipal CustomUserDetails principal) {
+
+        User user = userService.findByEmail(principal.getUsername());
+        expenseService.deleteExpenseByIdAndUser(id, user);
+
         return "redirect:/expenses";
     }
 }
