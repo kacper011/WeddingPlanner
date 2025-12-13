@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface GuestRepository extends JpaRepository<Guest, Long> {
@@ -18,4 +19,5 @@ public interface GuestRepository extends JpaRepository<Guest, Long> {
     List<Guest> findByUserAndCategory(User user, GuestCategory category);
     List<Guest> findByUserAndLastNameContainingIgnoreCase(User user, String lastName);
 
+    Optional<Guest> findByIdAndUser(Long id, User user);
 }

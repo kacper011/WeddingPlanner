@@ -21,35 +21,38 @@ public class GuestServiceImpl implements GuestService {
 
     @Transactional
     @Override
-    public void deleteGuest(Long id) {
-        guestRepository.deleteById(id);
+    public void deleteGuest(Long id, User user) {
+        Guest guest = guestRepository.findByIdAndUser(id, user)
+                .orElseThrow(() -> new GuestNotFoundException(id));
+
+        guestRepository.delete(guest);
     }
 
     @Transactional
     @Override
-    public void updatePresence(Long id, String presence) {
-        Guest guest = guestRepository.findById(id)
+    public void updatePresence(Long id, String presence, User user) {
+        Guest guest = guestRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new GuestNotFoundException(id));
+
         guest.setAttendanceConfirmation(presence);
-        guestRepository.save(guest);
     }
 
     @Transactional
     @Override
-    public void updateTransport(Long id, String transport) {
-        Guest guest = guestRepository.findById(id)
+    public void updateTransport(Long id, String transport, User user) {
+        Guest guest = guestRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new GuestNotFoundException(id));
+
         guest.setTransport(transport);
-        guestRepository.save(guest);
     }
 
     @Transactional
     @Override
-    public void updateLodging(Long id, String lodging) {
-        Guest guest = guestRepository.findById(id)
+    public void updateLodging(Long id, String lodging, User user) {
+        Guest guest = guestRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new GuestNotFoundException(id));
+
         guest.setAccommodation(lodging);
-        guestRepository.save(guest);
     }
 
     @Override
@@ -67,13 +70,12 @@ public class GuestServiceImpl implements GuestService {
         return guestRepository.findByUser(user);
     }
 
-
     @Transactional
     @Override
     public Guest saveGuest(Guest guest) {
-
+        if (guest.getUser() == null) {
+            throw new IllegalStateException("Guest must have a user");
+        }
         return guestRepository.save(guest);
     }
-
-
 }
