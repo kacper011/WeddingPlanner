@@ -26,22 +26,19 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public List<Expense> getExpensesForUser(String userEmail) {
-        User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new UserNotFoundException(userEmail));
-
+    public List<Expense> getExpensesForUser(User user) {
         return expenseRepository.findByUser(user);
     }
 
     @Override
-    public BigDecimal getTotalForUser(String userEmail) {
-        List<Expense> expenses = getExpensesForUser(userEmail);
+    public BigDecimal getTotalForUser(User user) {
+        List<Expense> expenses = getExpensesForUser(user);
 
         boolean hasNullFields = expenses.stream()
-                .anyMatch(expense -> expense.getAmount() == null || expense.getName() == null);
+                .anyMatch(e -> e.getAmount() == null || e.getName() == null);
 
         if (hasNullFields) {
-            throw new IllegalArgumentException("All expense fields (amount and name) must be completed.");
+            throw new InvalidExpenseDataException();
         }
 
         return expenses.stream()
@@ -51,20 +48,22 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public void saveExpense(Expense expense) {
-        if (expense.getAmount() == null || expense.getName() == null || expense.getName().trim().isEmpty()) {
+        if (expense.getAmount() == null ||
+                expense.getName() == null ||
+                expense.getName().trim().isEmpty()) {
             throw new InvalidExpenseDataException();
         }
+
         expenseRepository.save(expense);
     }
 
-    @Transactional
     @Override
-    public void deleteExpenseByIdAndUser(Long id, String username) {
+    public void deleteExpenseByIdAndUser(Long id, User user) {
         Expense expense = expenseRepository.findById(id)
                 .orElseThrow(() -> new ExpenseNotFoundException(id));
 
-        if (!expense.getUser().getEmail().equals(username)) {
-            throw new UnauthorizedExpenseAccessException(username);
+        if (!expense.getUser().getId().equals(user.getId())) {
+            throw new UnauthorizedExpenseAccessException(user.getEmail());
         }
 
         expenseRepository.delete(expense);

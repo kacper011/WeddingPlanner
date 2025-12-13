@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface ExpenseService {
 
-    List<Expense> getExpensesForUser(String userEmail);
+    List<Expense> getExpensesForUser(User user);
 
-    BigDecimal getTotalForUser(String userEmail);
+    BigDecimal getTotalForUser(User user);
 
     void saveExpense(Expense expense);
 
-    void deleteExpenseByIdAndUser(Long id, String username);
+    void deleteExpenseByIdAndUser(Long id, User user);
 }
