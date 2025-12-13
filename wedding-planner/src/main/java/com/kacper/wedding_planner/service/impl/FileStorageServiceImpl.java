@@ -26,30 +26,37 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     @Override
     public String storeFile(MultipartFile file, Long userId) throws IOException {
-        String original = StringUtils.cleanPath(file.getOriginalFilename());
 
+        if (file.isEmpty()) {
+            throw new IOException("Pusty plik");
+        }
+
+        if (file.getSize() > 10 * 1024 * 1024) {
+            throw new IOException("Plik jest za duży (max 10MB)");
+        }
+
+        String contentType = file.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new IOException("Niedozwolony typ pliku");
+        }
+
+        String original = StringUtils.cleanPath(file.getOriginalFilename());
         if (original.contains("..")) {
-            throw new IOException("Niepoprawna nazwa pliku: " + original);
+            throw new IOException("Niepoprawna nazwa pliku");
         }
 
         String ext = "";
         int idx = original.lastIndexOf('.');
-        if (idx >= 0) ext = original.substring(idx);
-
-        String storedName = UUID.randomUUID().toString() + ext;
-        Path userDir = root.resolve(String.valueOf(userId));
-
-        if (!Files.exists(userDir)) {
-            Files.createDirectories(userDir);
+        if (idx >= 0) {
+            ext = original.substring(idx).toLowerCase();
         }
+
+        String storedName = UUID.randomUUID() + ext;
+        Path userDir = root.resolve(String.valueOf(userId));
+        Files.createDirectories(userDir);
 
         Path target = userDir.resolve(storedName);
-
-        try {
-            Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException ex) {
-            throw new IOException("Nie można zapisać pliku " + original, ex);
-        }
+        Files.copy(file.getInputStream(), target);
 
         return userId + "/" + storedName;
     }
