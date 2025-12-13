@@ -36,8 +36,7 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public void saveEventForUser(Event event, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
+    public void saveEventForUser(Event event, User user) {
         event.setUser(user);
         eventRepository.save(event);
     }
