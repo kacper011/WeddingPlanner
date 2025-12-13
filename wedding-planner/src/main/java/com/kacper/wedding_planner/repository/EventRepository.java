@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findByUser(User user);
@@ -15,4 +16,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findByDate(LocalDate date);
 
     List<Event> findByDateAndReminderSentFalse(LocalDate targetDate);
+
+    Optional<Object> findByIdAndUser(Long id, User user);
 }

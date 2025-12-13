@@ -11,9 +11,9 @@ public interface EventService {
 
     List<EventDTO> getEventsForUser(User user);
 
-    void saveEventForUser(Event event, User user);
-
     Optional<Event> getEventByIdForUser(Long id, User user);
+
+    void saveEventForUser(Event event, User user);
 
     Event save(Event event);
 
