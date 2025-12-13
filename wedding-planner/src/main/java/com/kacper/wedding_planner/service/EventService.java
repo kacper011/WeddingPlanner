@@ -2,12 +2,13 @@ package com.kacper.wedding_planner.service;
 
 import com.kacper.wedding_planner.dto.EventDTO;
 import com.kacper.wedding_planner.model.Event;
+import com.kacper.wedding_planner.model.User;
 
 import java.util.List;
 
 public interface EventService {
 
-    public List<EventDTO> getEventsForUser(String email);
+    List<EventDTO> getEventsForUser(User user);
 
-    public void saveEventForUser(Event event, String email);
+    void saveEventForUser(Event event, User user);
 }

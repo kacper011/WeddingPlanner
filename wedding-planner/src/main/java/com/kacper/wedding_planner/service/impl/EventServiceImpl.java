@@ -25,9 +25,10 @@ public class EventServiceImpl implements EventService {
         this.userRepository = userRepository;
     }
 
+
     @Override
-    public List<EventDTO> getEventsForUser(String email) {
-        return eventRepository.findByUserEmail(email)
+    public List<EventDTO> getEventsForUser(User user) {
+        return eventRepository.findByUser(user)
                 .stream()
                 .map(EventMapper::toDTO)
                 .collect(Collectors.toList());
