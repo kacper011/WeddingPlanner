@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public class GuestTableServiceImpl implements GuestTableService {
 
@@ -26,18 +27,20 @@ public class GuestTableServiceImpl implements GuestTableService {
     public List<GuestTable> getTablesForUser(User user) {
         return guestTableRepository.findByUser(user);
     }
-
+    
     @Transactional
-    public void detachGuestsFromTable(Long tableId) {
+    public void detachGuestsFromTable(Long tableId, User user) {
         GuestTable table = guestTableRepository.findById(tableId)
                 .orElseThrow(() -> new GuestTableNotFoundException(tableId));
 
+        if (!table.getUser().getId().equals(user.getId())) {
+            throw new SecurityException("Nie masz uprawnień do modyfikacji tej tabeli");
+        }
+
         List<Guest> guests = table.getGuests();
         if (guests != null && !guests.isEmpty()) {
-            guests.forEach(guest -> {
-                guest.setTable(null);
-                guestRepository.save(guest);
-            });
+            guests.forEach(guest -> guest.setTable(null));
+            guestRepository.saveAll(guests);
         }
     }
 
@@ -50,7 +53,8 @@ public class GuestTableServiceImpl implements GuestTableService {
             throw new SecurityException("Nie masz uprawnień do usunięcia tej tabeli");
         }
 
-        detachGuestsFromTable(id);
+        detachGuestsFromTable(id, user);
+
         guestTableRepository.delete(table);
     }
 }
