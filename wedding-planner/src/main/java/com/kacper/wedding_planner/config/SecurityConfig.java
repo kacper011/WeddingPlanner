@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -18,6 +19,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers(new AntPathRequestMatcher("/public/**"))
+                )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/public/**", "/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/login", "/register").permitAll()
@@ -35,12 +39,13 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                         .sessionFixation().migrateSession()
                 );
-//                .requiresChannel(channel -> channel
-//                        .anyRequest().requiresSecure() // 8443 https
-//                );
+//      .requiresChannel(channel -> channel
+//          .anyRequest().requiresSecure() // 8443 https
+//      );
 
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

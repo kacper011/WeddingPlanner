@@ -50,7 +50,7 @@ public class PublicUploadController {
             return "public_invalid_token";
         }
 
-        if (file.isEmpty() || !file.getContentType().startsWith("image/") || file.getSize() > 5*1024*1024) {
+        if (file.isEmpty() || !file.getContentType().startsWith("image/") || file.getSize() > 15*1024*1024) {
             model.addAttribute("error", "Nieprawidłowy plik");
             model.addAttribute("token", token);
             return "public_upload_form";

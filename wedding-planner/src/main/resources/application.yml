@@ -2,9 +2,18 @@ app:
   upload:
     dir: /app/uploads
 
+server:
+  tomcat:
+    max-swallow-size: 15MB
+
 spring:
   application:
     name: wedding-planner
+
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 15MB
 
   datasource:
     url: jdbc:mysql://host.docker.internal:3306/wedding_planner
