@@ -28,8 +28,15 @@ public class PhotoServiceImpl implements PhotoService {
 
     @Override
     public Photo savePhotoFromUpload(MultipartFile file, UploadToken token) throws IOException {
+
+        if (token == null || !token.isValid()) {
+            throw new IllegalArgumentException("Token jest nieważny lub wygasł");
+        }
+
         if (file.isEmpty()) throw new IllegalArgumentException("Plik pusty");
+
         if (file.getSize() > 5L * 1024 * 1024) throw new IllegalArgumentException("Plik za duży (max 5MB)");
+
         String contentType = file.getContentType();
         if (contentType == null || (!contentType.startsWith("image/"))) {
             throw new IllegalArgumentException("Dozwolone tylko obrazy");
@@ -47,6 +54,11 @@ public class PhotoServiceImpl implements PhotoService {
         p.setOwner(user);
         p.setUploadedByPublic(true);
 
-        return photoRepository.save(p);
+        Photo saved = photoRepository.save(p);
+
+        token.markUsed();
+        tokenRepository.save(token);
+
+        return saved;
     }
 }

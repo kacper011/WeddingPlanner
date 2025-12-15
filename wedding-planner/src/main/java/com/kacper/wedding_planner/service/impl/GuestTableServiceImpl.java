@@ -27,7 +27,6 @@ public class GuestTableServiceImpl implements GuestTableService {
     public List<GuestTable> getTablesForUser(User user) {
         return guestTableRepository.findByUser(user);
     }
-    
     @Transactional
     public void detachGuestsFromTable(Long tableId, User user) {
         GuestTable table = guestTableRepository.findById(tableId)

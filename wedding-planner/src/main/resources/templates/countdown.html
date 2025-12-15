@@ -298,21 +298,17 @@
 </nav>
 
 
-<!-- MAIN CONTENT -->
 <main class="content-wrapper">
-  <!-- COUNTDOWN -->
   <div class="counter-container glass-card" th:if="${weddingInfo.weddingDate != null}">
     <h2 class="counter-title" th:text="|${weddingInfo.brideName} &amp; ${weddingInfo.groomName}|">Imiona</h2>
     <div class="countdown-circle" id="countdown">
       <div class="countdown-names" th:text="|${weddingInfo.brideName} & ${weddingInfo.groomName}|">Dominika & Kacper</div>
       <div class="countdown-days"></div>
     </div>
-    <!-- BUTTON + WEATHER OUTPUT -->
     <button id="showWeatherBtn" class="btn btn-secondary mt-3">Pokaż pogodę</button>
     <div id="weather-info" class="mt-3" style="font-size: 0.95rem;"></div>
   </div>
 
-  <!-- FORM -->
   <div class="form-container glass-card">
     <form th:action="@{/guests/countdown}" th:object="${weddingInfo}" method="post">
       <label>Imię Panny Młodej:</label>
@@ -329,7 +325,6 @@
   </div>
 </main>
 
-<!-- Weather Modal -->
 <div class="modal fade" id="weatherModal" tabindex="-1" aria-labelledby="weatherModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">

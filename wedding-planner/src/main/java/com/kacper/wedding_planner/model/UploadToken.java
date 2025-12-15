@@ -30,21 +30,35 @@ public class UploadToken {
 
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime expiresAt;
+
+    /**
+     * null = brak limitu użyć (do momentu wygaśnięcia)
+     */
     private Integer maxUses;
+
     private Integer uses = 0;
+
     private boolean active = true;
+
     public boolean isValid() {
         boolean notExpired = expiresAt == null || LocalDateTime.now().isBefore(expiresAt);
         boolean underMaxUses = maxUses == null || uses < maxUses;
-        return notExpired && underMaxUses;
+        return active && notExpired && underMaxUses;
     }
 
-    public static UploadToken createForUser(User user, int maxUses) {
+    public void markUsed() {
+        if (uses == null) {
+            uses = 0;
+        }
+        uses++;
+    }
+
+    public static UploadToken createForUser(User user) {
         UploadToken t = new UploadToken();
         t.setOwner(user);
         t.setToken(UUID.randomUUID().toString());
         t.setActive(true);
-        t.setMaxUses(maxUses);
+        t.setMaxUses(null);
         t.setCreatedAt(LocalDateTime.now());
         return t;
     }
