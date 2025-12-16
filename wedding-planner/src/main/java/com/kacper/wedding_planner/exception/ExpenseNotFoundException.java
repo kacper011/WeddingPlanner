@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ExpenseNotFoundException extends RuntimeException {
 
     public ExpenseNotFoundException(Long id) {
-        super("Expense with this id " + id + " not found.");
+        super("Nie znaleziono wydatku o podanym identyfikatorze.");
     }
 }
