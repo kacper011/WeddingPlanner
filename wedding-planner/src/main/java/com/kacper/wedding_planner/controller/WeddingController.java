@@ -55,11 +55,7 @@ public class WeddingController {
     public String listGuests(Model model, @AuthenticationPrincipal CustomUserDetails principal,
                              @RequestParam(required = false) String category) {
 
-        if (principal == null) {
-            return "redirect:/login";
-        }
-
-        User currentUser = userService.findByEmail(principal.getUsername());
+        User currentUser = currentUser(principal);
         List<Guest> guests;
 
         if (category != null && !category.isEmpty()) {
@@ -106,7 +102,7 @@ public class WeddingController {
                            @AuthenticationPrincipal CustomUserDetails principal,
                            Model model) {
 
-        User currentUser = userService.findByEmail(principal.getUsername());
+        User currentUser = currentUser(principal);
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("categories", GuestCategory.values());
@@ -124,7 +120,7 @@ public class WeddingController {
                                    @AuthenticationPrincipal CustomUserDetails principal,
                                    Model model) {
 
-        User currentUser = userService.findByEmail(principal.getUsername());
+        User currentUser = currentUser(principal);
 
         Guest guest = guestRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Nie znaleziono gościa"));
@@ -144,7 +140,7 @@ public class WeddingController {
                             @AuthenticationPrincipal CustomUserDetails principal,
                             Model model) {
 
-        User currentUser = userService.findByEmail(principal.getUsername());
+        User currentUser = currentUser(principal);
 
         Guest existingGuest = guestRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono gościa"));
@@ -171,7 +167,7 @@ public class WeddingController {
                               RedirectAttributes redirectAttributes,
                               @AuthenticationPrincipal CustomUserDetails principal) {
 
-        User currentUser = userService.findByEmail(principal.getUsername());
+        User currentUser = currentUser(principal);
         Guest guest = guestRepository.findById(id)
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono gościa"));
 
@@ -179,7 +175,7 @@ public class WeddingController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Odmowa dostępu");
         }
 
-        guestService.deleteGuest(id);
+        guestService.deleteGuest(id, currentUser);
         redirectAttributes.addFlashAttribute("message", "Gość został pomyślnie usunięty.");
         return "redirect:/guests";
     }
@@ -189,7 +185,7 @@ public class WeddingController {
                                  @RequestParam("presence") String presence,
                                  @AuthenticationPrincipal CustomUserDetails principal) {
 
-        User currentUser = userService.findByEmail(principal.getUsername());
+        User currentUser = currentUser(principal);
 
         Guest guest = guestRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono gościa"));
@@ -214,7 +210,7 @@ public class WeddingController {
                                   @RequestParam String transport,
                                   @AuthenticationPrincipal CustomUserDetails principal) {
 
-        User currentUser = userService.findByEmail(principal.getUsername());
+        User currentUser = currentUser(principal);
 
         Guest guest = guestRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono gościa"));
@@ -234,7 +230,7 @@ public class WeddingController {
                                 @RequestParam String lodging,
                                 @AuthenticationPrincipal CustomUserDetails principal) {
 
-        User currentUser = userService.findByEmail(principal.getUsername());
+        User currentUser = currentUser(principal);
 
         Guest guest = guestRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono gościa"));
@@ -252,7 +248,9 @@ public class WeddingController {
     @GetMapping("/confirmed")
     public String getConfirmedGuests(Model model,
                                      @AuthenticationPrincipal CustomUserDetails principal) {
-        User currentUser = userService.findByEmail(principal.getUsername());
+
+        User currentUser = currentUser(principal);
+
         List<Guest> confirmedGuests = guestRepository.findByUserAndAttendanceConfirmation(currentUser, "YES");
 
         confirmedGuests.sort(Comparator.comparing(Guest::getLastName));
@@ -263,7 +261,9 @@ public class WeddingController {
     @GetMapping("/notConfirmed")
     public String getNotConfirmedGuests(Model model,
                                         @AuthenticationPrincipal CustomUserDetails principal) {
-        User currentUser = userService.findByEmail(principal.getUsername());
+
+        User currentUser = currentUser(principal);
+
         List<Guest> notConfirmedGuests = guestRepository.findByUserAndAttendanceConfirmation(currentUser, "NO");
 
         notConfirmedGuests.sort(Comparator.comparing(Guest::getLastName));
@@ -275,7 +275,8 @@ public class WeddingController {
     public String searchGuests(@RequestParam("lastName") String lastName,
                                Model model,
                                @AuthenticationPrincipal CustomUserDetails principal) {
-        User currentUser = userService.findByEmail(principal.getUsername());
+
+        User currentUser = currentUser(principal);
 
         if (lastName == null || lastName.isBlank()) {
             return "redirect:/guests";
@@ -296,7 +297,8 @@ public class WeddingController {
     public String getWeddingReceptionsGuests(Model model,
                                              @AuthenticationPrincipal CustomUserDetails principal) {
 
-        User currentUser = userService.findByEmail(principal.getUsername());
+        User currentUser = currentUser(principal);
+
         List<Guest> weddingReceptionsGuests = guestRepository.findByUserAndAfterParty(currentUser, "YES");
 
         model.addAttribute("weddingReceptionsGuests", weddingReceptionsGuests);
@@ -306,7 +308,8 @@ public class WeddingController {
     @PostMapping("/receptions/toggle/{id}")
     public String toggleReceptionStatus(@PathVariable Long id,
                                         @AuthenticationPrincipal CustomUserDetails principal) {
-        User currentUser = userService.findByEmail(principal.getUsername());
+
+        User currentUser = currentUser(principal);
 
         Guest guest = guestRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono gościa"));
@@ -323,8 +326,10 @@ public class WeddingController {
 
     @GetMapping("/countdown")
     public String getCountdownPage(Model model, @AuthenticationPrincipal CustomUserDetails principal) {
-        User user = userService.findByEmail(principal.getUsername());
-        WeddingInfo info = weddingInfoRepository.findByUser(user).orElse(new WeddingInfo());
+
+        User currentUser = currentUser(principal);
+
+        WeddingInfo info = weddingInfoRepository.findByUser(currentUser).orElse(new WeddingInfo());
         model.addAttribute("weddingInfo", info);
         return "countdown";
 
@@ -333,9 +338,18 @@ public class WeddingController {
     @PostMapping("/countdown")
     public String saveWeddingInfo(@ModelAttribute WeddingInfo weddingInfo,
                                   @AuthenticationPrincipal CustomUserDetails principal) {
-        User user = userService.findByEmail(principal.getUsername());
-        weddingInfoService.saveOrUpdateWeddingInfo(weddingInfo, user);
+
+        User currentUser = currentUser(principal);
+
+        weddingInfoService.saveOrUpdateWeddingInfo(weddingInfo, currentUser);
         return "redirect:/guests/countdown";
+    }
+
+    private User currentUser(CustomUserDetails principal) {
+        if (principal == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Nie jesteś zalogowany");
+        }
+        return userService.findByEmail(principal.getUsername());
     }
 
 }
