@@ -76,7 +76,7 @@ public class EventController {
 
         Event event = eventService.getEventByIdForUser(id, user)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Event not found"));
+                        HttpStatus.NOT_FOUND, "Nie znaleziono wydarzenia"));
 
         event.setTitle(request.getTitle());
         event.setDate(request.getDate());
@@ -94,7 +94,11 @@ public class EventController {
 
         User user = userService.findByEmail(principal.getUsername());
 
-        eventService.deleteEventForUser(id, user);
+        boolean deleted = eventService.deleteEventForUser(id, user);
+
+        if (!deleted) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono wydarzenia");
+        }
 
         return ResponseEntity.noContent().build();
     }
