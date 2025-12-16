@@ -30,7 +30,7 @@ public class TokenManagementController {
     @GetMapping
     public String list(@AuthenticationPrincipal UserDetails principal, Model model) {
         User user = userRepository.findByEmail(principal.getUsername())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nie znaleziono użytkownika"));
 
         var tokens = tokenRepository.findByOwner(user);
 
@@ -44,26 +44,31 @@ public class TokenManagementController {
                             @PathVariable Long id,
                             Model model) {
 
-        User user = userRepository.findByEmail(principal.getUsername()).orElseThrow();
-        UploadToken t = tokenRepository.findById(id).orElseThrow();
+        User user = userRepository.findByEmail(principal.getUsername())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Nie znaleziono użytkownika"));
 
-        if (!t.getOwner().getId().equals(user.getId()))
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied");
+        UploadToken token = tokenRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Nie znaleziono tokenu"));
 
-        if (!t.isActive()) {
-            throw new ResponseStatusException(HttpStatus.GONE, "Token revoked");
+        if (!token.getOwner().getId().equals(user.getId()))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Brak dostępu do tego tokenu");
+
+        if (!token.isActive()) {
+            throw new ResponseStatusException(HttpStatus.GONE, "Token unieważniony");
         }
 
-        if (t.getExpiresAt() != null && t.getExpiresAt().isBefore(LocalDateTime.now())) {
-            throw new ResponseStatusException(HttpStatus.GONE, "Token expired");
+        if (token.getExpiresAt() != null && token.getExpiresAt().isBefore(LocalDateTime.now())) {
+            throw new ResponseStatusException(HttpStatus.GONE, "Token wygasł");
         }
 
         String publicLink = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/public/upload/")
-                .path(t.getToken())
+                .path(token.getToken())
                 .toUriString();
 
-        model.addAttribute("token", t);
+        model.addAttribute("token", token);
         model.addAttribute("publicLink", publicLink);
 
         return "tokens_show";
@@ -75,9 +80,10 @@ public class TokenManagementController {
             @RequestParam(defaultValue = "48") int hours) {
 
         User user = userRepository.findByEmail(principal.getUsername())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Nie znaleziono użytkownika"));
 
-        UploadToken t = UploadToken.createForUser(user, hours);
+        UploadToken t = UploadToken.createForUser(user);
         tokenRepository.save(t);
 
         return "redirect:/tokens/" + t.getId() + "/show";
@@ -85,17 +91,20 @@ public class TokenManagementController {
 
     @PostMapping("/revoke/{id}")
     public String revoke(@AuthenticationPrincipal UserDetails principal, @PathVariable Long id) {
+
         User user = userRepository.findByEmail(principal.getUsername())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Nie znaleziono użytkownika"));
 
-        UploadToken t = tokenRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        UploadToken token = tokenRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Nie znaleziono tokenu"));
 
-        if (!t.getOwner().getId().equals(user.getId()))
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied");
+        if (!token.getOwner().getId().equals(user.getId()))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Brak dostępu do tego tokenu");
 
-        t.setActive(false);
-        tokenRepository.save(t);
+        token.setActive(false);
+        tokenRepository.save(token);
 
         return "redirect:/tokens";
     }

@@ -40,7 +40,7 @@ public class SeatingPlanController {
     @GetMapping
     public String showSeatingPlan(@AuthenticationPrincipal CustomUserDetails principal, Model model) {
 
-        User user = userRepository.findByEmail(principal.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmail(principal.getUsername()).orElseThrow(() -> new RuntimeException("Nie znaleziono użytkownika" + principal.getUsername()));
 
 
         List<GuestTable> tables = guestTableService.getTablesForUser(user);
@@ -59,13 +59,13 @@ public class SeatingPlanController {
                                      @AuthenticationPrincipal CustomUserDetails principal) {
 
         User user = userRepository.findByEmail(principal.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono użytkownika" + principal.getUsername()));
 
         Guest guest = guestRepository.findById(guestId)
-                .orElseThrow(() -> new RuntimeException("Guest not found"));
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono gościa"));
 
         GuestTable table = guestTableRepository.findById(tableId)
-                .orElseThrow(() -> new RuntimeException("Table not found"));
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono stołu"));
 
         if (!guest.getUser().getId().equals(user.getId()) ||
             !table.getUser().getId().equals(user.getId())) {
@@ -84,7 +84,7 @@ public class SeatingPlanController {
                            Model model) {
 
         User user = userRepository.findByEmail(principal.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono użytkownika" + principal.getUsername()));
 
         if (result.hasErrors()) {
             model.addAttribute("tables", guestTableService.getTablesForUser(user));
@@ -144,7 +144,7 @@ public class SeatingPlanController {
     @PostMapping("/delete")
     public String deleteTable(@RequestParam Long id, @AuthenticationPrincipal CustomUserDetails principal) {
         User user = userRepository.findByEmail(principal.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono użytkownika" + principal.getUsername()));
 
         guestTableService.deleteTableById(id, user);
 
