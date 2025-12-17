@@ -11,7 +11,8 @@ public interface WeddingTimelineService {
 
     void save(WeddingTimeline item);
 
-    void delete(Long id);
+    void deleteForUser(Long id, User user);
 
-    WeddingTimeline findById(Long id);
+    WeddingTimeline findByIdForUser(Long id, User user);
 }
+

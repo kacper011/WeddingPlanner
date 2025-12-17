@@ -63,13 +63,8 @@ public class TimelineController {
                                  @AuthenticationPrincipal CustomUserDetails principal) {
 
         User user = userService.findByEmail(principal.getUsername());
-        WeddingTimeline timeline = weddingTimelineService.findById(id);
 
-        if (timeline == null || !timeline.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("Forbidden");
-        }
-
-        weddingTimelineService.delete(id);
+        weddingTimelineService.deleteForUser(id, user);
 
         return "redirect:/timeline";
     }

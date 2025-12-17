@@ -4,6 +4,7 @@ import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.model.WeddingTimeline;
 import com.kacper.wedding_planner.repository.WeddingTimelineRepository;
 import com.kacper.wedding_planner.service.WeddingTimelineService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class WeddingTimelineServiceImpl implements WeddingTimelineService {
     public WeddingTimelineServiceImpl(WeddingTimelineRepository weddingTimelineRepository) {
         this.weddingTimelineRepository = weddingTimelineRepository;
     }
+
     @Override
     public List<WeddingTimeline> getForUser(User user) {
         return weddingTimelineRepository.findByUserOrderByTimeAsc(user);
@@ -25,14 +27,22 @@ public class WeddingTimelineServiceImpl implements WeddingTimelineService {
         weddingTimelineRepository.save(item);
     }
 
+    @Transactional
     @Override
-    public void delete(Long id) {
-        weddingTimelineRepository.deleteById(id);
+    public void deleteForUser(Long id, User user) {
+        WeddingTimeline timeline = weddingTimelineRepository
+                .findByIdAndUser(id, user)
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono wpisu osi czasu"));
+
+        weddingTimelineRepository.delete(timeline);
     }
 
     @Override
-    public WeddingTimeline findById(Long id) {
-        return weddingTimelineRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Timeline not found"));
+    public WeddingTimeline findByIdForUser(Long id, User user) {
+        return weddingTimelineRepository
+                .findByIdAndUser(id, user)
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono wpisu osi czasu"));
     }
 }
+
+

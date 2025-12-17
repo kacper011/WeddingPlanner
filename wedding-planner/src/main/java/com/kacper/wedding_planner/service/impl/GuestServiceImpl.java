@@ -74,7 +74,7 @@ public class GuestServiceImpl implements GuestService {
     @Override
     public Guest saveGuest(Guest guest) {
         if (guest.getUser() == null) {
-            throw new IllegalStateException("Guest must have a user");
+            throw new IllegalStateException("Gość musi być przypisany do użytkownika");
         }
         return guestRepository.save(guest);
     }
