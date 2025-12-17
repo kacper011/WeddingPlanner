@@ -15,7 +15,5 @@ public interface EventService {
 
     void saveEventForUser(Event event, User user);
 
-    Event save(Event event);
-
     boolean deleteEventForUser(Long id, User user);
 }

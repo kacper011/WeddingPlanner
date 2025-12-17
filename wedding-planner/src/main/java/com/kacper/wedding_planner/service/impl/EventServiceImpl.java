@@ -43,17 +43,13 @@ public class EventServiceImpl implements EventService {
         eventRepository.save(event);
     }
 
-    @Override
-    public Event save(Event event) {
-        return eventRepository.save(event);
-    }
-
     @Transactional
     @Override
-    public void deleteEventForUser(Long id, User user) {
+    public boolean deleteEventForUser(Long id, User user) {
         Event event = eventRepository.findByIdAndUser(id, user)
-                .orElseThrow(() -> new ResourceNotFoundException("Event not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Nie znaleziono wydarzenia"));
 
         eventRepository.delete(event);
+        return true;
     }
 }
