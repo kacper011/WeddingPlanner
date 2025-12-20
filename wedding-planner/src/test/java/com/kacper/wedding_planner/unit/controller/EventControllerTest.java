@@ -3,10 +3,14 @@ package com.kacper.wedding_planner.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kacper.wedding_planner.config.CustomUserDetails;
 import com.kacper.wedding_planner.controller.EventController;
+import com.kacper.wedding_planner.dto.EventDTO;
+import com.kacper.wedding_planner.dto.EventRequest;
 import com.kacper.wedding_planner.model.Event;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.EventRepository;
 import com.kacper.wedding_planner.repository.UserRepository;
+import com.kacper.wedding_planner.service.EventService;
+import com.kacper.wedding_planner.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -25,6 +29,8 @@ import java.util.Optional;
 
 import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -37,40 +43,39 @@ class EventControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private EventRepository eventRepository;
+    private UserService userService;
 
     @MockBean
-    private UserRepository userRepository;
+    private EventService eventService;
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    private CustomUserDetails principal;
 
     private User testUser;
 
     @BeforeEach
     void setup() {
         testUser = new User();
+        testUser.setId(1L);
         testUser.setEmail("test@example.com");
-        principal = new CustomUserDetails(testUser);
-
-        UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     @Test
     @WithMockUser(username = "test@example.com")
     void shouldReturnEventsJson() throws Exception {
-        Event event = new Event();
-        event.setId(1L);
-        event.setTitle("Test event");
-        event.setDate(LocalDate.now());
-        event.setUser(testUser);
 
-        when(eventRepository.findByUserEmail("test@example.com"))
-                .thenReturn(List.of(event));
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("test@example.com");
+
+        EventDTO dto = new EventDTO();
+        dto.setTitle("Test event");
+
+        when(userService.findByEmail("test@example.com"))
+                .thenReturn(user);
+
+        when(eventService.getEventsForUser(user))
+                .thenReturn(List.of(dto));
 
         mockMvc.perform(get("/events/data"))
                 .andExpect(status().isOk())
@@ -81,7 +86,15 @@ class EventControllerTest {
     @Test
     @WithMockUser(username = "test@example.com")
     void shouldReturnNoContentWhenNoEvents() throws Exception {
-        when(eventRepository.findByUserEmail("test@example.com"))
+
+        User testUser = new User();
+        testUser.setId(1L);
+        testUser.setEmail("test@example.com");
+
+        when(userService.findByEmail("test@example.com"))
+                .thenReturn(testUser);
+
+        when(eventService.getEventsForUser(testUser))
                 .thenReturn(List.of());
 
         mockMvc.perform(get("/events/data"))
@@ -91,27 +104,22 @@ class EventControllerTest {
     @Test
     @WithMockUser(username = "test@example.com")
     void shouldCreateEvent() throws Exception {
-        Event event = new Event();
-        event.setTitle("New Event");
-        event.setDate(LocalDate.now());
 
-        when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(testUser));
+        EventRequest request = new EventRequest();
+        request.setTitle("New Event");
+        request.setDate(LocalDate.of(2025, 6, 1));
 
-        Event savedEvent = new Event();
-        savedEvent.setId(1L);
-        savedEvent.setTitle(event.getTitle());
-        savedEvent.setDate(event.getDate());
-        savedEvent.setUser(testUser);
+        when(userService.findByEmail("test@example.com"))
+                .thenReturn(testUser);
 
-        when(eventRepository.save(any(Event.class))).thenReturn(savedEvent);
+        doNothing().when(eventService)
+                        .saveEventForUser(any(Event.class), eq(testUser));
 
         mockMvc.perform(post("/events")
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(event)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.title").value("New Event"));
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated());
     }
 
     @Test

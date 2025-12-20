@@ -81,9 +81,9 @@ public class EventController {
         event.setTitle(request.getTitle());
         event.setDate(request.getDate());
 
-        Event updated = eventService.save(event);
+        eventService.saveEventForUser(event, user);
 
-        return ResponseEntity.ok(EventMapper.toDTO(updated));
+        return ResponseEntity.ok(EventMapper.toDTO(event));
     }
 
     @DeleteMapping("/{id}")
