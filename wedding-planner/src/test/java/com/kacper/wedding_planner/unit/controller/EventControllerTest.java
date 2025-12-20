@@ -125,28 +125,30 @@ class EventControllerTest {
     @Test
     @WithMockUser(username = "test@example.com")
     void shouldUpdateEvent() throws Exception {
+
         Event existing = new Event();
         existing.setId(1L);
         existing.setTitle("Old Title");
         existing.setDate(LocalDate.of(2025, 1, 1));
         existing.setUser(testUser);
 
-        Event updated = new Event();
-        updated.setTitle("Updated Title");
-        updated.setDate(LocalDate.of(2025, 12, 25));
+       EventRequest request = new EventRequest();
+       request.setTitle("New Title");
+       request.setDate(LocalDate.of(2025, 12, 25));
 
-        Mockito.when(eventRepository.findById(1L)).thenReturn(Optional.of(existing));
-        Mockito.when(eventRepository.save(any(Event.class))).thenReturn(existing);
+       when(userService.findByEmail("test@example.com"))
+               .thenReturn(testUser);
 
-        mockMvc.perform(put("/events/1")
-                        .with(csrf())
-                        .with(authentication(
-                                new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities())
-                        ))
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(updated)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value("Updated Title"));
+       when(eventService.getEventByIdForUser(1L, testUser))
+               .thenReturn(Optional.of(existing));
+
+       mockMvc.perform(put("/events/1")
+               .with(csrf())
+               .contentType(MediaType.APPLICATION_JSON)
+               .content(objectMapper.writeValueAsString(request)))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.title").value("New Title"));
+
     }
 
     @Test
