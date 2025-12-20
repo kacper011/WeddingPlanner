@@ -17,52 +17,62 @@ import java.util.List;
 @Component
 public class EventNotificationsScheduler {
 
-    private static final Logger log = LoggerFactory.getLogger(EventNotificationsScheduler.class);
+    private static final Logger log =
+            LoggerFactory.getLogger(EventNotificationsScheduler.class);
+
     private final EventRepository eventRepository;
     private final EmailService emailService;
 
-    public EventNotificationsScheduler(EventRepository eventRepository, UserRepository userRepository, EmailService emailService) {
+    public EventNotificationsScheduler(EventRepository eventRepository,
+                                       EmailService emailService) {
         this.eventRepository = eventRepository;
         this.emailService = emailService;
     }
 
-    @PostConstruct
-    public void onStartupCheck() {
-        sendReminders();
-    }
-
-    @Transactional
-    @Scheduled(cron = "0 * * * * *") // codziennie o 8:00
+    @Scheduled(cron = "0 0 8 * * *") // codziennie o 8:00
     public void sendReminders() {
         LocalDate targetDate = LocalDate.now().plusDays(2);
-        log.info("🔄 Checking events for date: " + targetDate);
+        log.info("🔄 Checking events for date {}", targetDate);
 
-        List<Event> events = eventRepository.findByDateAndReminderSentFalse(targetDate);
+        List<Event> events =
+                eventRepository.findByDateAndReminderSentFalse(targetDate);
 
         if (events.isEmpty()) {
-            System.out.println("ℹ️ No events to remind for date: " + targetDate);
+            log.info("ℹ️ No events to remind for date {}", targetDate);
             return;
         }
 
         for (Event event : events) {
             try {
-                User user = event.getUser();
-                if (user != null && user.getEmail() != null) {
-                    emailService.sendReminderEmail(
-                            user.getEmail(),
-                            user.getFirstName(),
-                            event.getTitle(),
-                            event.getDate()
-                    );
-
-                    event.setReminderSent(true);
-                    eventRepository.save(event);
-
-                    log.info("✅ Reminder sent to user {} for event '{}'", user.getEmail(), event.getTitle());
-                }
+                sendReminderForEvent(event);
             } catch (Exception e) {
-                log.error("❌ Error sending reminder for event ID: {}", event.getId(), e);
+                log.error("❌ Error sending reminder for event ID {}",
+                        event.getId(), e);
             }
         }
     }
+
+    @Transactional
+    protected void sendReminderForEvent(Event event) {
+        User user = event.getUser();
+
+        if (user == null || user.getEmail() == null) {
+            log.warn("Event {} has no user/email", event.getId());
+            return;
+        }
+
+        emailService.sendReminderEmail(
+                user.getEmail(),
+                user.getFirstName(),
+                event.getTitle(),
+                event.getDate()
+        );
+
+        event.setReminderSent(true);
+        eventRepository.save(event);
+
+        log.info("✅ Reminder sent to {} for event '{}'",
+                user.getEmail(), event.getTitle());
+    }
 }
+
