@@ -1,5 +1,6 @@
 package com.kacper.wedding_planner.unit.service.impl;
 
+import com.kacper.wedding_planner.exception.GuestNotFoundException;
 import com.kacper.wedding_planner.model.Guest;
 import com.kacper.wedding_planner.model.User;
 import com.kacper.wedding_planner.repository.GuestRepository;
@@ -19,7 +20,6 @@ import static org.mockito.Mockito.*;
 class GuestServiceImplTest {
 
     private GuestRepository guestRepository;
-    @InjectMocks
     private GuestServiceImpl guestService;
 
     @BeforeEach
@@ -32,6 +32,7 @@ class GuestServiceImplTest {
     void shouldReturnAllGuestsForUser() {
         User testUser = new User();
         List<Guest> guests = Arrays.asList(new Guest(), new Guest());
+
         when(guestRepository.findByUser(testUser)).thenReturn(guests);
 
         List<Guest> result = guestService.getAllGuestsByUser(testUser);
@@ -42,51 +43,103 @@ class GuestServiceImplTest {
 
     @Test
     void shouldDeleteGuestById() {
-        guestService.deleteGuest(1L);
-        verify(guestRepository).deleteById(1L);
+
+        Long guestId = 1L;
+
+        User user = new User();
+        user.setEmail("test@example.com");
+
+        Guest guest = new Guest();
+        guest.setId(guestId);
+        guest.setUser(user);
+
+        when(guestRepository.findById(guestId))
+                .thenReturn(Optional.of(guest));
+
+        guestService.deleteGuest(guestId, user);
+        verify(guestRepository).delete(guest);
     }
 
     @Test
     void shouldUpdatePresence() {
+
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("test@example.com");
+
         Guest guest = new Guest();
-        when(guestRepository.findById(1L)).thenReturn(Optional.of(guest));
+        guest.setId(1L);
+        guest.setUser(user);
+        guest.setAttendanceConfirmation("NIE");
 
-        guestService.updatePresence(1L, "tak");
+        when(guestRepository.findByIdAndUser(1L, user))
+                .thenReturn(Optional.of(guest));
 
-        assertEquals("tak", guest.getAttendanceConfirmation());
-        verify(guestRepository).save(guest);
+        guestService.updatePresence(1L, "TAK", user);
+
+        assertEquals("TAK", guest.getAttendanceConfirmation());
+        verify(guestRepository).findByIdAndUser(1L, user);
+        verify(guestRepository, never()).save(any());
     }
 
     @Test
     void shouldThrowExceptionWhenUpdatingPresenceAndGuestNotFound() {
-        when(guestRepository.findById(1L)).thenReturn(Optional.empty());
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () ->
-                guestService.updatePresence(1L, "tak"));
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("test@example.com");
 
-        assertEquals("Gość o identyfikatorze  nie został znaleziony.", exception.getMessage());
+        when(guestRepository.findByIdAndUser(1L, user))
+                .thenReturn(Optional.empty());
+
+        GuestNotFoundException exception = assertThrows(
+                GuestNotFoundException.class,
+                () -> guestService.updatePresence(1L, "TAK", user)
+        );
+
+        assertEquals("Gość o identyfikatorze 1 nie został znaleziony.", exception.getMessage());
     }
 
     @Test
     void shouldUpdateTransport() {
-        Guest guest = new Guest();
-        when(guestRepository.findById(1L)).thenReturn(Optional.of(guest));
 
-        guestService.updateTransport(1L, "Tak");
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("test@example.com");
+
+        Guest guest = new Guest();
+        guest.setId(1L);
+        guest.setUser(user);
+
+        when(guestRepository.findByIdAndUser(1L, user))
+                .thenReturn(Optional.of(guest));
+
+        guestService.updateTransport(1L, "Tak", user);
 
         assertEquals("Tak", guest.getTransport());
+        verify(guestRepository).findByIdAndUser(1L, user);
         verify(guestRepository).save(guest);
     }
 
     @Test
     void shouldUpdateLodging() {
-        Guest guest = new Guest();
-        when(guestRepository.findById(1L)).thenReturn(Optional.of(guest));
 
-        guestService.updateLodging(1L, "Tak");
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("test@example.com");
+
+        Guest guest = new Guest();
+        guest.setId(1L);
+        guest.setUser(user);
+
+        when(guestRepository.findByIdAndUser(1L, user))
+                .thenReturn(Optional.of(guest));
+
+        guestService.updateLodging(1L, "Tak", user);
 
         assertEquals("Tak", guest.getAccommodation());
-        verify(guestRepository).save(guest);
+        verify(guestRepository).findByIdAndUser(1L, user);
+        verify(guestRepository, never()).save(any());
     }
 
     @Test
