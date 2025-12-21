@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -49,25 +50,27 @@ class ExpenseControllerTest {
     @BeforeEach
     void setup() {
         testUser = new User();
+        testUser.setId(1L);
         testUser.setEmail("testuser@example.com");
-        principal = new CustomUserDetails(testUser);
-
-        UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     @Test
     @WithMockUser(username = "testuser@example.com")
     void shouldShowExpensesViewWithModelAttributes() throws Exception {
+
         Expense expense = new Expense();
         expense.setId(1L);
         expense.setName("Test Expense");
         expense.setAmount(BigDecimal.valueOf(50));
+        expense.setUser(testUser);
 
-        when(expenseService.getExpensesForUser("testuser@example.com"))
+        when(userService.findByEmail("testuser@example.com"))
+                .thenReturn(testUser);
+
+        when(expenseService.getExpensesForUser(testUser))
                 .thenReturn(List.of(expense));
-        when(expenseService.getTotalForUser("testuser@example.com"))
+
+        when(expenseService.getTotalForUser(testUser))
                 .thenReturn(BigDecimal.valueOf(50));
 
         mockMvc.perform(get("/expenses"))
@@ -81,11 +84,10 @@ class ExpenseControllerTest {
     @Test
     @WithMockUser(username = "testuser@example.com")
     void shouldSaveExpenseAndRedirectWhenNoValidationErrors() throws Exception {
-        Expense expense = new Expense();
-        expense.setName("New Expense");
-        expense.setAmount(BigDecimal.valueOf(100));
 
-        when(userService.findByEmail("testuser@example.com")).thenReturn(testUser);
+        when(userService.findByEmail("testuser@example.com"))
+                .thenReturn(testUser);
+
 
         mockMvc.perform(post("/expenses")
                         .with(csrf())
@@ -101,9 +103,13 @@ class ExpenseControllerTest {
     @WithMockUser(username = "testuser@example.com")
     void shouldReturnExpensesViewWhenValidationErrors() throws Exception {
 
-        when(expenseService.getExpensesForUser("testuser@example.com"))
+        when(userService.findByEmail("testuser@example.com"))
+                .thenReturn(testUser);
+
+        when(expenseService.getExpensesForUser(testUser))
                 .thenReturn(List.of());
-        when(expenseService.getTotalForUser("testuser@example.com"))
+
+        when(expenseService.getTotalForUser(testUser))
                 .thenReturn(BigDecimal.ZERO);
 
         mockMvc.perform(post("/expenses")
@@ -120,16 +126,15 @@ class ExpenseControllerTest {
     @WithMockUser(username = "testuser@example.com")
     void shouldDeleteExpense() throws Exception {
 
-        Long expenseId = 1L;
-        String username = "testuser@example.com";
+        when(userService.findByEmail("testuser@example.com"))
+                .thenReturn(testUser);
 
-        mockMvc.perform(get("/expenses/delete/{id}", expenseId)
+        mockMvc.perform(get("/expenses/delete/{id}", 1L)
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/expenses"));
 
-        Mockito.verify(expenseService)
-                .deleteExpenseByIdAndUser(expenseId, username);
+        verify(expenseService).deleteExpenseByIdAndUser(1L, testUser);
     }
 
 }
