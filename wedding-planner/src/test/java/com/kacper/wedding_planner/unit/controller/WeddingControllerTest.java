@@ -269,13 +269,20 @@ class WeddingControllerTest {
 
         Long guestId = 1L;
 
+        User testUser = new User();
+        testUser.setId(1L);
+        testUser.setEmail("test@example.com");
+
+        when(userService.findByEmail("test@example.com"))
+                .thenReturn(testUser);
+
         mockMvc.perform(post("/guests/delete/{id}", guestId)
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/guests"))
                 .andExpect(flash().attribute("message", "Gość został pomyślnie usunięty."));
 
-        verify(guestService, times(1)).deleteGuest(guestId);
+        verify(guestService, times(1)).deleteGuest(guestId, testUser);
     }
 
     @Test

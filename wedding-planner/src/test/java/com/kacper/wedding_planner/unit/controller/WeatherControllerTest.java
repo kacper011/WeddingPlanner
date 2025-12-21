@@ -37,13 +37,13 @@ class WeatherControllerTest {
 
     @BeforeEach
     void setupSecurityContext() {
-        // Setup user and principal
+
         User user = new User();
         user.setEmail("test@example.com");
 
         CustomUserDetails principal = new CustomUserDetails(user);
 
-        // Set authentication context
+
         var authentication = new UsernamePasswordAuthenticationToken(
                 principal, null, principal.getAuthorities());
 
@@ -52,7 +52,7 @@ class WeatherControllerTest {
 
     @Test
     void shouldReturnWeatherData() throws Exception {
-        // Arrange
+
         User user = new User();
         user.setEmail("test@example.com");
 
@@ -61,7 +61,7 @@ class WeatherControllerTest {
         when(userService.findByEmail("test@example.com")).thenReturn(user);
         when(restTemplate.getForObject(anyString(), eq(WeatherResponse.class))).thenReturn(response);
 
-        // Act & Assert
+
         mockMvc.perform(get("/guests/countdown/weather")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .accept(MediaType.APPLICATION_JSON))
