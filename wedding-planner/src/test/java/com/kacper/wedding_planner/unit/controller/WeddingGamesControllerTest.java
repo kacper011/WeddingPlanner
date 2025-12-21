@@ -49,7 +49,7 @@ public class WeddingGamesControllerTest {
     public void shouldWeddingGamesPageReturnsViewWithQuestions() throws Exception {
 
         weddingGamesController.init();
-        // Act & Assert
+
         mockMvc.perform(get("/wedding_games")
                         .accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
@@ -59,11 +59,10 @@ public class WeddingGamesControllerTest {
 
     @Test
     public void shouldInitMethodLoadsQuestions() throws IOException {
-        // Arrange
+
         WeddingGamesController controller = new WeddingGamesController();
         controller.init();
 
-        // Assert
         assertThat(controller).hasFieldOrProperty("questions");
         assertThat(controller.weddingGamesPage(new org.springframework.ui.ExtendedModelMap()))
                 .isEqualTo("wedding_games");

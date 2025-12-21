@@ -29,7 +29,7 @@ public class EventNotificationsSchedulerTest {
         eventRepository = mock(EventRepository.class);
         userRepository = mock(UserRepository.class);
         emailService = mock(EmailService.class);
-        scheduler = new EventNotificationsScheduler(eventRepository, userRepository, emailService);
+        scheduler = new EventNotificationsScheduler(eventRepository, emailService);
     }
 
     @Test
