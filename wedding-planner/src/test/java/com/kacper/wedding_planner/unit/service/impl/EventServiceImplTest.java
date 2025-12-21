@@ -21,19 +21,21 @@ import static org.mockito.Mockito.*;
 class EventServiceImplTest {
 
     private EventRepository eventRepository;
-    private UserRepository userRepository;
     private EventServiceImpl eventService;
+    private User user;
 
     @BeforeEach
     void setUp() {
         eventRepository = mock(EventRepository.class);
-        userRepository = mock(UserRepository.class);
-        eventService = new EventServiceImpl(eventRepository, userRepository);
+        eventService = new EventServiceImpl(eventRepository);
+
+        user = new User();
+        user.setId(1L);
+        user.setEmail("test@test.com");
     }
 
     @Test
     void getEventsForUserShouldReturnEvents() {
-        String email = "test@test.com";
 
         Event event1 = new Event();
         event1.setTitle("Wedding");
@@ -43,54 +45,26 @@ class EventServiceImplTest {
         event2.setTitle("Reception");
         event2.setDate(LocalDate.now().plusDays(1));
 
-        List<Event> expectedEvents = List.of(event1, event2);
+        when(eventRepository.findByUser(user)).thenReturn(List.of(event1, event2));
 
-        when(eventRepository.findByUserEmail(email)).thenReturn(expectedEvents);
+        List<EventDTO> result = eventService.getEventsForUser(user);
 
-        List<EventDTO> result = eventService.getEventsForUser(email);
+        assertEquals(2, result.size());
+        assertEquals("Wedding", result.get(0).getTitle());
+        assertEquals("Reception", result.get(1).getTitle());
 
-        assertEquals(expectedEvents.size(), result.size());
-        assertEquals(expectedEvents.get(0).getTitle(), result.get(0).getTitle());
-        assertEquals(expectedEvents.get(0).getDate(), result.get(0).getDate());
-        assertEquals(expectedEvents.get(1).getTitle(), result.get(1).getTitle());
-        assertEquals(expectedEvents.get(1).getDate(), result.get(1).getDate());
-
-        verify(eventRepository, times(1)).findByUserEmail(email);
+        verify(eventRepository.findByUser(user));
     }
 
     @Test
     void saveEventForUserShouldSetUserAndSave() {
-        // given
-        String email = "test@example.com";
-        User mockUser = new User();
-        mockUser.setEmail(email);
 
         Event event = new Event();
 
-        when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
+        eventService.saveEventForUser(event, user);
 
-        // when
-        eventService.saveEventForUser(event, email);
-
-        // then
-        assertEquals(mockUser, event.getUser());
-        verify(eventRepository, times(1)).save(event);
-        verify(userRepository, times(1)).findByEmail(email);
-    }
-
-    @Test
-    void saveEventForUserShouldThrowWhenUserNotFound() {
-        // given
-        String email = "missing@example.com";
-        Event event = new Event();
-        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
-
-        // then
-        assertThrows(UserNotFoundException.class, () -> {
-            eventService.saveEventForUser(event, email);
-        });
-
-        verify(eventRepository, never()).save(any());
+        assertEquals(user, event.getUser());
+        verify(eventRepository).save(event);
     }
 
 }
