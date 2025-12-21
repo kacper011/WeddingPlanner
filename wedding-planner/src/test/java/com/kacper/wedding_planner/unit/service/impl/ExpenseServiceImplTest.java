@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.verify;
@@ -25,46 +26,38 @@ import static org.mockito.Mockito.when;
 class ExpenseServiceImplTest {
 
     private ExpenseRepository expenseRepository;
-    private UserRepository userRepository;
     private ExpenseServiceImpl expenseService;
+    private User user;
 
     @BeforeEach
     void setUp() {
         expenseRepository = mock(ExpenseRepository.class);
-        userRepository = mock(UserRepository.class);
-        expenseService = new ExpenseServiceImpl(expenseRepository, userRepository);
+        expenseService = new ExpenseServiceImpl(expenseRepository, null);
+
+        user = new User();
+        user.setId(1L);
+        user.setEmail("test@example.com");
     }
 
     @Test
     void shouldReturnExpensesForUser() {
-        User user = new User();
-        user.setEmail("test@example.com");
+
         Expense expense = new Expense();
+        expense.setUser(user);
         expense.setName("Test");
         expense.setAmount(BigDecimal.valueOf(100));
-        expense.setUser(user);
 
-        when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(user));
-        when(expenseRepository.findByUser(user)).thenReturn(Collections.singletonList(expense));
+        when(expenseRepository.findByUser(user))
+                .thenReturn(List.of(expense));
 
-        var result = expenseService.getExpensesForUser("test@example.com");
+        var result = expenseService.getExpensesForUser(user);
 
         assertEquals(1, result.size());
         assertEquals("Test", result.get(0).getName());
     }
 
     @Test
-    void shouldThrowWhenUserNotFound() {
-        when(userRepository.findByEmail("notfound@example.com")).thenReturn(Optional.empty());
-
-        assertThrows(UserNotFoundException.class,
-                () -> expenseService.getExpensesForUser("notfound@example.com"));
-    }
-
-    @Test
     void shouldCalculateTotalExpensesCorrectly() {
-        User user = new User();
-        user.setEmail("test@example.com");
 
         Expense e1 = new Expense();
         e1.setAmount(BigDecimal.valueOf(100));
@@ -74,34 +67,30 @@ class ExpenseServiceImplTest {
         e2.setAmount(BigDecimal.valueOf(200));
         e2.setName("Test2");
 
-        when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(user));
-        when(expenseRepository.findByUser(user)).thenReturn(Arrays.asList(e1, e2));
+        when(expenseRepository.findByUser(user))
+                .thenReturn(List.of(e1, e2));
 
-        BigDecimal total = expenseService.getTotalForUser("test@example.com");
+        BigDecimal total = expenseService.getTotalForUser(user);
 
         assertEquals(BigDecimal.valueOf(300), total);
     }
 
     @Test
     void shouldThrowIfExpenseHasNullFields() {
-        User user = new User();
-        user.setEmail("test@example.com");
 
-        Expense e1 = new Expense();
-        e1.setAmount(null);
-        e1.setName("Test1");
+        Expense expense = new Expense();
+        expense.setAmount(null);
+        expense.setName("Test1");
 
-        when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(user));
-        when(expenseRepository.findByUser(user)).thenReturn(Collections.singletonList(e1));
+        when(expenseRepository.findByUser(user))
+                .thenReturn(List.of(expense));
 
         assertThrows(IllegalArgumentException.class,
-                () -> expenseService.getTotalForUser("test@example.com"));
+                () -> expenseService.getTotalForUser(user));
     }
 
     @Test
     void shouldSaveExpenseWithUser() {
-        User user = new User();
-        user.setEmail("test@example.com");
 
         Expense expense = new Expense();
         expense.setName("Test");
@@ -109,19 +98,11 @@ class ExpenseServiceImplTest {
 
         expenseService.saveExpense(expense);
 
-        ArgumentCaptor<Expense> captor = ArgumentCaptor.forClass(Expense.class);
-        verify(expenseRepository).save(captor.capture());
-
-        Expense savedExpense = captor.getValue();
-        assertEquals("Test", savedExpense.getName());
-        assertEquals(BigDecimal.valueOf(50), savedExpense.getAmount());
-        assertEquals(user, savedExpense.getUser());
+        verify(expenseRepository).save(expense);
     }
 
     @Test
     void shouldDeleteExpenseIfAuthorized() {
-        User user = new User();
-        user.setEmail("user@example.com");
 
         Expense expense = new Expense();
         expense.setId(1L);
@@ -129,24 +110,24 @@ class ExpenseServiceImplTest {
 
         when(expenseRepository.findById(1L)).thenReturn(Optional.of(expense));
 
-        expenseService.deleteExpenseByIdAndUser(1L, "user@example.com");
+        expenseService.deleteExpenseByIdAndUser(1L, user);
 
         verify(expenseRepository).delete(expense);
     }
 
     @Test
     void shouldThrowIfDeletingUnauthorizedExpense() {
-        User user = new User();
-        user.setEmail("owner@example.com");
+        User otherUser = new User();
+        otherUser.setId(2L);
 
         Expense expense = new Expense();
         expense.setId(1L);
-        expense.setUser(user);
+        expense.setUser(otherUser);
 
         when(expenseRepository.findById(1L)).thenReturn(Optional.of(expense));
 
         assertThrows(RuntimeException.class,
-                () -> expenseService.deleteExpenseByIdAndUser(1L, "other@example.com"));
+                () -> expenseService.deleteExpenseByIdAndUser(1L, user));
     }
 
     @Test
@@ -154,6 +135,6 @@ class ExpenseServiceImplTest {
         when(expenseRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(RuntimeException.class,
-                () -> expenseService.deleteExpenseByIdAndUser(1L, "user@example.com"));
+                () -> expenseService.deleteExpenseByIdAndUser(1L, user));
     }
 }
