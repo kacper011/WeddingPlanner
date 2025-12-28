@@ -115,7 +115,25 @@ class GuestTableServiceImplTest {
         verify(guestTableRepository).delete(table);
     }
 
+    @Test
+    void shouldThrowSecurityExceptionWhenUserIsNotOwner() {
 
+        Long tableId = 1L;
+
+        User owner = new User();
+        owner.setId(1L);
+
+        User attacker = new User();
+        attacker.setId(2L);
+
+        GuestTable table = new GuestTable();
+        table.setId(tableId);
+        table.setUser(owner);
+
+        when(guestTableRepository.findById(tableId)).thenReturn(Optional.of(table));
+
+        assertThrows(SecurityException.class, () -> guestTableService.detachGuestsFromTable(tableId, attacker));
+    }
 
 
 }
