@@ -33,7 +33,7 @@ public class GuestTableServiceImpl implements GuestTableService {
                 .orElseThrow(() -> new GuestTableNotFoundException(tableId));
 
         if (!table.getUser().getId().equals(user.getId())) {
-            throw new SecurityException("Nie masz uprawnień do modyfikacji tej tabeli");
+            throw new SecurityException("You are not authorized to modify this table");
         }
 
         List<Guest> guests = table.getGuests();
@@ -49,7 +49,7 @@ public class GuestTableServiceImpl implements GuestTableService {
                 .orElseThrow(() -> new GuestTableNotFoundException(id));
 
         if (!table.getUser().getId().equals(user.getId())) {
-            throw new SecurityException("Nie masz uprawnień do usunięcia tej tabeli");
+            throw new SecurityException("You are not authorized to modify this table");
         }
 
         detachGuestsFromTable(id, user);

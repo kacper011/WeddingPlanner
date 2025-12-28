@@ -46,8 +46,12 @@ class GuestTableServiceImplTest {
     void shouldDetachGuestsFromTable() {
         Long tableId = 1L;
 
+        User user = new User();
+        user.setId(10L);
+
         GuestTable table = new GuestTable();
         table.setId(tableId);
+        table.setUser(user);
 
         Guest guest1 = new Guest();
         guest1.setId(1L);
@@ -61,22 +65,25 @@ class GuestTableServiceImplTest {
 
         when(guestTableRepository.findById(tableId)).thenReturn(Optional.of(table));
 
-        guestTableService.detachGuestsFromTable(tableId);
+        guestTableService.detachGuestsFromTable(tableId, user);
 
         assertNull(guest1.getTable());
         assertNull(guest2.getTable());
 
-        verify(guestRepository, times(2)).save(any(Guest.class));
+        verify(guestRepository).saveAll(anyList());
     }
 
     @Test
     void shouldThrowExceptionIfTableNotFoundWhenDetachingGuests() {
         Long tableId = 1L;
+
+        User user = new User();
+
         when(guestTableRepository.findById(tableId)).thenReturn(Optional.empty());
 
-        RuntimeException exception = assertThrows(GuestTableNotFoundException.class, () -> {
-            guestTableService.detachGuestsFromTable(tableId);
-        });
+        GuestTableNotFoundException exception =
+                assertThrows(GuestTableNotFoundException.class, () ->
+                        guestTableService.detachGuestsFromTable(tableId, user));;
 
         assertEquals("Table with ID: " + tableId + " not found.", exception.getMessage());
     }
@@ -104,9 +111,11 @@ class GuestTableServiceImplTest {
 
         assertNull(guest.getTable(), "Guest should be detached from table");
 
-        verify(guestRepository).save(guest);
+        verify(guestRepository).saveAll(anyList());
         verify(guestTableRepository).delete(table);
     }
+
+
 
 
 }
