@@ -11,6 +11,7 @@ import com.kacper.wedding_planner.repository.EventRepository;
 import com.kacper.wedding_planner.repository.UserRepository;
 import com.kacper.wedding_planner.service.EventService;
 import com.kacper.wedding_planner.service.UserService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -57,23 +58,22 @@ class EventControllerTest {
         testUser = new User();
         testUser.setId(1L);
         testUser.setEmail("test@example.com");
+
+        authenticate(testUser);
     }
 
     @Test
-    @WithMockUser(username = "test@example.com")
     void shouldReturnEventsJson() throws Exception {
 
-        User user = new User();
-        user.setId(1L);
-        user.setEmail("test@example.com");
+       authenticate(testUser);
 
         EventDTO dto = new EventDTO();
         dto.setTitle("Test event");
 
         when(userService.findByEmail("test@example.com"))
-                .thenReturn(user);
+                .thenReturn(testUser);
 
-        when(eventService.getEventsForUser(user))
+        when(eventService.getEventsForUser(testUser))
                 .thenReturn(List.of(dto));
 
         mockMvc.perform(get("/events/data"))
@@ -174,5 +174,24 @@ class EventControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("events"));
     }
+
+    @AfterEach
+    void cleanup() {
+        SecurityContextHolder.clearContext();
+    }
+
+    private void authenticate(User user) {
+        CustomUserDetails principal = new CustomUserDetails(user);
+
+        UsernamePasswordAuthenticationToken auth =
+                new UsernamePasswordAuthenticationToken(
+                        principal,
+                        null,
+                        principal.getAuthorities()
+                );
+
+        SecurityContextHolder.getContext().setAuthentication(auth);
+    }
+
 
 }
