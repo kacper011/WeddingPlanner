@@ -272,8 +272,11 @@
 
     <form th:action="@{/expenses}" th:object="${expense}" method="post" class="p-3 mb-4 shadow-sm" style="background: #fff0f0; border-radius: 12px;">
         <div class="mb-2">
-            <label for="name" class="form-label" style="font-size: 0.9rem;">Nazwa</label>
-            <input type="text" class="form-control form-control-sm" id="nazwa" th:field="*{name}" placeholder="np. Kwiaty" />
+            <label class="form-label">Nazwa</label>
+            <input type="text"
+                   class="form-control form-control-sm"
+                   th:field="*{name}"
+                   placeholder="np. Kwiaty" />
             <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="form-text text-danger" style="font-size: 0.75rem;"></div>
         </div>
 

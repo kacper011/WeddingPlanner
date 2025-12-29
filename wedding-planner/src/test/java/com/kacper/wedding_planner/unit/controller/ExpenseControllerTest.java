@@ -44,6 +44,7 @@ class ExpenseControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+
     private CustomUserDetails principal;
     private User testUser;
 
@@ -52,10 +53,11 @@ class ExpenseControllerTest {
         testUser = new User();
         testUser.setId(1L);
         testUser.setEmail("testuser@example.com");
+
+        authenticate(testUser);
     }
 
     @Test
-    @WithMockUser(username = "testuser@example.com")
     void shouldShowExpensesViewWithModelAttributes() throws Exception {
 
         Expense expense = new Expense();
@@ -82,7 +84,6 @@ class ExpenseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "testuser@example.com")
     void shouldSaveExpenseAndRedirectWhenNoValidationErrors() throws Exception {
 
         when(userService.findByEmail("testuser@example.com"))
@@ -100,7 +101,6 @@ class ExpenseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "testuser@example.com")
     void shouldReturnExpensesViewWhenValidationErrors() throws Exception {
 
         when(userService.findByEmail("testuser@example.com"))
@@ -123,13 +123,12 @@ class ExpenseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "testuser@example.com")
     void shouldDeleteExpense() throws Exception {
 
         when(userService.findByEmail("testuser@example.com"))
                 .thenReturn(testUser);
 
-        mockMvc.perform(get("/expenses/delete/{id}", 1L)
+        mockMvc.perform(post("/expenses/delete/{id}", 1L)
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/expenses"));
@@ -137,4 +136,16 @@ class ExpenseControllerTest {
         verify(expenseService).deleteExpenseByIdAndUser(1L, testUser);
     }
 
+    private void authenticate(User user) {
+        CustomUserDetails principal = new CustomUserDetails(user);
+
+        UsernamePasswordAuthenticationToken auth =
+                new UsernamePasswordAuthenticationToken(
+                        principal,
+                        null,
+                        principal.getAuthorities()
+                );
+
+        SecurityContextHolder.getContext().setAuthentication(auth);
+    }
 }

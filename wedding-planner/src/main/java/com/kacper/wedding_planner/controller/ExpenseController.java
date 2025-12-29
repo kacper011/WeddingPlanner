@@ -46,7 +46,7 @@ public class ExpenseController {
     }
 
     @PostMapping
-    public String saveExpense(@ModelAttribute @Valid ExpenseRequest request,
+    public String saveExpense(@ModelAttribute("expense") @Valid ExpenseRequest request,
                               BindingResult result,
                               @AuthenticationPrincipal CustomUserDetails principal,
                               Model model) {
