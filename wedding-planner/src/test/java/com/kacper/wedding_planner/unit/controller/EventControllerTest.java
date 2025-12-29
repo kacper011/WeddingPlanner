@@ -65,8 +65,6 @@ class EventControllerTest {
     @Test
     void shouldReturnEventsJson() throws Exception {
 
-       authenticate(testUser);
-
         EventDTO dto = new EventDTO();
         dto.setTitle("Test event");
 
@@ -83,12 +81,8 @@ class EventControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "test@example.com")
     void shouldReturnNoContentWhenNoEvents() throws Exception {
 
-        User testUser = new User();
-        testUser.setId(1L);
-        testUser.setEmail("test@example.com");
 
         when(userService.findByEmail("test@example.com"))
                 .thenReturn(testUser);
@@ -101,7 +95,6 @@ class EventControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "test@example.com")
     void shouldCreateEvent() throws Exception {
 
         EventRequest request = new EventRequest();
@@ -122,7 +115,6 @@ class EventControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "test@example.com")
     void shouldUpdateEvent() throws Exception {
 
         Event existing = new Event();
@@ -151,7 +143,6 @@ class EventControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "test@example.com")
     void shouldDeleteEvent() throws Exception {
 
         when(userService.findByEmail("test@example.com"))
@@ -168,7 +159,6 @@ class EventControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "test@example.com")
     void shouldReturnEventsView() throws Exception {
         mockMvc.perform(get("/events"))
                 .andExpect(status().isOk())
