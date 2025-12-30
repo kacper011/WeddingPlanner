@@ -24,6 +24,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -48,26 +49,23 @@ class WeddingTaskControllerTest {
     @BeforeEach
     void setup() {
         testUser = new User();
+        testUser.setId(1L);
         testUser.setEmail("test@example.com");
-
-        principal = new CustomUserDetails(testUser);
-
-        UsernamePasswordAuthenticationToken auth =
-                new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
     @Test
-    @WithMockUser(username = "test@example.com")
     void shouldShowChecklist() throws Exception {
+
         WeddingTask task = new WeddingTask();
         task.setId(1L);
         task.setName("Test Task");
+        task.setUser(testUser);
 
         when(userService.findByEmail("test@example.com")).thenReturn(testUser);
         when(weddingTaskService.getForUser(testUser)).thenReturn(List.of(task));
 
-        mockMvc.perform(get("/checklist"))
+        mockMvc.perform(get("/checklist")
+                        .with(user(new CustomUserDetails(testUser))))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("tasks"))
                 .andExpect(model().attributeExists("newTask"))
