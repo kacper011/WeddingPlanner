@@ -73,15 +73,12 @@ class WeddingTaskControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "test@example.com")
     void shouldAddTask() throws Exception {
-
-        WeddingTask task = new WeddingTask();
-        task.setName("New Task");
 
         when(userService.findByEmail("test@example.com")).thenReturn(testUser);
 
         mockMvc.perform(post("/checklist")
+                .with(user(new CustomUserDetails(testUser)))
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("name", "New Task"))
@@ -92,10 +89,17 @@ class WeddingTaskControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "test@example.com")
     void shouldDeleteTask() throws Exception {
 
-        mockMvc.perform(get("/checklist/delete/5"))
+        WeddingTask task = new WeddingTask();
+        task.setId(5L);
+        task.setUser(testUser);
+
+        when(userService.findByEmail("test@example.com")).thenReturn(testUser);
+        when(weddingTaskService.getById(5L)).thenReturn(task);
+
+        mockMvc.perform(get("/checklist/delete/5")
+                        .with(user(new CustomUserDetails(testUser))))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/checklist"));
 
@@ -103,12 +107,18 @@ class WeddingTaskControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "test@example.com")
     void shouldToggleTask() throws Exception {
 
-        when(userService.findByEmail("test@example.com")).thenReturn(testUser);
+        WeddingTask task = new WeddingTask();
+        task.setId(3L);
+        task.setUser(testUser);
 
-        mockMvc.perform(post("/checklist/toggle/3").with(csrf()))
+        when(userService.findByEmail("test@example.com")).thenReturn(testUser);
+        when(weddingTaskService.getById(3L)).thenReturn(task);
+
+        mockMvc.perform(post("/checklist/toggle/3")
+                        .with(user(new CustomUserDetails(testUser)))
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/checklist"));
 
