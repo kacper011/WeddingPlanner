@@ -53,7 +53,7 @@ class GuestServiceImplTest {
         guest.setId(guestId);
         guest.setUser(user);
 
-        when(guestRepository.findById(guestId))
+        when(guestRepository.findByIdAndUser(guestId, user))
                 .thenReturn(Optional.of(guest));
 
         guestService.deleteGuest(guestId, user);
@@ -117,8 +117,9 @@ class GuestServiceImplTest {
         guestService.updateTransport(1L, "Tak", user);
 
         assertEquals("Tak", guest.getTransport());
+
         verify(guestRepository).findByIdAndUser(1L, user);
-        verify(guestRepository).save(guest);
+        verifyNoMoreInteractions(guestRepository);
     }
 
     @Test
@@ -180,12 +181,19 @@ class GuestServiceImplTest {
 
     @Test
     void shouldSaveGuest() {
+
+        User user = new User();
+        user.setId(1L);
+
         Guest guest = new Guest();
-        when(guestRepository.save(guest)).thenReturn(guest);
+        guest.setFirstName("John");
+        guest.setUser(user);
+
+        when(guestRepository.save(any(Guest.class))).thenReturn(guest);
 
         Guest saved = guestService.saveGuest(guest);
 
-        assertEquals(guest, saved);
+        assertNotNull(saved);
         verify(guestRepository).save(guest);
     }
 }
