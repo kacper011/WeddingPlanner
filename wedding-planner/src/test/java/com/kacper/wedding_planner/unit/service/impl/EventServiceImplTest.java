@@ -53,7 +53,7 @@ class EventServiceImplTest {
         assertEquals("Wedding", result.get(0).getTitle());
         assertEquals("Reception", result.get(1).getTitle());
 
-        verify(eventRepository.findByUser(user));
+        verify(eventRepository).findByUser(user);
     }
 
     @Test
