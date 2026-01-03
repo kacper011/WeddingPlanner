@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -45,9 +46,10 @@ class RegistrationControllerTest {
         doNothing().when(userService).registerUser(anyString(), anyString(), anyString());
 
         mockMvc.perform(post("/register")
+                        .with(csrf())
                         .param("email", "test@test.com")
-                        .param("password", "123456")
-                        .param("confirmPassword", "123456")
+                        .param("password", "12345678")
+                        .param("confirmPassword", "12345678")
                         .param("firstName", "John"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login?success"));
@@ -60,12 +62,14 @@ class RegistrationControllerTest {
                 .registerUser("test@example.com", "secret123", "John");
 
         mockMvc.perform(post("/register")
+                        .with(csrf())
                         .param("email", "test@example.com")
                         .param("password", "secret123")
+                        .param("confirmPassword", "secret123")
                         .param("firstName", "John"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("register"))
                 .andExpect(model().attributeExists("error"))
-                .andExpect(model().attributeDoesNotExist("user"));
+                .andExpect(model().attribute("error", "Email already exists"));
     }
 }
