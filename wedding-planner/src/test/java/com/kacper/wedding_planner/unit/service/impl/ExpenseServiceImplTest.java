@@ -1,5 +1,6 @@
 package com.kacper.wedding_planner.unit.service.impl;
 
+import com.kacper.wedding_planner.exception.InvalidExpenseDataException;
 import com.kacper.wedding_planner.exception.UserNotFoundException;
 import com.kacper.wedding_planner.model.Expense;
 import com.kacper.wedding_planner.model.User;
@@ -85,7 +86,7 @@ class ExpenseServiceImplTest {
         when(expenseRepository.findByUser(user))
                 .thenReturn(List.of(expense));
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(InvalidExpenseDataException.class,
                 () -> expenseService.getTotalForUser(user));
     }
 
