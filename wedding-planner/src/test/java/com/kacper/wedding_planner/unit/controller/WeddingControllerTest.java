@@ -62,6 +62,7 @@ class WeddingControllerTest {
     @BeforeEach
     void setupSecurityContext() {
         mockUser = new User();
+        mockUser.setId(1L);
         mockUser.setEmail("test@example.com");
 
         CustomUserDetails principal = new CustomUserDetails(mockUser);
@@ -164,9 +165,16 @@ class WeddingControllerTest {
     @WithMockUser(username = "test@example.com", roles = "USER")
     void shouldReturnGuestDetailsView() throws Exception {
 
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("test@example.com");
+
         guest = createGuest("Kowalski", GuestCategory.GROOM_FAMILY, "TAK", "TAK");
         guest.setId(1L);
+        guest.setUser(user);
+
         when(guestRepository.findById(1L)).thenReturn(Optional.of(guest));
+        when(userService.findByEmail("test@example.com")).thenReturn(user);
 
         mockMvc.perform(get("/guests/details/1"))
                 .andExpect(status().isOk())
@@ -189,7 +197,7 @@ class WeddingControllerTest {
     void shouldCreateGuestSuccessfully() throws Exception {
         when(userService.findByEmail("test@example.com")).thenReturn(mockUser);
 
-        mockMvc.perform(post("/guests/create")
+        mockMvc.perform(post("/guests")
                 .with(csrf())
                 .param("firstName", "Jan")
                 .param("lastName", "Kowalski")
@@ -199,13 +207,14 @@ class WeddingControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/guests"));
 
-        verify(guestRepository).save(any(Guest.class));
+        verify(guestService).saveGuest(any(Guest.class));
     }
 
     @Test
     @WithMockUser(username = "test@example.com", roles = "USER")
     void shouldReturnToFormWhenGuestDataIsInvalid() throws Exception {
-        mockMvc.perform(post("/guests/create")
+
+        mockMvc.perform(post("/guests")
                         .with(csrf())
                         .param("lastName", "Kowalski")
                         .param("category", "RODZINA_PANA_MLODEGO"))
@@ -357,6 +366,7 @@ class WeddingControllerTest {
         Guest guest = new Guest();
         guest.setId(2L);
         guest.setTransport("TAK");
+        guest.setUser(mockUser);
 
         when(guestRepository.findById(2L)).thenReturn(Optional.of(guest));
         when(guestRepository.save(any(Guest.class))).thenAnswer(invocation -> invocation.getArgument(0));
