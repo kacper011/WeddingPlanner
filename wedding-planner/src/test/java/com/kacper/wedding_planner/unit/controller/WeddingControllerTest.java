@@ -249,16 +249,16 @@ class WeddingControllerTest {
     @WithMockUser(username = "test@example.com", roles = "USER")
     void shouldReturnErrorPageWhenGuestNotFound() throws Exception {
         // given
-        when(guestRepository.findById(99L)).thenReturn(Optional.empty());
+        Long guestId = 99L;
+        when(guestRepository.findById(guestId)).thenReturn(Optional.empty());
 
         // when & then
-        mockMvc.perform(post("/guests/edit/99")
+        mockMvc.perform(post("/guests/edit/{id}", guestId)
                         .with(csrf())
                         .param("nazwisko", "Nowak")
                         .param("imie", "Jan")
                         .param("kategoria", GuestCategory.GROOM_FAMILY.name()))
-                .andExpect(status().isOk())
-                .andExpect(view().name("error"));
+                .andExpect(status().isNotFound());
 
         verify(guestRepository, never()).save(any());
     }
