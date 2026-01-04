@@ -230,8 +230,13 @@ class WeddingControllerTest {
     @WithMockUser(username = "test@example.com", roles = "USER")
     void shouldEditGuestSuccessfully() throws Exception {
 
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("test@example.com");
+
         Guest existingGuest = createGuest("Kowalski", GuestCategory.GROOM_FAMILY, "TAK", "TAK");
         existingGuest.setId(1L);
+        existingGuest.setUser(user);
 
         when(guestRepository.findById(1L)).thenReturn(Optional.of(existingGuest));
         when(userService.findByEmail("test@example.com")).thenReturn(mockUser);
@@ -241,9 +246,10 @@ class WeddingControllerTest {
                         .param("firstName", "Jan")
                         .param("lastName", "Nowak")
                         .param("attendanceConfirmation", "TAK")
-                        .param("afterParty", "NIE"))
+                        .param("afterParty", "NIE")
+                        .param("category", "GROOM_FAMILY"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/guests/confirmed"));
+                .andExpect(redirectedUrl("/guests"));
 
         verify(guestRepository).save(argThat(savedGuest ->
                 savedGuest.getId().equals(1L) &&
@@ -305,8 +311,14 @@ class WeddingControllerTest {
         testUser.setId(1L);
         testUser.setEmail("test@example.com");
 
+        Guest guest = new Guest();
+        guest.setId(guestId);
+        guest.setUser(testUser);
+
         when(userService.findByEmail("test@example.com"))
                 .thenReturn(testUser);
+
+        when(guestRepository.findById(guestId)).thenReturn(Optional.of(guest));
 
         mockMvc.perform(post("/guests/delete/{id}", guestId)
                 .with(csrf()))
@@ -321,8 +333,13 @@ class WeddingControllerTest {
     @WithMockUser(username = "test@example.com", roles = "USER")
     void updatePresenceShouldUpdateGuestAndRedirect() throws Exception {
 
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("test@example.com");
+
         Guest guest = new Guest();
         guest.setId(1L);
+        guest.setUser(user);
         guest.setAttendanceConfirmation("TAK");
 
         when(guestRepository.findById(1L)).thenReturn(Optional.of(guest));
@@ -343,8 +360,13 @@ class WeddingControllerTest {
     @WithMockUser(username = "test@example.com", roles = "USER")
     void updateTransportShouldUpdateGuestAndRedirect() throws Exception {
 
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("test@example.com");
+
         Guest guest = new Guest();
         guest.setId(1L);
+        guest.setUser(user);
         guest.setTransport(null);
 
         when(guestRepository.findById(1L)).thenReturn(Optional.of(guest));
@@ -395,9 +417,15 @@ class WeddingControllerTest {
     @Test
     @WithMockUser("testuser@example.com")
     void shouldUpdateLodgingAndRedirect() throws Exception {
+
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("testuser@example.com");
+
         Long guestId = 1L;
         Guest guest = new Guest();
         guest.setId(guestId);
+        guest.setUser(user);
 
         when(guestRepository.findById(guestId)).thenReturn(Optional.of(guest));
 
