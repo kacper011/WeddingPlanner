@@ -265,6 +265,29 @@ class WeddingControllerTest {
 
     @Test
     @WithMockUser(username = "test@example.com", roles = "USER")
+    void shouldReturn403WhenGuestBelongsToAnotherUser() throws Exception {
+
+        User otherUser = new User();
+        otherUser.setId(2L);
+
+        Guest guest = new Guest();
+        guest.setId(1L);
+        guest.setUser(otherUser);
+
+        when(guestRepository.findById(1L)).thenReturn(Optional.of(guest));
+
+        mockMvc.perform(post("/guests/edit/{id}", 1L)
+                .with(csrf())
+                .param("nazwisko", "Nowak")
+                .param("imie", "Jan")
+                .param("kategora", GuestCategory.GROOM_FAMILY.name()))
+                .andExpect(status().isForbidden());
+
+        verify(guestRepository, never()).save(any());
+    }
+
+    @Test
+    @WithMockUser(username = "test@example.com", roles = "USER")
     void shouldDeleteGuestAndRedirect() throws Exception {
 
         Long guestId = 1L;
