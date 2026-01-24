@@ -263,11 +263,10 @@ class WeddingControllerTest {
     @Test
     @WithMockUser(username = "test@example.com", roles = "USER")
     void shouldReturnErrorPageWhenGuestNotFound() throws Exception {
-        // given
+
         Long guestId = 99L;
         when(guestRepository.findById(guestId)).thenReturn(Optional.empty());
 
-        // when & then
         mockMvc.perform(post("/guests/edit/{id}", guestId)
                         .with(csrf())
                         .param("nazwisko", "Nowak")

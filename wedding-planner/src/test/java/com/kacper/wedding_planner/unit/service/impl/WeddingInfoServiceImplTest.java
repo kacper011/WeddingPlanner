@@ -41,7 +41,6 @@ class WeddingInfoServiceImplTest {
     @Test
     void shouldUpdateExistingWeddingInfo() {
 
-        //given
         WeddingInfo existingInfo = new WeddingInfo();
         existingInfo.setUser(testUser);
         existingInfo.setBrideName("Old Bride");
@@ -50,10 +49,8 @@ class WeddingInfoServiceImplTest {
 
         when(weddingInfoRepository.findByUser(testUser)).thenReturn(Optional.of(existingInfo));
 
-        //when
         weddingInfoService.saveOrUpdateWeddingInfo(weddingInfo, testUser);
 
-        //then
         verify(weddingInfoRepository).save(existingInfo);
         verify(weddingInfoRepository, never()).save(weddingInfo);
 
@@ -65,13 +62,10 @@ class WeddingInfoServiceImplTest {
     @Test
     void shouldSaveNewWeddingInfoWhenNoneExists() {
 
-        //given
         when(weddingInfoRepository.findByUser(testUser)).thenReturn(Optional.empty());
 
-        //when
         weddingInfoService.saveOrUpdateWeddingInfo(weddingInfo, testUser);
 
-        //then
         verify(weddingInfoRepository).save(weddingInfo);
         assert weddingInfo.getUser() == testUser;
     }

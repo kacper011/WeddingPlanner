@@ -40,7 +40,7 @@ public class EmailServiceTest {
         MimeMessage mimeMessage = mock(MimeMessage.class);
         when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
 
-        emailService.sendReminderEmail("user@example.com", "Kacper", "Wesele", LocalDate.of(2025, 6, 29));//Trzeba ustawiać datę na 2 dni przed
+        emailService.sendReminderEmail("user@example.com", "Kacper", "Wesele", LocalDate.of(2025, 6, 29));
 
         verify(mailSender, times(1)).send(any(MimeMessage.class));
     }
